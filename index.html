@@ -4506,6 +4506,7 @@
     function normalizarMenuItens(valor) {
       const itens = Array.isArray(valor) ? valor : Array.isArray(valor?.itens) ? valor.itens : [];
       const usados = new Set();
+      const urlsUsadas = new Set();
       const resultado = [];
 
       itens.forEach((item, index) => {
@@ -4513,6 +4514,12 @@
         const label = String(item.label ?? item.nome ?? '').trim();
         const url = normalizarUrlMenu(item.url ?? item.link ?? '');
         if (!label || !url) return;
+
+        // Impede duplicação de um mesmo destino interno no menu.
+        // Links externos podem aparecer mais de uma vez, se necessário.
+        const ehInterno = !/^https?:\/\//i.test(url);
+        if (ehInterno && urlsUsadas.has(url)) return;
+        if (ehInterno) urlsUsadas.add(url);
 
         let baseId = String(item.id || `menu-${index + 1}`);
         let id = baseId;
@@ -4522,6 +4529,7 @@
 
         resultado.push({
           id,
+          pageId: item.pageId ? String(item.pageId) : undefined,
           label: label.slice(0, 80),
           url: url.slice(0, 500),
           target: item.target === '_blank' ? '_blank' : '_self',
@@ -4566,26 +4574,48 @@
       if (!page || !page.id) return null;
       const url = normalizarUrlMenu(page.url || (page.tipo === 'custom' && page.slug ? `pagina.html?slug=${encodeURIComponent(page.slug)}` : ''));
       if (!url) return null;
-      const existente = encontrarMenuDaPagina({ ...page, url });
+
+      // Primeiro remove duplicatas do mesmo destino. Isso também corrige bases
+      // antigas que acabaram gravando a mesma página duas vezes no menu.
+      let encontrado = null;
+      const destino = url;
+      menuSiteItens = menuSiteItens.filter(item => {
+        const mesmoDestino = normalizarUrlMenu(item.url) === destino;
+        const mesmoId = String(item.id || '') === String(page.id) || String(item.id || '') === `pagina-${page.id}`;
+        if (mesmoDestino || mesmoId) {
+          if (!encontrado) encontrado = item;
+          return true;
+        }
+        return true;
+      });
+
+      const existente = encontrado || encontrarMenuDaPagina({ ...page, url });
       if (existente) {
+        existente.id = String(page.tipo === 'sistema' ? page.id : `pagina-${page.id}`);
+        existente.pageId = String(page.id);
         existente.label = String(page.titulo || page.nome || existente.label || 'Página').slice(0, 80);
         existente.url = url.slice(0, 500);
         existente.target = existente.target === '_blank' ? '_blank' : '_self';
-        existente.visible = page.visivel !== false;
+        existente.visible = page.visivel !== false && page.menu !== false;
         return existente;
       }
 
       const novo = {
         id: String(page.tipo === 'sistema' ? page.id : `pagina-${page.id}`),
+        pageId: String(page.id),
         label: String(page.titulo || page.nome || 'Página').slice(0, 80),
         url: url.slice(0, 500),
         target: '_self',
-        visible: page.visivel !== false
+        visible: page.visivel !== false && page.menu !== false
       };
       // Coloca novas páginas no final, preservando a ordem atual do menu.
       menuSiteItens.push(novo);
       return novo;
     }
+
+    // Deixa a função explicitamente disponível para os handlers inline e para
+    // versões do navegador que tenham restaurado scripts antigos em cache.
+    window.garantirMenuDaPagina = garantirMenuDaPagina;
 
     function removerMenuDaPagina(id) {
       const alvo = String(id || '');
@@ -4920,13 +4950,87 @@
     }
     function limparFiltroPaginasAdmin(){const el=document.getElementById('filtroPaginasAdmin');if(el)el.value='';renderListaPaginasCMS();}
 
+    function extrairSlugPaginaDeUrl(url){
+      const valor=String(url||'').trim();
+      const match=valor.match(/(?:^|[?&])slug=([^&#]+)/i);
+      if(match){try{return decodeURIComponent(match[1]);}catch(_){return match[1];}}
+      const base=valor.split('?')[0].split('#')[0].split('/').pop()||'';
+      return base.replace(/\.html?$/i,'').trim();
+    }
+
+    function paginaCorrespondeAoSistema(item){
+      if(!item||typeof item!=='object') return false;
+      const itemId=String(item.id||'').trim();
+      const itemUrl=normalizarUrlMenu(item.url||'');
+      const itemSlug=String(item.slug||extrairSlugPaginaDeUrl(itemUrl)||'').trim().toLowerCase();
+      return PAGINAS_SISTEMA.some(sistema=>{
+        const sistemaId=String(sistema.id||'');
+        const sistemaUrl=normalizarUrlMenu(sistema.url||'');
+        const sistemaSlug=String(sistema.id||'').toLowerCase();
+        return itemId===sistemaId || itemUrl===sistemaUrl || (itemSlug && itemSlug===sistemaSlug);
+      });
+    }
+
     async function carregarPaginasDoBanco(){
-      try{const resposta=await fetch(`${CLOUDFLARE_API_URL}/api/config/portal_pages?v=${Date.now()}`,{cache:'no-store'});if(resposta.ok){const data=await resposta.json(),itens=Array.isArray(data?.valor?.pages)?data.valor.pages:[],mapa=new Map(itens.map(p=>[String(p?.id||''),p]));PAGINAS_SISTEMA.forEach((p,index)=>{const salvo=mapa.get(String(p.id));if(salvo){p.visivel=salvo.visivel!==false||p.id==='inicio';p.menu=p.id==='inicio'?true:salvo.menu!==false;if(Number.isFinite(Number(salvo.ordem)))p.ordem=Number(salvo.ordem);}else if(!Number.isFinite(Number(p.ordem)))p.ordem=index+1;});paginasCustomizadas=itens.map((item,i)=>normalizarPaginaCustom(item,i)).filter(Boolean);}else{paginasCustomizadas=[];}}catch(error){console.warn('Não foi possível carregar as páginas personalizadas.',error);paginasCustomizadas=[];}
+      try{
+        const resposta=await fetch(`${CLOUDFLARE_API_URL}/api/config/portal_pages?v=${Date.now()}`,{cache:'no-store'});
+        if(resposta.ok){
+          const data=await resposta.json();
+          const itens=Array.isArray(data?.valor?.pages)?data.valor.pages:[];
+          const mapa=new Map(itens.map(p=>[String(p?.id||''),p]));
+          PAGINAS_SISTEMA.forEach((p,index)=>{
+            const salvo=mapa.get(String(p.id));
+            if(salvo){
+              p.visivel=salvo.visivel!==false||p.id==='inicio';
+              p.menu=p.id==='inicio'?true:salvo.menu!==false;
+              if(Number.isFinite(Number(salvo.ordem)))p.ordem=Number(salvo.ordem);
+            }else if(!Number.isFinite(Number(p.ordem)))p.ordem=index+1;
+          });
+
+          // Bases anteriores chegaram a gravar as páginas do sistema dentro
+          // da coleção de personalizadas. Elas aparecem como duplicadas na
+          // listagem. Aqui elas são descartadas localmente; ao próximo salvamento
+          // o payload limpo também substitui o conteúdo antigo no D1.
+          const idsUsados=new Set();
+          const slugsUsados=new Set();
+          paginasCustomizadas=itens
+            .map((item,i)=>normalizarPaginaCustom(item,i))
+            .filter(Boolean)
+            .filter(page=>{
+              if(paginaCorrespondeAoSistema(page)) return false;
+              const id=String(page.id||'');
+              const slug=String(page.slug||'').toLowerCase();
+              if(idsUsados.has(id)||slugsUsados.has(slug)) return false;
+              idsUsados.add(id);slugsUsados.add(slug);
+              return true;
+            });
+        }else{
+          paginasCustomizadas=[];
+        }
+      }catch(error){
+        console.warn('Não foi possível carregar as páginas personalizadas.',error);
+        paginasCustomizadas=[];
+      }
       renderListaPaginasCMS();preencherSelectPaginaMae();
     }
     async function salvarPaginasNoBanco(){
       registrarAtividadeAdmin();if(!localStorage.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return false;}
-      try{atualizarOrdemPaginasAPartirDaLista(obterOrdemPaginas());const payload=[...PAGINAS_SISTEMA.map(p=>({...p})),...paginasCustomizadas.map((p,i)=>({...normalizarPaginaCustom(p,i),ordem:p.ordem}))];await cloudflareAdminFetch('/api/admin/config/portal_pages',{method:'PUT',body:JSON.stringify({valor:{pages:payload}})});await cloudflareAdminFetch('/api/admin/config/site_menu',{method:'PUT',body:JSON.stringify({valor:{itens:menuSiteItens}})});renderListaPaginasCMS();renderMenuPublico();showToast('Páginas salvas e menu sincronizado com o Cloudflare.');return true;}catch(error){console.error(error);showToast('Não foi possível salvar as páginas: '+(error.message||'erro desconhecido'));return false;}
+      try{
+        atualizarOrdemPaginasAPartirDaLista(obterOrdemPaginas());
+        // Remove qualquer registro antigo do sistema que tenha sido gravado
+        // indevidamente como página personalizada.
+        const customsLimpos=paginasCustomizadas
+          .map((p,i)=>({...normalizarPaginaCustom(p,i),ordem:p.ordem}))
+          .filter(Boolean)
+          .filter(p=>!paginaCorrespondeAoSistema(p));
+        paginasCustomizadas=customsLimpos;
+
+        menuSiteItens=normalizarMenuItens(menuSiteItens);
+        const payload=[...PAGINAS_SISTEMA.map(p=>({...p})),...paginasCustomizadas];
+        await cloudflareAdminFetch('/api/admin/config/portal_pages',{method:'PUT',body:JSON.stringify({valor:{pages:payload}})});
+        await cloudflareAdminFetch('/api/admin/config/site_menu',{method:'PUT',body:JSON.stringify({valor:{itens:menuSiteItens}})});
+        renderListaPaginasCMS();renderMenuPublico();showToast('Páginas salvas e menu sincronizado com o Cloudflare.');return true;
+      }catch(error){console.error(error);showToast('Não foi possível salvar as páginas: '+(error.message||'erro desconhecido'));return false;}
     }
 
     function iniciarArrastePagina(event,id){paginaArrastandoId=String(id);event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/plain',String(id));event.currentTarget.style.opacity='.55';}
@@ -4982,7 +5086,7 @@
           else{const page=localizarCustom(paginaEditandoId);if(!page)return;Object.assign(page,dados,{id:page.id,tipo:'custom',podeExcluir:true,createdAt:page.createdAt||agora});if(page.menu)garantirMenuDaPagina(page);else removerMenuDaPagina(page.id);sincronizarVisibilidadePaginaComMenu(page);}
         }else{const page={...dados,id:crypto.randomUUID(),tipo:'custom',podeExcluir:true,createdAt:agora,ordem:paginasCustomizadas.length+10};paginasCustomizadas.push(page);if(page.menu)garantirMenuDaPagina(page);}
         const salvo=await salvarPaginasNoBanco();if(!salvo)return;fecharEditorPaginaPortal();renderListaPaginasCMS();renderMenuPublico();showToast('Página salva com sucesso.');
-      }catch(error){console.error(error);alert('Não foi possível salvar a página: '+(error.message||'erro desconhecido'));}
+      }catch(error){console.error('Erro completo ao salvar página:',error);alert('Não foi possível salvar a página: '+(error?.message||'erro desconhecido'));}
     }
 
     async function restaurarPaginasPadrao(){if(!confirm('Restaurar as páginas institucionais padrão e remover todas as páginas personalizadas deste portal?'))return;paginasCustomizadas.forEach(p=>removerMenuDaPagina(p.id));paginasCustomizadas=[];PAGINAS_SISTEMA.forEach((p,index)=>{p.visivel=true;p.menu=true;p.ordem=index+1;garantirMenuDaPagina(p);});fecharEditorPaginaPortal();renderListaPaginasCMS();renderMenuPublico();await salvarPaginasNoBanco();}
