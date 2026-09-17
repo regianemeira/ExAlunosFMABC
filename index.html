@@ -2325,37 +2325,62 @@
 
 
 <style id="fmabc-pages-admin-style">
-  .pages-admin-intro{margin:0 0 20px;color:var(--slate-muted);line-height:1.55;font-size:.9rem}
-  .pages-admin-box{border:1px solid var(--border-color);border-radius:14px;background:var(--slate-light);padding:18px;margin-bottom:18px}
-  .pages-admin-box h4{margin:0 0 12px;color:var(--azul-institucional)}
-  .pages-admin-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  .pages-admin-form-grid .full{grid-column:1/-1}
-  .pages-admin-inline{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-  .pages-admin-check{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border-color);border-radius:9px;padding:10px 12px;font-size:.82rem;font-weight:700;color:var(--azul-institucional)}
-  .pages-admin-check input{width:16px;height:16px}
-  .pages-admin-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:14px}
-  .pages-admin-list{display:flex;flex-direction:column;gap:10px}
-  .page-admin-item{display:grid;grid-template-columns:34px 42px 1.4fr 1fr 150px auto;gap:12px;align-items:center;background:#fff;border:1px solid var(--border-color);border-radius:12px;padding:12px;transition:.2s ease}
-  .page-admin-item.dragging{opacity:.55;border-color:var(--verde-principal)}
-  .page-admin-handle{width:34px;height:34px;border:1px solid var(--border-color);border-radius:8px;background:#f8fafc;display:flex;align-items:center;justify-content:center;cursor:grab;font-size:1.05rem;color:var(--azul-institucional);user-select:none}
-  .page-admin-number{width:42px;height:34px;border-radius:8px;background:#f5f7f8;color:var(--azul-institucional);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.8rem}
-  .page-admin-main strong{display:block;color:var(--azul-institucional);font-size:.95rem}
-  .page-admin-main small,.page-admin-url{color:var(--slate-muted);font-size:.75rem;display:block;word-break:break-word}
-  .page-admin-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
-  .page-admin-badge{display:inline-flex;align-items:center;border-radius:999px;padding:4px 8px;font-size:.68rem;font-weight:800;background:#eef3f0;color:var(--verde-escuro)}
-  .page-admin-badge.off{background:#fff1f2;color:#be123c}
-  .page-admin-meta{font-size:.78rem;color:var(--slate-muted)}
-  .page-admin-btns{display:flex;gap:5px;justify-content:flex-end;flex-wrap:wrap}
-  .page-admin-btns button{width:32px;height:32px;border:1px solid var(--border-color);border-radius:7px;background:#fff;color:var(--azul-institucional);cursor:pointer;font-weight:900}
-  .page-admin-btns button:disabled{opacity:.4;cursor:not-allowed}
-  .page-admin-danger{color:#b91c1c!important;background:#fff7f7!important;border-color:#fecaca!important}
-  .page-admin-system{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:#64748b}
-  .page-admin-status{margin-top:10px;color:var(--slate-muted);font-size:.78rem}
-  .page-admin-muted{padding:14px;background:#fff;border:1px dashed var(--border-color);border-radius:10px;color:var(--slate-muted);font-size:.84rem}
-  .page-admin-preview{display:none;margin-top:8px;max-width:260px;border:1px solid var(--border-color);border-radius:10px;overflow:hidden;background:#fff}
-  .page-admin-preview img{display:block;width:100%;height:150px;object-fit:cover}
-  @media(max-width:1050px){.page-admin-item{grid-template-columns:34px 42px 1fr 1fr auto}.page-admin-meta{grid-column:3/-1}.page-admin-btns{grid-column:3/-1;justify-content:flex-start}}
-  @media(max-width:760px){.pages-admin-form-grid{grid-template-columns:1fr}.pages-admin-form-grid .full{grid-column:auto}.page-admin-item{grid-template-columns:30px 38px 1fr}.page-admin-item>div:not(.page-admin-handle):not(.page-admin-number){grid-column:3}.page-admin-meta,.page-admin-btns{grid-column:3}.page-admin-handle{width:30px}}
+  /* CMS de páginas inspirado no layout das referências fornecidas */
+  .cms-pages-wrap{background:#fff;border:1px solid #e5e7eb;border-radius:7px;box-shadow:0 1px 3px rgba(15,23,42,.04);overflow:hidden}
+  .cms-pages-toolbar{padding:20px 22px 0;border-bottom:1px solid #e5e7eb;background:#fff}
+  .cms-pages-toolbar-top{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:20px}
+  .cms-pages-toolbar-title{margin:0;color:#2f3967;font-size:1.12rem;font-weight:800}
+  .cms-pages-toolbar-sub{margin:5px 0 0;color:#7a8499;font-size:.8rem}
+  .cms-new-page-btn{display:inline-flex;align-items:center;gap:9px;background:#339c5b;color:#fff;border:0;border-radius:5px;padding:12px 18px;font-weight:800;font-size:.82rem;cursor:pointer;box-shadow:0 2px 5px rgba(51,156,91,.24);text-transform:uppercase;white-space:nowrap}
+  .cms-new-page-btn:hover{background:#2f8d52}
+  .cms-pages-search{padding:0 0 18px;position:relative}
+  .cms-pages-search input{width:100%;height:52px;border:1px solid #e2e6ec;border-radius:4px;padding:0 46px 0 20px;font-size:.9rem;color:#56617d;outline:none;box-shadow:0 2px 7px rgba(15,23,42,.04)}
+  .cms-pages-search input:focus{border-color:#cbd5e1;box-shadow:0 0 0 3px rgba(51,156,91,.08)}
+  .cms-pages-search svg{position:absolute;right:18px;top:17px;color:#94a3b8}
+  .cms-pages-clear{display:flex;justify-content:flex-end;margin:-2px 0 12px;color:#339c5b;font-size:.8rem;text-decoration:none;cursor:pointer}
+  .cms-pages-table-wrap{overflow-x:auto}
+  .cms-pages-table{width:100%;border-collapse:collapse;min-width:760px}
+  .cms-pages-table th{background:#f7f9fb;color:#8290a8;text-transform:uppercase;letter-spacing:.12em;font-size:.62rem;text-align:left;padding:13px 22px;border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb;font-weight:800}
+  .cms-pages-table td{padding:15px 22px;border-bottom:1px solid #e7ebf0;color:#52607d;font-size:.84rem;vertical-align:middle;background:#fff}
+  .cms-pages-table tbody tr:hover td{background:#fbfcfd}
+  .cms-pages-name{font-weight:700;color:#4e5f86;cursor:pointer}
+  .cms-pages-name:hover{color:#339c5b}
+  .cms-pages-date{white-space:nowrap;color:#5a6886}
+  .cms-pages-status{display:inline-flex;align-items:center;gap:7px;font-size:.74rem;font-weight:700}
+  .cms-status-dot{width:8px;height:8px;border-radius:50%;background:#34a853;display:inline-block}.cms-status-dot.off{background:#cbd5e1}
+  .cms-pages-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px}
+  .cms-icon-btn{width:30px;height:30px;border:0;background:transparent;color:#5a6786;display:inline-flex;align-items:center;justify-content:center;border-radius:5px;cursor:pointer;padding:0}
+  .cms-icon-btn:hover{background:#eef7f1;color:#339c5b}.cms-icon-btn.danger:hover{background:#fff1f2;color:#be123c}.cms-icon-btn:disabled{opacity:.35;cursor:not-allowed}
+  .cms-pages-empty{padding:40px 20px;text-align:center;color:#8a95a8;font-size:.86rem}
+  .cms-pages-footer{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:14px 22px;background:#fff;border-top:1px solid #e5e7eb;flex-wrap:wrap}
+  .cms-pages-footer-note{font-size:.76rem;color:#8a95a8}.cms-pages-footer-actions{display:flex;gap:8px;flex-wrap:wrap}
+  .cms-secondary-btn{border:1px solid #d8dee8;background:#fff;color:#56617d;border-radius:5px;padding:9px 13px;font-weight:700;font-size:.76rem;cursor:pointer}.cms-secondary-btn:hover{border-color:#339c5b;color:#339c5b}
+
+  .cms-editor-shell{display:none;background:#f6f8fb;border:1px solid #e4e8ef;border-radius:7px;overflow:hidden}
+  .cms-editor-shell.active{display:block}
+  .cms-editor-head{padding:22px 26px;border-bottom:1px solid #e2e7ed;background:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .cms-editor-head h4{margin:0;color:#303968;font-size:1.65rem;font-weight:800}.cms-editor-head p{margin:6px 0 0;color:#7b8498;font-size:.78rem}
+  .cms-editor-head-actions{display:flex;gap:9px;flex-wrap:wrap}
+  .cms-form-card{background:#fff;border-bottom:1px solid #e3e7ed;padding:22px 26px}
+  .cms-field-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 28px}.cms-field-grid .full{grid-column:1/-1}
+  .cms-label{display:block;color:#536384;font-weight:800;font-size:.78rem;margin-bottom:7px}.cms-label em{font-style:normal;font-weight:600;color:#8b95a8}
+  .cms-input,.cms-select,.cms-textarea{width:100%;border:1px solid #e3e7ec;border-radius:4px;background:#fff;color:#45536f;font-size:.88rem;min-height:44px;padding:10px 12px;outline:none;box-shadow:inset 0 1px 2px rgba(15,23,42,.03)}
+  .cms-input:focus,.cms-select:focus,.cms-textarea:focus{border-color:#bdc9d8;box-shadow:0 0 0 3px rgba(51,156,91,.08)}
+  .cms-input[readonly]{background:#eef0f3;color:#7a879b}
+  .cms-mini-help{font-size:.7rem;color:#8b95a8;margin-top:5px;display:block;line-height:1.45}
+  .cms-toggle-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .cms-pill-toggle{display:inline-flex;align-items:center;gap:9px;padding:10px 12px;background:#fff;border:1px solid #e0e5eb;border-radius:5px;color:#52607d;font-size:.78rem;font-weight:700;cursor:pointer}
+  .cms-pill-toggle input{width:15px;height:15px;accent-color:#339c5b}
+  .cms-editor-section-title{margin:0 0 18px;color:#333d6e;font-size:1.08rem;font-weight:800}
+  .cms-language-tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:18px}.cms-language-tab{border:1px solid #e1e6ec;border-radius:5px;padding:12px;text-align:center;background:#fff;color:#339c5b;font-weight:700;cursor:pointer}.cms-language-tab.active{background:#339c5b;color:#fff;border-color:#339c5b}
+  .cms-lang-note{padding:10px 12px;background:#f5f7fa;border:1px solid #e2e6ec;border-radius:5px;color:#7b8498;font-size:.74rem;margin-bottom:14px}
+  .cms-rich-editor{border:1px solid #d9dee6;border-radius:4px;overflow:hidden;background:#fff}.cms-rich-toolbar{display:flex;align-items:center;gap:2px;flex-wrap:wrap;padding:6px;border-bottom:1px solid #d9dee6;background:#fafbfd}.cms-rich-btn{min-width:30px;height:31px;border:1px solid transparent;background:transparent;color:#334155;border-radius:3px;cursor:pointer;font-size:.82rem}.cms-rich-btn:hover{background:#eef2f5}.cms-rich-sep{width:1px;height:22px;background:#dfe5ec;margin:0 3px}.cms-rich-content{min-height:300px;padding:14px 15px;color:#333d4f;outline:none;font-size:.94rem;line-height:1.6}.cms-rich-content:focus{box-shadow:inset 0 0 0 2px rgba(51,156,91,.10)}
+  .cms-collapse{border:1px solid #e0e5eb;border-radius:5px;overflow:hidden;margin-top:14px}.cms-collapse summary{list-style:none;cursor:pointer;padding:13px 14px;background:#f4f5f7;color:#536384;font-weight:800;font-size:.78rem}.cms-collapse summary::-webkit-details-marker{display:none}.cms-collapse-body{padding:16px;background:#fff}
+  .cms-upload-box{border:1px dashed #ccd5df;background:#fbfcfd;padding:14px;border-radius:5px}.cms-preview-banner{margin-top:10px;border:1px solid #e0e5eb;border-radius:5px;overflow:hidden;background:#fff}.cms-preview-banner img{display:block;width:100%;max-height:280px;object-fit:cover}
+  .cms-editor-actions{padding:16px 26px;background:#f8fafc;border-top:1px solid #e2e7ed;display:flex;gap:9px;justify-content:flex-start;flex-wrap:wrap}.cms-save-btn{background:#339c5b;color:#fff;border:0;border-radius:5px;padding:11px 18px;font-weight:800;cursor:pointer}.cms-save-btn:hover{background:#2f8d52}.cms-cancel-btn{background:#fff;color:#52607d;border:1px solid #d8dee7;border-radius:5px;padding:11px 18px;font-weight:800;cursor:pointer}
+  .cms-editor-info{padding:0 26px 20px;color:#8a95a8;font-size:.7rem;background:#f8fafc}
+  @media(max-width:900px){.cms-field-grid{grid-template-columns:1fr}.cms-field-grid .full{grid-column:auto}.cms-pages-toolbar-top{align-items:flex-start;flex-direction:column}.cms-new-page-btn{align-self:flex-start}.cms-editor-head{align-items:flex-start;flex-direction:column}}
+  @media(max-width:600px){.cms-pages-toolbar{padding:16px 14px 0}.cms-pages-table th,.cms-pages-table td{padding-left:14px;padding-right:14px}.cms-form-card,.cms-editor-head,.cms-editor-actions,.cms-editor-info{padding-left:14px;padding-right:14px}.cms-language-tabs{gap:5px}.cms-editor-head h4{font-size:1.35rem}}
 </style>
 
 </head>
@@ -2650,59 +2675,166 @@
           </section>
 
           <section id="tabPaginas" class="admin-tab-pane">
-            <h3 class="admin-section-title">Gestão de Páginas do Portal</h3>
-            <p class="pages-admin-intro">Gerencie as páginas públicas do portal em um único lugar. As páginas institucionais já existentes podem ser exibidas ou ocultadas e controladas no menu. Novas páginas podem ser criadas, editadas, ordenadas, publicadas, ocultadas e excluídas sem editar o código do portal.</p>
-
-            <div class="pages-admin-box">
-              <h4 id="tituloEditorPagina">Criar nova página</h4>
-              <form id="formPaginaPortal" onsubmit="salvarPaginaPortal(event)">
-                <input type="hidden" id="paginaEditandoId" value="">
-                <div class="pages-admin-form-grid">
-                  <div class="form-group">
-                    <label>Título da página</label>
-                    <input type="text" id="inputPaginaTitulo" class="form-control" maxlength="100" placeholder="Ex: História da Instituição" required>
+            <div id="paginasListaView" class="cms-pages-wrap">
+              <div class="cms-pages-toolbar">
+                <div class="cms-pages-toolbar-top">
+                  <div>
+                    <h3 class="cms-pages-toolbar-title">Lista de Páginas</h3>
+                    <p class="cms-pages-toolbar-sub">Gerencie as páginas do portal, publicação, menu, ordem e conteúdo.</p>
                   </div>
-                  <div class="form-group">
-                    <label>Slug / endereço da página</label>
-                    <input type="text" id="inputPaginaSlug" class="form-control" maxlength="80" placeholder="historia-da-instituicao" required>
-                    <small style="display:block;margin-top:5px;color:var(--slate-muted);font-size:.72rem;">Será publicado como <strong>pagina.html?slug=...</strong>.</small>
-                  </div>
-                  <div class="form-group full">
-                    <label>Descrição curta</label>
-                    <input type="text" id="inputPaginaResumo" class="form-control" maxlength="180" placeholder="Resumo que aparecerá no topo da página">
-                  </div>
-                  <div class="form-group full">
-                    <label>Conteúdo da página</label>
-                    <textarea id="inputPaginaConteudo" class="form-control" rows="10" placeholder="Digite o conteúdo da nova página..."></textarea>
-                  </div>
-                  <div class="form-group full">
-                    <label>Imagem de capa (opcional)</label>
-                    <input type="file" id="inputPaginaImagemFile" class="form-control" accept="image/*">
-                    <input type="text" id="inputPaginaImagemUrl" class="form-control" style="margin-top:8px;" maxlength="1000" placeholder="Ou informe uma URL de imagem">
-                    <div id="previewPaginaImagem" class="page-admin-preview"><img id="previewPaginaImagemImg" src="" alt="Pré-visualização da capa"></div>
-                  </div>
-                  <div class="form-group full">
-                    <div class="pages-admin-inline">
-                      <label class="pages-admin-check"><input type="checkbox" id="inputPaginaVisivel" checked> Publicar página</label>
-                      <label class="pages-admin-check"><input type="checkbox" id="inputPaginaMenu" checked> Mostrar no menu superior</label>
-                    </div>
-                  </div>
+                  <button type="button" class="cms-new-page-btn" onclick="abrirNovaPaginaPortal()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M12 5v14M5 12h14"/></svg>
+                    Nova página
+                  </button>
                 </div>
-                <div class="pages-admin-actions">
-                  <button type="button" class="btn-save" style="background:#64748b;" onclick="limparEditorPaginaPortal()">Nova página</button>
-                  <button type="submit" class="btn-save" id="btnSalvarPaginaPortal">Salvar página</button>
+                <div class="cms-pages-search">
+                  <input id="filtroPaginasAdmin" type="search" placeholder="Pesquisar" oninput="renderListaPaginasCMS()" autocomplete="off">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
                 </div>
-              </form>
+                <div class="cms-pages-clear" id="limparFiltroPaginas" onclick="limparFiltroPaginasAdmin()">Limpar a busca</div>
+              </div>
+              <div class="cms-pages-table-wrap">
+                <table class="cms-pages-table">
+                  <thead><tr><th>Nome</th><th>Criado em</th><th style="text-align:right">Ações</th></tr></thead>
+                  <tbody id="listaPaginasAdmin"></tbody>
+                </table>
+              </div>
+              <div class="cms-pages-footer">
+                <div class="cms-pages-footer-note" id="statusPaginasAdmin">Arraste as páginas pela alça para alterar a ordem.</div>
+                <div class="cms-pages-footer-actions">
+                  <button type="button" class="cms-secondary-btn" onclick="restaurarPaginasPadrao()">Restaurar padrões</button>
+                  <button type="button" class="cms-secondary-btn" onclick="salvarPaginasNoBanco()">Salvar alterações</button>
+                </div>
+              </div>
             </div>
 
-            <div class="pages-admin-box">
-              <h4>Páginas existentes</h4>
-              <div id="listaPaginasAdmin" class="pages-admin-list"></div>
-              <div id="statusPaginasAdmin" class="page-admin-status">Arraste as páginas ou use as setas para alterar a ordem.</div>
-              <div class="pages-admin-actions">
-                <button type="button" class="btn-save" style="background:#64748b;" onclick="restaurarPaginasPadrao()">Restaurar padrões das páginas</button>
-                <button type="button" class="btn-save" onclick="salvarPaginasNoBanco()">Salvar alterações das páginas</button>
+            <div id="paginaEditorCMS" class="cms-editor-shell" aria-hidden="true">
+              <div class="cms-editor-head">
+                <div><h4 id="tituloEditorPagina">Alterar página</h4><p id="subtituloEditorPagina">Edite os campos da página selecionada.</p></div>
+                <div class="cms-editor-head-actions">
+                  <button type="button" class="cms-cancel-btn" onclick="fecharEditorPaginaPortal()">Voltar para lista</button>
+                </div>
               </div>
+
+              <form id="formPaginaPortal" onsubmit="salvarPaginaPortal(event)">
+                <input type="hidden" id="paginaEditandoId" value="">
+                <section class="cms-form-card">
+                  <div class="cms-field-grid">
+                    <div>
+                      <label class="cms-label">Nome</label>
+                      <input id="inputPaginaTitulo" class="cms-input" type="text" maxlength="100" placeholder="Nome da página" required>
+                    </div>
+                    <div>
+                      <label class="cms-label">Slug <em>(endereço da página)</em></label>
+                      <input id="inputPaginaSlug" class="cms-input" type="text" maxlength="80" placeholder="historia-da-instituicao" required>
+                      <span class="cms-mini-help">Endereço: pagina.html?slug=...</span>
+                    </div>
+                    <div>
+                      <label class="cms-label">Modelo</label>
+                      <select id="inputPaginaModelo" class="cms-select">
+                        <option value="institucional">Página institucional</option>
+                        <option value="conteudo">Página de conteúdo</option>
+                        <option value="galeria">Página com galeria</option>
+                        <option value="memoria">Página de memória</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="cms-label">Página mãe</label>
+                      <select id="inputPaginaMae" class="cms-select"><option value="">Não possui</option></select>
+                    </div>
+                    <div>
+                      <label class="cms-label">Visível</label>
+                      <select id="inputPaginaVisivel" class="cms-select"><option value="true">Sim</option><option value="false">Não</option></select>
+                    </div>
+                    <div>
+                      <label class="cms-label">Popup</label>
+                      <select id="inputPaginaPopup" class="cms-select"><option value="">Selecione...</option><option value="informativo">Informativo</option><option value="aviso">Aviso</option></select>
+                    </div>
+                    <div>
+                      <label class="cms-label">Categoria</label>
+                      <select id="inputPaginaCategoria" class="cms-select">
+                        <option value="">Selecione...</option><option value="memoria">Memória Institucional</option><option value="acervo">Acervo</option><option value="institucional">Institucional</option><option value="outros">Outros</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="cms-label">Sub categoria</label>
+                      <input id="inputPaginaSubcategoria" class="cms-input" type="text" maxlength="80" placeholder="Opcional">
+                    </div>
+                  </div>
+                </section>
+
+                <section class="cms-form-card">
+                  <h5 class="cms-editor-section-title">Campos</h5>
+                  <div class="cms-language-tabs">
+                    <button type="button" class="cms-language-tab active" onclick="selecionarIdiomaPagina('pt',this)">Português</button>
+                    <button type="button" class="cms-language-tab" onclick="selecionarIdiomaPagina('en',this)">Inglês</button>
+                    <button type="button" class="cms-language-tab" onclick="selecionarIdiomaPagina('es',this)">Espanhol</button>
+                  </div>
+                  <div id="cmsLangNote" class="cms-lang-note">A versão em português é a versão publicada atualmente. Os campos de outros idiomas ficam disponíveis para futura expansão.</div>
+                  <div id="paginaLangPt">
+                    <div class="form-group" style="margin:0 0 18px"><label class="cms-label">Título</label><input id="inputPaginaTituloPublico" class="cms-input" type="text" maxlength="140" placeholder="Título exibido na página"></div>
+                    <div>
+                      <label class="cms-label">Conteúdo</label>
+                      <div class="cms-rich-editor">
+                        <div class="cms-rich-toolbar">
+                          <button type="button" class="cms-rich-btn" title="Desfazer" onclick="executarComandoEditor('undo')">↶</button>
+                          <button type="button" class="cms-rich-btn" title="Refazer" onclick="executarComandoEditor('redo')">↷</button><span class="cms-rich-sep"></span>
+                          <button type="button" class="cms-rich-btn" title="Negrito" onclick="executarComandoEditor('bold')"><strong>B</strong></button>
+                          <button type="button" class="cms-rich-btn" title="Itálico" onclick="executarComandoEditor('italic')"><em>I</em></button>
+                          <button type="button" class="cms-rich-btn" title="Sublinhado" onclick="executarComandoEditor('underline')"><u>U</u></button><span class="cms-rich-sep"></span>
+                          <button type="button" class="cms-rich-btn" title="Alinhar à esquerda" onclick="executarComandoEditor('justifyLeft')">≡</button>
+                          <button type="button" class="cms-rich-btn" title="Centralizar" onclick="executarComandoEditor('justifyCenter')">≣</button>
+                          <button type="button" class="cms-rich-btn" title="Alinhar à direita" onclick="executarComandoEditor('justifyRight')">≡</button><span class="cms-rich-sep"></span>
+                          <button type="button" class="cms-rich-btn" title="Lista" onclick="executarComandoEditor('insertUnorderedList')">•</button>
+                          <button type="button" class="cms-rich-btn" title="Lista numerada" onclick="executarComandoEditor('insertOrderedList')">1.</button>
+                          <button type="button" class="cms-rich-btn" title="Link" onclick="inserirLinkEditor()">↗</button>
+                          <button type="button" class="cms-rich-btn" title="Limpar formatação" onclick="executarComandoEditor('removeFormat')">Tx</button>
+                        </div>
+                        <div id="inputPaginaConteudo" class="cms-rich-content" contenteditable="true"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="paginaLangOutro" style="display:none"><div class="cms-lang-note">A edição de inglês e espanhol pode ser ativada futuramente sem alterar a versão em português.</div></div>
+
+                  <details class="cms-collapse"><summary>Conteúdo secundário</summary><div class="cms-collapse-body"><div id="inputPaginaConteudoSecundario" class="cms-rich-content" contenteditable="true" style="border:1px solid #d9dee6;border-radius:4px;min-height:160px"></div></div></details>
+                  <details class="cms-collapse"><summary>Informações adicionais</summary><div class="cms-collapse-body"><div id="inputPaginaInformacoesAdicionais" class="cms-rich-content" contenteditable="true" style="border:1px solid #d9dee6;border-radius:4px;min-height:160px"></div></div></details>
+                </section>
+
+                <section class="cms-form-card">
+                  <h5 class="cms-editor-section-title">Banner superior</h5>
+                  <div class="cms-upload-box">
+                    <input id="inputPaginaImagemFile" type="file" class="cms-input" accept="image/*">
+                    <input id="inputPaginaImagemUrl" type="text" class="cms-input" style="margin-top:9px" maxlength="1000" placeholder="Ou informe uma URL de imagem">
+                    <input id="inputPaginaBannerAlt" type="text" class="cms-input" style="margin-top:9px" maxlength="180" placeholder="Texto alternativo da imagem">
+                    <div id="previewPaginaImagem" class="cms-preview-banner" style="display:none"><img id="previewPaginaImagemImg" src="" alt="Pré-visualização do banner"></div>
+                  </div>
+                </section>
+
+                <section class="cms-form-card">
+                  <h5 class="cms-editor-section-title">Informações para Listagem</h5>
+                  <div class="cms-field-grid">
+                    <div class="full"><label class="cms-label">Descrição curta</label><textarea id="inputPaginaResumo" class="cms-textarea" rows="3" maxlength="220" placeholder="Resumo que aparecerá em listagens e mecanismos de busca internos"></textarea></div>
+                    <div><label class="cms-label">Destaque</label><select id="inputPaginaDestaque" class="cms-select"><option value="false">Não</option><option value="true">Sim</option></select></div>
+                    <div><label class="cms-label">Mostrar na busca</label><select id="inputPaginaBusca" class="cms-select"><option value="true">Sim</option><option value="false">Não</option></select></div>
+                    <div class="full"><label class="cms-label">Exibir no menu superior</label><label class="cms-pill-toggle"><input type="checkbox" id="inputPaginaMenu" checked> Mostrar esta página no menu principal</label></div>
+                  </div>
+                </section>
+
+                <section class="cms-form-card">
+                  <h5 class="cms-editor-section-title">SEO (metatags)</h5>
+                  <div class="cms-field-grid">
+                    <div class="full"><label class="cms-label">Título</label><input id="inputPaginaSeoTitulo" class="cms-input" maxlength="160" placeholder="Mantenha em branco para utilizar o título da própria página"></div>
+                    <div class="full"><label class="cms-label">Descrição</label><textarea id="inputPaginaSeoDescricao" class="cms-textarea" rows="3" maxlength="300" placeholder="Descrição da página para mecanismos de busca"></textarea></div>
+                    <div class="full"><label class="cms-label">Palavras chave <em>(separadas por espaço simples)</em></label><input id="inputPaginaSeoKeywords" class="cms-input" maxlength="300" placeholder="fmabc memória história acervo"></div>
+                  </div>
+                </section>
+
+                <div class="cms-editor-actions">
+                  <button type="button" class="cms-cancel-btn" onclick="fecharEditorPaginaPortal()">Cancelar</button>
+                  <button type="submit" class="cms-save-btn" id="btnSalvarPaginaPortal">Enviar</button>
+                </div>
+                <div class="cms-editor-info" id="infoEditorPagina">As alterações ficam armazenadas no Cloudflare e podem ser editadas novamente.</div>
+              </form>
             </div>
           </section>
 
@@ -4668,10 +4800,7 @@
 
 
     // =========================================================
-    // GESTÃO DE PÁGINAS DO PORTAL
-    // Páginas do sistema continuam em arquivos próprios.
-    // Novas páginas são armazenadas no D1 em site_config.portal_pages
-    // e publicadas pelo template pagina.html?slug=...
+    // GESTÃO DE PÁGINAS DO PORTAL — CMS
     // =========================================================
     const PAGINAS_SISTEMA = [
       { id:'inicio', tipo:'sistema', titulo:'Página Inicial', url:'index.html', resumo:'Página principal do acervo de turmas.', visivel:true, menu:true, ordem:1, podeExcluir:false },
@@ -4680,289 +4809,124 @@
       { id:'galeria-diretores-reitores', tipo:'sistema', titulo:'Fotos e galeria de diretores e reitores', url:'galeria-diretores-reitores.html', resumo:'Galeria institucional de diretores e reitores.', visivel:true, menu:true, ordem:4, podeExcluir:false },
       { id:'professores-emeritos', tipo:'sistema', titulo:'Professores eméritos', url:'professores-emeritos.html', resumo:'Galeria e registros de professores eméritos.', visivel:true, menu:true, ordem:5, podeExcluir:false }
     ];
+    let paginasCustomizadas=[];
+    let paginaArrastandoId='';
+    let paginaEditandoId='';
+    let idiomaPaginaEditor='pt';
 
-    let paginasCustomizadas = [];
-    let paginaArrastandoId = '';
-    let paginaEditandoId = '';
-
-    function slugSeguroPagina(texto){
-      return String(texto||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,80) || 'nova-pagina';
+    function slugSeguroPagina(texto){return String(texto||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,80)||'nova-pagina';}
+    function escHtmlPagina(s){return String(s??'').replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\'':'&#39;','"':'&quot;'}[m]));}
+    function normalizarPaginaCustom(item,index=0){
+      if(!item||typeof item!=='object')return null;
+      const id=String(item.id||'').trim(),titulo=String(item.titulo||item.nome||item.title||'').trim(),slug=slugSeguroPagina(item.slug||titulo||`pagina-${index+1}`);
+      if(!id||!titulo||!slug)return null;
+      return {id,tipo:'custom',titulo:titulo.slice(0,100),slug,url:`pagina.html?slug=${encodeURIComponent(slug)}`,resumo:String(item.resumo||item.description||'').trim().slice(0,220),conteudo:String(item.conteudo||item.content||''),conteudoSecundario:String(item.conteudoSecundario||''),informacoesAdicionais:String(item.informacoesAdicionais||''),imagem:String(item.imagem||item.image||item.bannerUrl||'').trim().slice(0,1000),bannerAlt:String(item.bannerAlt||'').trim().slice(0,180),modelo:String(item.modelo||'institucional'),paginaMae:String(item.paginaMae||''),visivel:item.visivel!==false,menu:item.menu!==false,popup:String(item.popup||''),categoria:String(item.categoria||''),subcategoria:String(item.subcategoria||''),destaque:item.destaque===true,mostrarBusca:item.mostrarBusca!==false,seoTitulo:String(item.seoTitulo||''),seoDescricao:String(item.seoDescricao||''),seoKeywords:String(item.seoKeywords||''),createdAt:item.createdAt||item.criadoEm||'',updatedAt:item.updatedAt||new Date().toISOString(),ordem:Number.isFinite(Number(item.ordem))?Number(item.ordem):9999,podeExcluir:true};
     }
+    function todasPaginasPortal(){return [...PAGINAS_SISTEMA.map(p=>({...p})),...paginasCustomizadas.map(normalizarPaginaCustom).filter(Boolean)];}
+    function obterOrdemPaginas(){return todasPaginasPortal().sort((a,b)=>(Number(a.ordem)||9999)-(Number(b.ordem)||9999)||String(a.titulo).localeCompare(String(b.titulo),'pt-BR',{sensitivity:'base'}));}
+    function atualizarOrdemPaginasAPartirDaLista(lista){lista.forEach((page,index)=>{const alvo=page.tipo==='sistema'?PAGINAS_SISTEMA.find(p=>String(p.id)===String(page.id)):paginasCustomizadas.find(p=>String(p.id)===String(page.id));if(alvo)alvo.ordem=index+1;});}
+    function localizarCustom(id){return paginasCustomizadas.find(p=>String(p.id)===String(id))||null;}
+    function paginaPorId(id){return todasPaginasPortal().find(p=>String(p.id)===String(id))||null;}
+    function formatarDataPagina(v){if(!v)return '—';const d=new Date(v);return Number.isNaN(d.getTime())?'—':d.toLocaleDateString('pt-BR');}
 
-    function normalizarPaginaCustom(item, index=0){
-      if(!item || typeof item!=='object') return null;
-      const id=String(item.id||'').trim();
-      const titulo=String(item.titulo||item.title||'').trim();
-      const slug=slugSeguroPagina(item.slug||titulo||`pagina-${index+1}`);
-      if(!id || !titulo || !slug) return null;
-      return {
-        id,
-        tipo:'custom',
-        titulo:titulo.slice(0,100),
-        slug,
-        url:`pagina.html?slug=${encodeURIComponent(slug)}`,
-        resumo:String(item.resumo||item.description||'').trim().slice(0,180),
-        conteudo:String(item.conteudo||item.content||''),
-        imagem:String(item.imagem||item.image||'').trim().slice(0,1000),
-        visivel:item.visivel!==false,
-        menu:item.menu!==false,
-        ordem:Number.isFinite(Number(item.ordem))?Number(item.ordem):9999,
-        podeExcluir:true,
-        updatedAt:item.updatedAt||new Date().toISOString()
-      };
+    function preencherSelectPaginaMae(idAtual=''){
+      const el=document.getElementById('inputPaginaMae');if(!el)return;const atual=String(idAtual||paginaEditandoId||'');
+      el.innerHTML='<option value="">Não possui</option>';
+      obterOrdemPaginas().filter(p=>String(p.id)!==atual).forEach(p=>{const o=document.createElement('option');o.value=String(p.id);o.textContent=p.titulo;el.appendChild(o);});
     }
-
-    function todasPaginasPortal(){
-      const custom=paginasCustomizadas.map(normalizarPaginaCustom).filter(Boolean);
-      return [...PAGINAS_SISTEMA.map(p=>({...p})), ...custom];
-    }
-
-    function paginaPorId(id){ return todasPaginasPortal().find(p=>String(p.id)===String(id)) || null; }
-
-    function obterOrdemPaginas(){
-      return todasPaginasPortal().sort((a,b)=>{
-        const oa=Number.isFinite(Number(a.ordem))?Number(a.ordem):9999;
-        const ob=Number.isFinite(Number(b.ordem))?Number(b.ordem):9999;
-        return oa-ob || String(a.titulo).localeCompare(String(b.titulo),'pt-BR',{sensitivity:'base'});
-      });
-    }
-
-    function atualizarOrdemPaginasAPartirDaLista(lista){
+    function renderListaPaginasCMS(){
+      const tbody=document.getElementById('listaPaginasAdmin');if(!tbody)return;tbody.innerHTML='';
+      const filtro=String(document.getElementById('filtroPaginasAdmin')?.value||'').trim().toLowerCase();
+      const lista=obterOrdemPaginas().filter(p=>!filtro||String(p.titulo).toLowerCase().includes(filtro)||String(p.slug||'').toLowerCase().includes(filtro));
+      if(!lista.length){const tr=document.createElement('tr');tr.innerHTML='<td colspan="3" class="cms-pages-empty">Nenhuma página encontrada.</td>';tbody.appendChild(tr);return;}
       lista.forEach((page,index)=>{
-        const ordem=index+1;
-        if(page.tipo==='sistema'){
-          const original=PAGINAS_SISTEMA.find(p=>String(p.id)===String(page.id));
-          if(original) original.ordem=ordem;
-        } else {
-          const original=paginasCustomizadas.find(p=>String(p.id)===String(page.id));
-          if(original) original.ordem=ordem;
+        const tr=document.createElement('tr');tr.draggable=true;tr.dataset.id=String(page.id);tr.ondragstart=e=>iniciarArrastePagina(e,page.id);tr.ondragend=finalizarArrastePagina;tr.ondragover=e=>e.preventDefault();tr.ondrop=e=>soltarPagina(e,page.id);
+        const nome=document.createElement('td');
+        const nomeBtn=document.createElement('div');nomeBtn.className='cms-pages-name';nomeBtn.textContent=page.titulo;nomeBtn.title=page.tipo==='sistema'?'Abrir configurações desta página':'Editar página';nomeBtn.onclick=()=>editarPaginaPortal(page.id);nome.appendChild(nomeBtn);
+        const info=document.createElement('div');info.style.cssText='font-size:.69rem;color:#9aa4b5;margin-top:4px';info.textContent=page.url;nome.appendChild(info);
+        const status=document.createElement('div');status.className='cms-pages-status';status.innerHTML=`<span class="cms-status-dot ${page.visivel===false?'off':''}"></span>${page.visivel===false?'Oculta':'Publicada'}`;nome.appendChild(status);
+        const data=document.createElement('td');data.className='cms-pages-date';data.textContent=page.tipo==='custom'?formatarDataPagina(page.createdAt):'—';
+        const actions=document.createElement('td');const actionsWrap=document.createElement('div');actionsWrap.className='cms-pages-actions';
+        const mkBtn=(title,svg,fn,cls='')=>{const b=document.createElement('button');b.type='button';b.className='cms-icon-btn '+cls;b.title=title;b.innerHTML=svg;b.onclick=fn;return b;};
+        actionsWrap.appendChild(mkBtn('Editar','<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>',()=>editarPaginaPortal(page.id)));
+        actionsWrap.appendChild(mkBtn(page.visivel===false?'Publicar':'Ocultar',page.visivel===false?'<svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>':'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l18 18"/><path d="M10.6 10.6a2 2 0 1 0 2.8 2.8"/><path d="M9.9 4.2A12.3 12.3 0 0 1 12 4c7 0 10 8 10 8a18.6 18.6 0 0 1-3.1 4.4"/><path d="M6.1 6.1C3.5 8.1 2 12 2 12s3 8 10 8c1 0 1.9-.1 2.8-.4"/></svg>',()=>alternarVisibilidadePagina(page.id)));
+        if(page.tipo==='custom'){
+          actionsWrap.appendChild(mkBtn('Duplicar','<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',()=>duplicarPaginaPortal(page.id)));
+          actionsWrap.appendChild(mkBtn('Excluir','<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 14h10l1-14"/><path d="M9 7V4h6v3"/></svg>',()=>excluirPaginaPortal(page.id),'danger'));
         }
+        if(page.menu!==false) actionsWrap.appendChild(mkBtn('Retirar do menu','<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h10M4 18h16"/><path d="m16 10 5 5-5 5"/></svg>',()=>alternarMenuPagina(page.id)));
+        actions.appendChild(actionsWrap);tr.append(nome,data,actions);tbody.appendChild(tr);
       });
+      const n=obterOrdemPaginas().length;const st=document.getElementById('statusPaginasAdmin');if(st)st.textContent=`${n} página${n===1?'':'s'} cadastrada${n===1?'':'s'}. Arraste as páginas pela alça ou use edição para reorganizar.`;
     }
-
-    function encontrarMenuDaPagina(page){
-      const pageId=String(page?.id||'');
-      const url=String(page?.url||'');
-      return menuSiteItens.find(item=>String(item.pageId||'')===pageId || String(item.url||'')===url || (pageId && String(item.id||'')===pageId));
-    }
-
-    function sincronizarVisibilidadePaginaComMenu(page){
-      if(!page) return;
-      const item=encontrarMenuDaPagina(page);
-      if(item){ item.visible=page.visivel!==false && page.menu!==false; item.pageId=String(page.id); }
-    }
-
-    function garantirMenuDaPagina(page){
-      if(!page || page.menu===false || page.visivel===false) return;
-      let item=encontrarMenuDaPagina(page);
-      if(!item){
-        item={id:gerarIdMenuUnico(page.id||page.titulo),pageId:String(page.id),label:page.titulo,url:page.url,target:'_self',visible:true};
-        menuSiteItens.push(item);
-      } else {
-        item.pageId=String(page.id); item.label=page.titulo; item.url=page.url; item.visible=true;
-      }
-    }
-
-    function removerMenuDaPagina(pageId){
-      const pid=String(pageId||'');
-      menuSiteItens=menuSiteItens.filter(item=>String(item.pageId||'')!==pid);
-    }
+    function limparFiltroPaginasAdmin(){const el=document.getElementById('filtroPaginasAdmin');if(el)el.value='';renderListaPaginasCMS();}
 
     async function carregarPaginasDoBanco(){
-      try{
-        const resposta=await fetch(`${CLOUDFLARE_API_URL}/api/config/portal_pages?v=${Date.now()}`,{cache:'no-store'});
-        if(resposta.ok){
-          const data=await resposta.json();
-          const itens=Array.isArray(data?.valor?.pages)?data.valor.pages:[];
-          const mapa=new Map(itens.map(p=>[String(p?.id||''),p]));
-          PAGINAS_SISTEMA.forEach((p,index)=>{
-            const salvo=mapa.get(String(p.id));
-            if(salvo){
-              p.visivel=salvo.visivel!==false || p.id==='inicio';
-              p.menu=p.id==='inicio' ? true : salvo.menu!==false;
-              if(Number.isFinite(Number(salvo.ordem))) p.ordem=Number(salvo.ordem);
-            } else if(!Number.isFinite(Number(p.ordem))) p.ordem=index+1;
-          });
-          paginasCustomizadas=itens.map((item,i)=>normalizarPaginaCustom(item,i)).filter(Boolean).map((item,i)=>({...item,ordem:Number.isFinite(Number(itens.find(x=>String(x?.id||'')===String(item.id))?.ordem))?Number(itens.find(x=>String(x?.id||'')===String(item.id))?.ordem):i+10}));
-        } else { paginasCustomizadas=[]; }
-      }catch(error){
-        console.warn('Não foi possível carregar as páginas personalizadas.',error);
-        paginasCustomizadas=[];
-      }
-      renderEditorPaginas();
+      try{const resposta=await fetch(`${CLOUDFLARE_API_URL}/api/config/portal_pages?v=${Date.now()}`,{cache:'no-store'});if(resposta.ok){const data=await resposta.json(),itens=Array.isArray(data?.valor?.pages)?data.valor.pages:[],mapa=new Map(itens.map(p=>[String(p?.id||''),p]));PAGINAS_SISTEMA.forEach((p,index)=>{const salvo=mapa.get(String(p.id));if(salvo){p.visivel=salvo.visivel!==false||p.id==='inicio';p.menu=p.id==='inicio'?true:salvo.menu!==false;if(Number.isFinite(Number(salvo.ordem)))p.ordem=Number(salvo.ordem);}else if(!Number.isFinite(Number(p.ordem)))p.ordem=index+1;});paginasCustomizadas=itens.map((item,i)=>normalizarPaginaCustom(item,i)).filter(Boolean);}else{paginasCustomizadas=[];}}catch(error){console.warn('Não foi possível carregar as páginas personalizadas.',error);paginasCustomizadas=[];}
+      renderListaPaginasCMS();preencherSelectPaginaMae();
     }
-
     async function salvarPaginasNoBanco(){
-      registrarAtividadeAdmin();
-      if(!localStorage.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return false;}
-      try{
-        const lista=obterOrdemPaginas();
-        atualizarOrdemPaginasAPartirDaLista(lista);
-        const payload=[...PAGINAS_SISTEMA.map(p=>({id:p.id,tipo:'sistema',titulo:p.titulo,url:p.url,resumo:p.resumo,visivel:p.visivel!==false,menu:p.menu!==false,ordem:p.ordem,podeExcluir:false})), ...paginasCustomizadas.map((p,index)=>{const n=normalizarPaginaCustom(p,index);return {...n,ordem:Number.isFinite(Number(p.ordem))?Number(p.ordem):index+10};})];
-        await cloudflareAdminFetch('/api/admin/config/portal_pages',{method:'PUT',body:JSON.stringify({valor:{pages:payload}})});
-        await cloudflareAdminFetch('/api/admin/config/site_menu',{method:'PUT',body:JSON.stringify({valor:{itens:menuSiteItens}})});
-        renderEditorPaginas();
-        renderMenuPublico();
-        showToast('Páginas salvas e menu sincronizado com o Cloudflare.');
-        return true;
-      }catch(error){
-        console.error('Erro ao salvar páginas:',error);
-        showToast('Não foi possível salvar as páginas: '+(error.message||'erro desconhecido'));
-        return false;
-      }
+      registrarAtividadeAdmin();if(!localStorage.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return false;}
+      try{atualizarOrdemPaginasAPartirDaLista(obterOrdemPaginas());const payload=[...PAGINAS_SISTEMA.map(p=>({...p})),...paginasCustomizadas.map((p,i)=>({...normalizarPaginaCustom(p,i),ordem:p.ordem}))];await cloudflareAdminFetch('/api/admin/config/portal_pages',{method:'PUT',body:JSON.stringify({valor:{pages:payload}})});await cloudflareAdminFetch('/api/admin/config/site_menu',{method:'PUT',body:JSON.stringify({valor:{itens:menuSiteItens}})});renderListaPaginasCMS();renderMenuPublico();showToast('Páginas salvas e menu sincronizado com o Cloudflare.');return true;}catch(error){console.error(error);showToast('Não foi possível salvar as páginas: '+(error.message||'erro desconhecido'));return false;}
     }
 
-    function renderEditorPaginas(){
-      const container=document.getElementById('listaPaginasAdmin');
-      if(!container) return;
-      container.innerHTML='';
-      const lista=obterOrdemPaginas();
-      if(!lista.length){container.innerHTML='<div class="page-admin-muted">Nenhuma página disponível.</div>';return;}
-      lista.forEach((page,index)=>{
-        const row=document.createElement('div'); row.className='page-admin-item'; row.draggable=true; row.dataset.id=String(page.id);
-        row.ondragstart=e=>iniciarArrastePagina(e,page.id); row.ondragend=finalizarArrastePagina; row.ondragover=e=>e.preventDefault(); row.ondrop=e=>soltarPagina(e,page.id);
-        const handle=document.createElement('div');handle.className='page-admin-handle';handle.textContent='☰';handle.title='Arraste para reordenar';
-        const number=document.createElement('div');number.className='page-admin-number';number.textContent=String(index+1).padStart(2,'0');
-        const main=document.createElement('div'); main.className='page-admin-main';
-        const strong=document.createElement('strong');strong.textContent=page.titulo; main.appendChild(strong);
-        const small=document.createElement('small');small.textContent=page.url;main.appendChild(small);
-        const badges=document.createElement('div');badges.className='page-admin-badges';
-        const tipo=document.createElement('span');tipo.className='page-admin-badge';tipo.textContent=page.tipo==='sistema'?'Página do sistema':'Página personalizada';badges.appendChild(tipo);
-        const pub=document.createElement('span');pub.className='page-admin-badge'+(page.visivel===false?' off':'');pub.textContent=page.visivel===false?'Oculta':'Publicada';badges.appendChild(pub);
-        const menu=document.createElement('span');menu.className='page-admin-badge'+(page.menu===false?' off':'');menu.textContent=page.menu===false?'Fora do menu':'No menu';badges.appendChild(menu);
-        main.appendChild(badges);
-        const meta=document.createElement('div');meta.className='page-admin-meta';meta.textContent=page.tipo==='sistema'?'Conteúdo mantido no arquivo da página. Use o menu/visibilidade para controlar a publicação.':'Conteúdo editável pelo administrador.';
-        const actions=document.createElement('div'); actions.className='page-admin-btns';
-        const up=document.createElement('button');up.type='button';up.title='Mover para cima';up.textContent='↑';up.disabled=index===0;up.onclick=()=>moverPaginaPortal(page.id,-1);
-        const down=document.createElement('button');down.type='button';down.title='Mover para baixo';down.textContent='↓';down.disabled=index===lista.length-1;down.onclick=()=>moverPaginaPortal(page.id,1);
-        const toggle=document.createElement('button');toggle.type='button';toggle.title=page.visivel===false?'Publicar página':'Ocultar página';toggle.textContent=page.visivel===false?'▶':'◼';toggle.onclick=()=>alternarVisibilidadePagina(page.id);
-        actions.append(up,down,toggle);
-        if(page.tipo==='custom'){
-          const edit=document.createElement('button');edit.type='button';edit.title='Editar página';edit.textContent='✎';edit.onclick=()=>editarPaginaPortal(page.id);actions.appendChild(edit);
-          const duplicate=document.createElement('button');duplicate.type='button';duplicate.title='Duplicar página';duplicate.textContent='⧉';duplicate.onclick=()=>duplicarPaginaPortal(page.id);actions.appendChild(duplicate);
-          const del=document.createElement('button');del.type='button';del.className='page-admin-danger';del.title='Excluir página';del.textContent='×';del.onclick=()=>excluirPaginaPortal(page.id);actions.appendChild(del);
-        }
-        if(page.tipo==='sistema'){
-          const menuBtn=document.createElement('button');menuBtn.type='button';menuBtn.title=page.menu===false?'Adicionar ao menu':'Ocultar do menu';menuBtn.textContent=page.menu===false?'☰':'−';menuBtn.onclick=()=>alternarMenuPagina(page.id);actions.appendChild(menuBtn);
-        }
-        row.append(handle,number,main,meta,actions);container.appendChild(row);
-      });
+    function iniciarArrastePagina(event,id){paginaArrastandoId=String(id);event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/plain',String(id));event.currentTarget.style.opacity='.55';}
+    function finalizarArrastePagina(event){event.currentTarget.style.opacity='';}
+    function soltarPagina(event,idDestino){event.preventDefault();const origem=String(paginaArrastandoId||event.dataTransfer.getData('text/plain')||''),destino=String(idDestino||'');if(!origem||!destino||origem===destino)return;const lista=obterOrdemPaginas(),oi=lista.findIndex(p=>String(p.id)===origem),di=lista.findIndex(p=>String(p.id)===destino);if(oi<0||di<0)return;const[movido]=lista.splice(oi,1);lista.splice(di,0,movido);atualizarOrdemPaginasAPartirDaLista(lista);paginaArrastandoId='';renderListaPaginasCMS();showToast('Ordem alterada. Clique em “Salvar alterações” para publicar.');}
+
+    function abrirEditorPaginaCMS(){const list=document.getElementById('paginasListaView'),editor=document.getElementById('paginaEditorCMS');if(list)list.style.display='none';if(editor){editor.classList.add('active');editor.setAttribute('aria-hidden','false');editor.scrollIntoView({behavior:'smooth',block:'start'});}}
+    function fecharEditorPaginaPortal(){document.getElementById('paginaEditorCMS')?.classList.remove('active');document.getElementById('paginaEditorCMS')?.setAttribute('aria-hidden','true');const list=document.getElementById('paginasListaView');if(list)list.style.display='block';paginaEditandoId='';limparEditorPaginaPortal(false);}
+    function abrirNovaPaginaPortal(){limparEditorPaginaPortal(false);document.getElementById('tituloEditorPagina').textContent='Nova página';document.getElementById('subtituloEditorPagina').textContent='Cadastre a página e publique quando estiver pronta.';document.getElementById('btnSalvarPaginaPortal').textContent='Enviar';abrirEditorPaginaCMS();}
+    function selecionarIdiomaPagina(id,btn){idiomaPaginaEditor=id;document.querySelectorAll('.cms-language-tab').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');const pt=document.getElementById('paginaLangPt'),out=document.getElementById('paginaLangOutro');if(pt)pt.style.display=id==='pt'?'block':'none';if(out)out.style.display=id==='pt'?'none':'block';}
+    function executarComandoEditor(cmd,val=null){const ed=document.getElementById('inputPaginaConteudo');if(!ed)return;ed.focus();document.execCommand(cmd,false,val);}
+    function inserirLinkEditor(){const url=prompt('Informe a URL do link:','https://');if(url)executarComandoEditor('createLink',url);}
+    function definirEditorConteudo(id,html){const el=document.getElementById(id);if(el)el.innerHTML=html||'';}
+    function lerEditorConteudo(id){return document.getElementById(id)?.innerHTML||'';}
+    function atualizarPreviewImagemPagina(url){const box=document.getElementById('previewPaginaImagem'),img=document.getElementById('previewPaginaImagemImg');if(!box||!img)return;if(url){img.src=url;box.style.display='block';}else{img.removeAttribute('src');box.style.display='none';}}
+
+    function limparEditorPaginaPortal(fechar=true){
+      paginaEditandoId='';const idsText=['inputPaginaTitulo','inputPaginaSlug','inputPaginaTituloPublico','inputPaginaResumo','inputPaginaSubcategoria','inputPaginaImagemUrl','inputPaginaBannerAlt','inputPaginaSeoTitulo','inputPaginaSeoDescricao','inputPaginaSeoKeywords'];idsText.forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+      ['inputPaginaConteudo','inputPaginaConteudoSecundario','inputPaginaInformacoesAdicionais'].forEach(id=>definirEditorConteudo(id,''));
+      const file=document.getElementById('inputPaginaImagemFile');if(file)file.value='';
+      const set=(id,val)=>{const el=document.getElementById(id);if(el)el.value=val;};
+      set('inputPaginaModelo','institucional');set('inputPaginaMae','');set('inputPaginaPopup','');set('inputPaginaCategoria','');set('inputPaginaDestaque','false');set('inputPaginaBusca','true');
+      const vis=document.getElementById('inputPaginaVisivel');if(vis)vis.value='true';const menu=document.getElementById('inputPaginaMenu');if(menu)menu.checked=true;
+      atualizarPreviewImagemPagina('');preencherSelectPaginaMae();document.getElementById('paginaEditandoId').value='';
+      if(fechar)fecharEditorPaginaPortal();
     }
-
-    function localizarCustom(id){return paginasCustomizadas.find(p=>String(p.id)===String(id))||null;}
-
-    function moverPaginaPortal(id,delta){
-      const lista=obterOrdemPaginas(); const index=lista.findIndex(p=>String(p.id)===String(id)); const novo=index+delta;
-      if(index<0||novo<0||novo>=lista.length)return;
-      const [movido]=lista.splice(index,1);lista.splice(novo,0,movido);
-      atualizarOrdemPaginasAPartirDaLista(lista);
-      renderEditorPaginas();
-      showToast('Ordem atualizada. Clique em “Salvar alterações das páginas”.');
-    }
-
-    function alternarVisibilidadePagina(id){
-      const custom=localizarCustom(id); if(custom){custom.visivel=custom.visivel===false; sincronizarVisibilidadePaginaComMenu(custom);}
-      const sistema=PAGINAS_SISTEMA.find(p=>String(p.id)===String(id));
-      if(sistema){if(sistema.id==='inicio'){showToast('A Página Inicial não pode ser ocultada.');return;} sistema.visivel=sistema.visivel===false; sincronizarVisibilidadePaginaComMenu(sistema);}
-      renderEditorPaginas();renderMenuPublico();showToast('Visibilidade alterada. Clique em “Salvar alterações das páginas”.');
-    }
-
-    function alternarMenuPagina(id){
-      const custom=localizarCustom(id); if(custom){custom.menu=custom.menu===false; if(custom.menu)garantirMenuDaPagina({...custom,url:`pagina.html?slug=${encodeURIComponent(custom.slug)}`,visivel:custom.visivel}); else removerMenuDaPagina(custom.id);}
-      const sistema=PAGINAS_SISTEMA.find(p=>String(p.id)===String(id)); if(sistema){sistema.menu=sistema.menu===false; if(sistema.menu)garantirMenuDaPagina(sistema); else {const item=encontrarMenuDaPagina(sistema);if(item)item.visible=false;}}
-      renderEditorPaginas();renderMenuPublico();showToast('Presença no menu alterada. Clique em “Salvar alterações das páginas”.');
-    }
-
-    function limparEditorPaginaPortal(){
-      paginaEditandoId='';
-      document.getElementById('paginaEditandoId').value='';
-      document.getElementById('tituloEditorPagina').textContent='Criar nova página';
-      document.getElementById('btnSalvarPaginaPortal').textContent='Salvar página';
-      ['inputPaginaTitulo','inputPaginaSlug','inputPaginaResumo','inputPaginaConteudo','inputPaginaImagemUrl'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-      document.getElementById('inputPaginaVisivel').checked=true;document.getElementById('inputPaginaMenu').checked=true;
-      atualizarPreviewImagemPagina('');
-    }
-
     function editarPaginaPortal(id){
-      const page=localizarCustom(id); if(!page){showToast('As páginas institucionais existentes permanecem nos arquivos próprios e não são editadas por este formulário.');return;}
-      paginaEditandoId=String(id);document.getElementById('paginaEditandoId').value=paginaEditandoId;
-      document.getElementById('tituloEditorPagina').textContent='Editar página';
-      document.getElementById('btnSalvarPaginaPortal').textContent='Salvar alterações';
-      document.getElementById('inputPaginaTitulo').value=page.titulo||'';
-      document.getElementById('inputPaginaSlug').value=page.slug||'';
-      document.getElementById('inputPaginaResumo').value=page.resumo||'';
-      document.getElementById('inputPaginaConteudo').value=page.conteudo||'';
-      document.getElementById('inputPaginaImagemUrl').value=page.imagem||'';
-      document.getElementById('inputPaginaVisivel').checked=page.visivel!==false;
-      document.getElementById('inputPaginaMenu').checked=page.menu!==false;
-      atualizarPreviewImagemPagina(page.imagem||'');
-      document.getElementById('tabPaginas')?.scrollIntoView({behavior:'smooth',block:'start'});
+      const page=paginaPorId(id);if(!page)return;
+      paginaEditandoId=String(id);document.getElementById('paginaEditandoId').value=paginaEditandoId;document.getElementById('tituloEditorPagina').textContent='Alterar página';document.getElementById('subtituloEditorPagina').textContent=page.tipo==='sistema'?'Página do sistema: conteúdo estrutural mantido no arquivo correspondente.':'Edite todos os campos disponíveis para esta página.';document.getElementById('btnSalvarPaginaPortal').textContent=page.tipo==='sistema'?'Salvar configurações':'Enviar';
+      const set=(id,val)=>{const el=document.getElementById(id);if(el)el.value=val??'';};
+      set('inputPaginaTitulo',page.titulo);set('inputPaginaSlug',page.slug||'');set('inputPaginaTituloPublico',page.titulo||'');set('inputPaginaResumo',page.resumo||'');set('inputPaginaModelo',page.modelo||'institucional');set('inputPaginaPopup',page.popup||'');set('inputPaginaCategoria',page.categoria||'');set('inputPaginaSubcategoria',page.subcategoria||'');set('inputPaginaVisivel',page.visivel===false?'false':'true');set('inputPaginaDestaque',page.destaque?'true':'false');set('inputPaginaBusca',page.mostrarBusca===false?'false':'true');set('inputPaginaSeoTitulo',page.seoTitulo||'');set('inputPaginaSeoDescricao',page.seoDescricao||'');set('inputPaginaSeoKeywords',page.seoKeywords||'');set('inputPaginaMae',page.paginaMae||'');set('inputPaginaImagemUrl',page.imagem||'');set('inputPaginaBannerAlt',page.bannerAlt||'');document.getElementById('inputPaginaMenu').checked=page.menu!==false;
+      definirEditorConteudo('inputPaginaConteudo',page.conteudo||'');definirEditorConteudo('inputPaginaConteudoSecundario',page.conteudoSecundario||'');definirEditorConteudo('inputPaginaInformacoesAdicionais',page.informacoesAdicionais||'');atualizarPreviewImagemPagina(page.imagem||'');preencherSelectPaginaMae(page.paginaMae||'');
+      // Sistema: conteúdo não editável neste painel; os demais metadados seguem editáveis.
+      const ed=document.getElementById('inputPaginaConteudo');if(page.tipo==='sistema'){ed.contentEditable='false';ed.style.background='#eef0f3';document.getElementById('inputPaginaConteudoSecundario').contentEditable='false';document.getElementById('inputPaginaInformacoesAdicionais').contentEditable='false';}else{ed.contentEditable='true';ed.style.background='#fff';document.getElementById('inputPaginaConteudoSecundario').contentEditable='true';document.getElementById('inputPaginaInformacoesAdicionais').contentEditable='true';}
+      abrirEditorPaginaCMS();
     }
-
-    function duplicarPaginaPortal(id){
-      const page=localizarCustom(id);if(!page)return;
-      const base=slugSeguroPagina(page.titulo+' copia');
-      const novo={...page,id:crypto.randomUUID(),titulo:(page.titulo+' (cópia)').slice(0,100),slug:base,visivel:false,menu:false};
-      let slug=novo.slug,c=2;const slugs=new Set(paginasCustomizadas.map(p=>String(p.slug)));while(slugs.has(slug))slug=base+'-'+c++;novo.slug=slug;novo.ordem=paginasCustomizadas.length+10;
-      paginasCustomizadas.push(novo);editarPaginaPortal(novo.id);renderEditorPaginas();showToast('Página duplicada. Revise e salve.');
-    }
-
-    async function excluirPaginaPortal(id){
-      const page=localizarCustom(id);if(!page)return;if(!confirm(`Excluir a página “${page.titulo}”? Esta ação remove a página personalizada do banco e do menu.`))return;
-      paginasCustomizadas=paginasCustomizadas.filter(p=>String(p.id)!==String(id));removerMenuDaPagina(id);limparEditorPaginaPortal();renderEditorPaginas();renderMenuPublico();await salvarPaginasNoBanco();
-    }
-
-    function iniciarArrastePagina(event,id){paginaArrastandoId=String(id);event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/plain',String(id));event.currentTarget.classList.add('dragging');}
-    function finalizarArrastePagina(event){event.currentTarget.classList.remove('dragging');}
-    function soltarPagina(event,idDestino){event.preventDefault();const origem=String(paginaArrastandoId||event.dataTransfer.getData('text/plain')||'');const destino=String(idDestino||'');if(!origem||!destino||origem===destino)return;const lista=obterOrdemPaginas();const oi=lista.findIndex(p=>String(p.id)===origem),di=lista.findIndex(p=>String(p.id)===destino);if(oi<0||di<0)return;const[movido]=lista.splice(oi,1);lista.splice(di,0,movido);atualizarOrdemCustomAPartirDaLista(lista);paginaArrastandoId='';renderEditorPaginas();}
+    function duplicarPaginaPortal(id){const page=localizarCustom(id);if(!page)return;const base=slugSeguroPagina(page.titulo+' copia');let slug=base,c=2,slugs=new Set(paginasCustomizadas.map(p=>String(p.slug)));while(slugs.has(slug))slug=base+'-'+c++;const agora=new Date().toISOString();const novo={...page,id:crypto.randomUUID(),titulo:(page.titulo+' (cópia)').slice(0,100),slug,url:`pagina.html?slug=${encodeURIComponent(slug)}`,visivel:false,menu:false,createdAt:agora,updatedAt:agora,ordem:paginasCustomizadas.length+10};paginasCustomizadas.push(novo);editarPaginaPortal(novo.id);showToast('Página duplicada. Revise e salve.');}
+    async function excluirPaginaPortal(id){const page=localizarCustom(id);if(!page)return;if(!confirm(`Excluir a página “${page.titulo}”? Esta ação remove a página personalizada do banco e do menu.`))return;paginasCustomizadas=paginasCustomizadas.filter(p=>String(p.id)!==String(id));removerMenuDaPagina(id);fecharEditorPaginaPortal();renderListaPaginasCMS();renderMenuPublico();await salvarPaginasNoBanco();}
+    function alternarVisibilidadePagina(id){const custom=localizarCustom(id);if(custom){custom.visivel=custom.visivel===false;sincronizarVisibilidadePaginaComMenu(custom);}const sistema=PAGINAS_SISTEMA.find(p=>String(p.id)===String(id));if(sistema){if(sistema.id==='inicio'){showToast('A Página Inicial não pode ser ocultada.');return;}sistema.visivel=sistema.visivel===false;sincronizarVisibilidadePaginaComMenu(sistema);}renderListaPaginasCMS();renderMenuPublico();showToast('Visibilidade alterada. Clique em “Salvar alterações”.');}
+    function alternarMenuPagina(id){const custom=localizarCustom(id);if(custom){custom.menu=custom.menu===false;if(custom.menu)garantirMenuDaPagina({...custom,url:`pagina.html?slug=${encodeURIComponent(custom.slug)}`,visivel:custom.visivel});else removerMenuDaPagina(custom.id);}const sistema=PAGINAS_SISTEMA.find(p=>String(p.id)===String(id));if(sistema){sistema.menu=sistema.menu===false;if(sistema.menu)garantirMenuDaPagina(sistema);else{const item=encontrarMenuDaPagina(sistema);if(item)item.visible=false;}}renderListaPaginasCMS();renderMenuPublico();showToast('Presença no menu alterada. Clique em “Salvar alterações”.');}
 
     async function salvarPaginaPortal(event){
-      event.preventDefault();registrarAtividadeAdmin();
-      if(!localStorage.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return;}
-      const titulo=document.getElementById('inputPaginaTitulo').value.trim();
-      let slug=slugSeguroPagina(document.getElementById('inputPaginaSlug').value.trim()||titulo);
-      const resumo=document.getElementById('inputPaginaResumo').value.trim();
-      const conteudo=document.getElementById('inputPaginaConteudo').value;
-      const visivel=document.getElementById('inputPaginaVisivel').checked;
-      const menu=document.getElementById('inputPaginaMenu').checked;
-      const imagemUrl=document.getElementById('inputPaginaImagemUrl').value.trim();
-      if(!titulo){alert('Informe o título da página.');return;}
-      const duplicada=paginasCustomizadas.find(p=>String(p.slug)===slug&&String(p.id)!==String(paginaEditandoId));
-      if(duplicada){slug=slug+'-'+Date.now().toString().slice(-4);}
-      let imagemFinal=imagemUrl;
-      const arquivo=document.getElementById('inputPaginaImagemFile').files?.[0];
+      event.preventDefault();registrarAtividadeAdmin();if(!localStorage.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return;}
+      const get=id=>document.getElementById(id);const titulo=get('inputPaginaTitulo').value.trim();let slug=slugSeguroPagina(get('inputPaginaSlug').value.trim()||titulo);const tituloPublico=get('inputPaginaTituloPublico').value.trim()||titulo,resumo=get('inputPaginaResumo').value.trim();
+      if(!titulo){alert('Informe o nome da página.');return;}const duplicada=paginasCustomizadas.find(p=>String(p.slug)===slug&&String(p.id)!==String(paginaEditandoId));if(duplicada)slug=slug+'-'+Date.now().toString().slice(-4);
+      let imagemFinal=get('inputPaginaImagemUrl').value.trim();const arquivo=get('inputPaginaImagemFile').files?.[0];
       try{
-        if(arquivo){if(arquivo.size>FMABC_STORAGE_MAX_FILE_SIZE)throw new Error('A imagem deve ter no máximo 6 MB.');const fd=new FormData();fd.append('file',arquivo);const upload=await cloudflareAdminFetch('/api/admin/upload?folder=paginas', {method:'POST',body:fd});imagemFinal=upload.url||imagemFinal;}
-        const agora=new Date().toISOString();
+        if(arquivo){if(arquivo.size>FMABC_STORAGE_MAX_FILE_SIZE)throw new Error('A imagem deve ter no máximo 6 MB.');const fd=new FormData();fd.append('file',arquivo);const upload=await cloudflareAdminFetch('/api/admin/upload?folder=paginas',{method:'POST',body:fd});imagemFinal=upload.url||imagemFinal;}
+        const agora=new Date().toISOString(), dados={titulo:tituloPublico,slug,url:`pagina.html?slug=${encodeURIComponent(slug)}`,resumo,conteudo:lerEditorConteudo('inputPaginaConteudo'),conteudoSecundario:lerEditorConteudo('inputPaginaConteudoSecundario'),informacoesAdicionais:lerEditorConteudo('inputPaginaInformacoesAdicionais'),imagem:imagemFinal,bannerAlt:get('inputPaginaBannerAlt').value.trim(),modelo:get('inputPaginaModelo').value,paginaMae:get('inputPaginaMae').value,popup:get('inputPaginaPopup').value,visivel:get('inputPaginaVisivel').value!=='false',menu:get('inputPaginaMenu').checked,categoria:get('inputPaginaCategoria').value,subcategoria:get('inputPaginaSubcategoria').value,destaque:get('inputPaginaDestaque').value==='true',mostrarBusca:get('inputPaginaBusca').value!=='false',seoTitulo:get('inputPaginaSeoTitulo').value.trim(),seoDescricao:get('inputPaginaSeoDescricao').value.trim(),seoKeywords:get('inputPaginaSeoKeywords').value.trim(),updatedAt:agora};
         if(paginaEditandoId){
-          const page=localizarCustom(paginaEditandoId);if(!page)return;
-          Object.assign(page,{titulo,slug,url:`pagina.html?slug=${encodeURIComponent(slug)}`,resumo,conteudo,imagem:imagemFinal,visivel,menu,updatedAt:agora});
-          if(menu)garantirMenuDaPagina(page);else removerMenuDaPagina(page.id);
-          sincronizarVisibilidadePaginaComMenu(page);
-        }else{
-          const page={id:crypto.randomUUID(),tipo:'custom',titulo,slug,url:`pagina.html?slug=${encodeURIComponent(slug)}`,resumo,conteudo,imagem:imagemFinal,visivel,menu,podeExcluir:true,ordem:paginasCustomizadas.length+10,updatedAt:agora};
-          paginasCustomizadas.push(page);if(menu)garantirMenuDaPagina(page);
-        }
-        const salvo = await salvarPaginasNoBanco();
-        if(!salvo) return;
-        limparEditorPaginaPortal();
-        document.getElementById('inputPaginaImagemFile').value='';
-        renderEditorPaginas();renderMenuPublico();
-      }catch(error){console.error('Erro ao salvar página:',error);alert('Não foi possível salvar a página: '+(error.message||'erro desconhecido'));}
+          const system=PAGINAS_SISTEMA.find(p=>String(p.id)===String(paginaEditandoId));
+          if(system){Object.assign(system,{titulo:dados.titulo,resumo:dados.resumo,visivel:dados.visivel||system.id==='inicio',menu:system.id==='inicio'?true:dados.menu});const menuObj={...system,url:system.url};if(system.menu)garantirMenuDaPagina(menuObj);else{const mi=encontrarMenuDaPagina(system);if(mi)mi.visible=false;}}
+          else{const page=localizarCustom(paginaEditandoId);if(!page)return;Object.assign(page,dados,{id:page.id,tipo:'custom',podeExcluir:true,createdAt:page.createdAt||agora});if(page.menu)garantirMenuDaPagina(page);else removerMenuDaPagina(page.id);sincronizarVisibilidadePaginaComMenu(page);}
+        }else{const page={...dados,id:crypto.randomUUID(),tipo:'custom',podeExcluir:true,createdAt:agora,ordem:paginasCustomizadas.length+10};paginasCustomizadas.push(page);if(page.menu)garantirMenuDaPagina(page);}
+        const salvo=await salvarPaginasNoBanco();if(!salvo)return;fecharEditorPaginaPortal();renderListaPaginasCMS();renderMenuPublico();showToast('Página salva com sucesso.');
+      }catch(error){console.error(error);alert('Não foi possível salvar a página: '+(error.message||'erro desconhecido'));}
     }
 
-    function atualizarPreviewImagemPagina(url){
-      const box=document.getElementById('previewPaginaImagem');const img=document.getElementById('previewPaginaImagemImg');if(!box||!img)return;
-      if(url){img.src=url;box.style.display='block';}else{img.src='';box.style.display='none';}
-    }
-
-    async function restaurarPaginasPadrao(){
-      if(!confirm('Restaurar as páginas institucionais padrão e remover todas as páginas personalizadas deste portal?'))return;
-      paginasCustomizadas.forEach(p=>removerMenuDaPagina(p.id));
-      paginasCustomizadas=[];
-      PAGINAS_SISTEMA.forEach((p,index)=>{p.visivel=true;p.menu=true;p.ordem=index+1;garantirMenuDaPagina(p);});
-      limparEditorPaginaPortal();renderEditorPaginas();renderMenuPublico();await salvarPaginasNoBanco();
-    }
+    async function restaurarPaginasPadrao(){if(!confirm('Restaurar as páginas institucionais padrão e remover todas as páginas personalizadas deste portal?'))return;paginasCustomizadas.forEach(p=>removerMenuDaPagina(p.id));paginasCustomizadas=[];PAGINAS_SISTEMA.forEach((p,index)=>{p.visivel=true;p.menu=true;p.ordem=index+1;garantirMenuDaPagina(p);});fecharEditorPaginaPortal();renderListaPaginasCMS();renderMenuPublico();await salvarPaginasNoBanco();}
 
     const appState = {
       home: {
@@ -5917,7 +5881,7 @@
         renderEditorMenu();
       }
       if (tabId === 'tabPaginas') {
-        renderEditorPaginas();
+        renderListaPaginasCMS();
       }
       if (tabId === 'tabTurmas') {
         renderEditorOrdemTurmas();
