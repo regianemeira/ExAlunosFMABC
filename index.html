@@ -104,23 +104,6 @@
     }
 
 
-    .ex-alunos-label {
-      align-self: center;
-      color: var(--azul-institucional);
-      font-size: 0.78rem;
-      font-weight: 800;
-      letter-spacing: 0.65px;
-      line-height: 1;
-      white-space: nowrap;
-      margin-left: -2px;
-    }
-
-    @media (max-width: 620px) {
-      .ex-alunos-label {
-        font-size: 0.7rem;
-        letter-spacing: 0.45px;
-      }
-    }
     .top-nav {
       background-color: var(--azul-institucional);
       padding: 0.8rem 2.5rem;
@@ -1361,12 +1344,6 @@
         height: 40px;
       }
 
-      .ex-alunos-label {
-        order: 3;
-        width: 100%;
-        margin-left: 0;
-        text-align: left;
-      }
 
       .admin-nav-actions {
         margin-left: auto;
@@ -2119,7 +2096,6 @@
     <a href="#" class="brand-logo">
       <img src="https://www.fmabc.br/img/logo-fmabc.81be2f48.png" alt="Logotipo FMABC Centro Universitário" class="logo-img">
     </a>
-      <div class="ex-alunos-label" id="exAlunosLabel">Ex-Alunos FMABC</div>
     <div class="admin-nav-actions" id="adminNavActions">
       <button class="btn-admin-access" onclick="abrirAdminModal()">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-5.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8Z"/></svg>
@@ -2360,28 +2336,11 @@
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabUsuariosAdmin')">Gerenciar Usuários</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabRodape')">Editar Rodapé</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabBannerSocial')">Hero / Banners da Página Inicial</button>
-          <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabExAlunos')">Texto Ex-Alunos</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabSocialConfig')">Banner Redes Sociais</button>
         </nav>
 
         <main class="admin-content">
           
-
-          <section id="tabExAlunos" class="admin-tab-pane">
-            <h3 class="admin-section-title">Texto do Cabeçalho — Ex-Alunos</h3>
-            <p style="color:var(--slate-muted);font-size:.88rem;line-height:1.5;margin-bottom:18px;">
-              Edite a frase que aparece logo abaixo do logotipo institucional.
-            </p>
-            <form onsubmit="salvarTextoExAlunos(event)">
-              <div class="form-group">
-                <label for="inputExAlunosTexto">Frase exibida</label>
-                <input type="text" id="inputExAlunosTexto" class="form-control"
-                       value="Ex-Alunos FMABC"
-                       maxlength="80" required>
-              </div>
-              <button type="submit" class="btn-save">Salvar frase</button>
-            </form>
-          </section>
 
           <section id="tabHome" class="admin-tab-pane active">
             <h3 class="admin-section-title">Editar Informações da Página Inicial</h3>
@@ -2874,23 +2833,18 @@
 
     const HERO_STORAGE_KEY = 'fmabc_hero_images';
 
-    const EX_ALUNOS_DEFAULT_TEXT = 'Ex-Alunos FMABC';
     const HERO_ROTATION_DEFAULT = true;
     let heroRotativoAtivo = HERO_ROTATION_DEFAULT;
-    let exAlunosTexto = EX_ALUNOS_DEFAULT_TEXT;
 
     async function carregarConfiguracoesInstitucionais() {
       try {
-        const ids = ['ex_alunos_text', 'hero_rotation_enabled'];
+        const ids = ['hero_rotation_enabled'];
         const respostas = await Promise.all(ids.map(async id => {
           const r = await fetch(`${CLOUDFLARE_API_URL}/api/config/${encodeURIComponent(id)}`, { cache: 'no-store' });
           if (!r.ok) throw new Error(`Cloudflare API HTTP ${r.status}`);
           return await r.json();
         }));
         respostas.forEach(item => {
-          if (item.id === 'ex_alunos_text' && typeof item.valor?.texto === 'string') {
-            exAlunosTexto = item.valor.texto.trim() || EX_ALUNOS_DEFAULT_TEXT;
-          }
           if (item.id === 'hero_rotation_enabled' && typeof item.valor?.enabled === 'boolean') {
             heroRotativoAtivo = item.valor.enabled;
           }
@@ -2898,15 +2852,7 @@
       } catch (error) {
         console.warn('Configurações institucionais: usando valores padrão.', error);
       }
-      aplicarTextoExAlunos();
       aplicarControleHeroRotativo();
-    }
-
-    function aplicarTextoExAlunos() {
-      const label = document.getElementById('exAlunosLabel');
-      const input = document.getElementById('inputExAlunosTexto');
-      if (label) label.textContent = exAlunosTexto || EX_ALUNOS_DEFAULT_TEXT;
-      if (input) input.value = exAlunosTexto || EX_ALUNOS_DEFAULT_TEXT;
     }
 
     function aplicarControleHeroRotativo() {
@@ -2936,23 +2882,6 @@
         console.error(`Erro ao salvar ${id}:`, error);
         showToast('Não foi possível salvar: ' + (error.message || 'erro desconhecido'));
         return false;
-      }
-    }
-
-    async function salvarTextoExAlunos(e) {
-      e.preventDefault();
-      const input = document.getElementById('inputExAlunosTexto');
-      const valor = input?.value.trim();
-
-      if (!valor) {
-        alert('Digite uma frase para o cabeçalho.');
-        return;
-      }
-
-      if (await salvarConfigInstitucional('ex_alunos_text', { texto: valor })) {
-        exAlunosTexto = valor;
-        aplicarTextoExAlunos();
-        showToast('✅ Texto "Ex-Alunos" atualizado.');
       }
     }
 
