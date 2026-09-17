@@ -2323,6 +2323,41 @@
   }
 </style>
 
+
+<style id="fmabc-pages-admin-style">
+  .pages-admin-intro{margin:0 0 20px;color:var(--slate-muted);line-height:1.55;font-size:.9rem}
+  .pages-admin-box{border:1px solid var(--border-color);border-radius:14px;background:var(--slate-light);padding:18px;margin-bottom:18px}
+  .pages-admin-box h4{margin:0 0 12px;color:var(--azul-institucional)}
+  .pages-admin-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .pages-admin-form-grid .full{grid-column:1/-1}
+  .pages-admin-inline{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .pages-admin-check{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border-color);border-radius:9px;padding:10px 12px;font-size:.82rem;font-weight:700;color:var(--azul-institucional)}
+  .pages-admin-check input{width:16px;height:16px}
+  .pages-admin-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:14px}
+  .pages-admin-list{display:flex;flex-direction:column;gap:10px}
+  .page-admin-item{display:grid;grid-template-columns:34px 42px 1.4fr 1fr 150px auto;gap:12px;align-items:center;background:#fff;border:1px solid var(--border-color);border-radius:12px;padding:12px;transition:.2s ease}
+  .page-admin-item.dragging{opacity:.55;border-color:var(--verde-principal)}
+  .page-admin-handle{width:34px;height:34px;border:1px solid var(--border-color);border-radius:8px;background:#f8fafc;display:flex;align-items:center;justify-content:center;cursor:grab;font-size:1.05rem;color:var(--azul-institucional);user-select:none}
+  .page-admin-number{width:42px;height:34px;border-radius:8px;background:#f5f7f8;color:var(--azul-institucional);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.8rem}
+  .page-admin-main strong{display:block;color:var(--azul-institucional);font-size:.95rem}
+  .page-admin-main small,.page-admin-url{color:var(--slate-muted);font-size:.75rem;display:block;word-break:break-word}
+  .page-admin-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+  .page-admin-badge{display:inline-flex;align-items:center;border-radius:999px;padding:4px 8px;font-size:.68rem;font-weight:800;background:#eef3f0;color:var(--verde-escuro)}
+  .page-admin-badge.off{background:#fff1f2;color:#be123c}
+  .page-admin-meta{font-size:.78rem;color:var(--slate-muted)}
+  .page-admin-btns{display:flex;gap:5px;justify-content:flex-end;flex-wrap:wrap}
+  .page-admin-btns button{width:32px;height:32px;border:1px solid var(--border-color);border-radius:7px;background:#fff;color:var(--azul-institucional);cursor:pointer;font-weight:900}
+  .page-admin-btns button:disabled{opacity:.4;cursor:not-allowed}
+  .page-admin-danger{color:#b91c1c!important;background:#fff7f7!important;border-color:#fecaca!important}
+  .page-admin-system{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:#64748b}
+  .page-admin-status{margin-top:10px;color:var(--slate-muted);font-size:.78rem}
+  .page-admin-muted{padding:14px;background:#fff;border:1px dashed var(--border-color);border-radius:10px;color:var(--slate-muted);font-size:.84rem}
+  .page-admin-preview{display:none;margin-top:8px;max-width:260px;border:1px solid var(--border-color);border-radius:10px;overflow:hidden;background:#fff}
+  .page-admin-preview img{display:block;width:100%;height:150px;object-fit:cover}
+  @media(max-width:1050px){.page-admin-item{grid-template-columns:34px 42px 1fr 1fr auto}.page-admin-meta{grid-column:3/-1}.page-admin-btns{grid-column:3/-1;justify-content:flex-start}}
+  @media(max-width:760px){.pages-admin-form-grid{grid-template-columns:1fr}.pages-admin-form-grid .full{grid-column:auto}.page-admin-item{grid-template-columns:30px 38px 1fr}.page-admin-item>div:not(.page-admin-handle):not(.page-admin-number){grid-column:3}.page-admin-meta,.page-admin-btns{grid-column:3}.page-admin-handle{width:30px}}
+</style>
+
 </head>
 <body>
 
@@ -2541,6 +2576,7 @@
         <nav class="admin-sidebar">
           <button class="admin-nav-item active" onclick="switchAdminTab(event, 'tabHome')">Página Inicial</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabMenus')">Gestão de Menus</button>
+          <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabPaginas')">Gestão de Páginas</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabPlanoDeFundo')">Plano de Fundo</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabCursos')">Inclusão de Cursos</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabTurmas')">Gestão de Turmas</button>
@@ -2608,6 +2644,64 @@
               <div class="menu-admin-footer">
                 <button type="button" class="btn-save" style="background:#64748b;" onclick="restaurarMenuPadrao()">Restaurar menu padrão</button>
                 <button type="button" class="btn-save" onclick="salvarMenuNoBanco()">Salvar alterações do menu</button>
+              </div>
+            </div>
+
+          </section>
+
+          <section id="tabPaginas" class="admin-tab-pane">
+            <h3 class="admin-section-title">Gestão de Páginas do Portal</h3>
+            <p class="pages-admin-intro">Gerencie as páginas públicas do portal em um único lugar. As páginas institucionais já existentes podem ser exibidas ou ocultadas e controladas no menu. Novas páginas podem ser criadas, editadas, ordenadas, publicadas, ocultadas e excluídas sem editar o código do portal.</p>
+
+            <div class="pages-admin-box">
+              <h4 id="tituloEditorPagina">Criar nova página</h4>
+              <form id="formPaginaPortal" onsubmit="salvarPaginaPortal(event)">
+                <input type="hidden" id="paginaEditandoId" value="">
+                <div class="pages-admin-form-grid">
+                  <div class="form-group">
+                    <label>Título da página</label>
+                    <input type="text" id="inputPaginaTitulo" class="form-control" maxlength="100" placeholder="Ex: História da Instituição" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Slug / endereço da página</label>
+                    <input type="text" id="inputPaginaSlug" class="form-control" maxlength="80" placeholder="historia-da-instituicao" required>
+                    <small style="display:block;margin-top:5px;color:var(--slate-muted);font-size:.72rem;">Será publicado como <strong>pagina.html?slug=...</strong>.</small>
+                  </div>
+                  <div class="form-group full">
+                    <label>Descrição curta</label>
+                    <input type="text" id="inputPaginaResumo" class="form-control" maxlength="180" placeholder="Resumo que aparecerá no topo da página">
+                  </div>
+                  <div class="form-group full">
+                    <label>Conteúdo da página</label>
+                    <textarea id="inputPaginaConteudo" class="form-control" rows="10" placeholder="Digite o conteúdo da nova página..."></textarea>
+                  </div>
+                  <div class="form-group full">
+                    <label>Imagem de capa (opcional)</label>
+                    <input type="file" id="inputPaginaImagemFile" class="form-control" accept="image/*">
+                    <input type="text" id="inputPaginaImagemUrl" class="form-control" style="margin-top:8px;" maxlength="1000" placeholder="Ou informe uma URL de imagem">
+                    <div id="previewPaginaImagem" class="page-admin-preview"><img id="previewPaginaImagemImg" src="" alt="Pré-visualização da capa"></div>
+                  </div>
+                  <div class="form-group full">
+                    <div class="pages-admin-inline">
+                      <label class="pages-admin-check"><input type="checkbox" id="inputPaginaVisivel" checked> Publicar página</label>
+                      <label class="pages-admin-check"><input type="checkbox" id="inputPaginaMenu" checked> Mostrar no menu superior</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="pages-admin-actions">
+                  <button type="button" class="btn-save" style="background:#64748b;" onclick="limparEditorPaginaPortal()">Nova página</button>
+                  <button type="submit" class="btn-save" id="btnSalvarPaginaPortal">Salvar página</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="pages-admin-box">
+              <h4>Páginas existentes</h4>
+              <div id="listaPaginasAdmin" class="pages-admin-list"></div>
+              <div id="statusPaginasAdmin" class="page-admin-status">Arraste as páginas ou use as setas para alterar a ordem.</div>
+              <div class="pages-admin-actions">
+                <button type="button" class="btn-save" style="background:#64748b;" onclick="restaurarPaginasPadrao()">Restaurar padrões das páginas</button>
+                <button type="button" class="btn-save" onclick="salvarPaginasNoBanco()">Salvar alterações das páginas</button>
               </div>
             </div>
           </section>
@@ -3987,6 +4081,7 @@
       configurarHeroBanner();
       setupEventListeners();
       await carregarOrdemTurmasDoBanco();
+      await carregarPaginasDoBanco();
 
       // Primeira carga: busca os dados em paralelo, sem bloquear o Hero visível.
       await sincronizarDadosPublicosEconomicamente(true);
@@ -4002,6 +4097,9 @@
       document.addEventListener('visibilitychange', sincronizarAoRetornar);
       window.addEventListener('focus', sincronizarAoRetornar);
     });
+
+    document.getElementById('inputPaginaImagemUrl')?.addEventListener('input', (e) => atualizarPreviewImagemPagina(e.target.value.trim()));
+    document.getElementById('inputPaginaImagemFile')?.addEventListener('change', (e) => { const file=e.target.files?.[0]; if(file){ const reader=new FileReader(); reader.onload=()=>atualizarPreviewImagemPagina(reader.result); reader.readAsDataURL(file); } });
 
     document.getElementById('inputBgImageUrl')?.addEventListener('input', (e) => {
       if (e.target.value.trim() !== '') {
@@ -4244,11 +4342,11 @@
     // Persiste no Cloudflare D1 usando a configuração genérica site_config.
     // =========================================================
     const MENU_PADRAO = [
-      { id: 'inicio', label: 'Início', url: 'index.html', target: '_self', visible: true },
-      { id: 'linha-do-tempo', label: 'Linha do tempo', url: 'linha-do-tempo.html', target: '_self', visible: true },
-      { id: 'depoimentos-ex-alunos', label: 'Depoimentos de ex-alunos', url: 'depoimentos-ex-alunos.html', target: '_self', visible: true },
-      { id: 'galeria-diretores-reitores', label: 'Fotos e galeria de diretores e reitores', url: 'galeria-diretores-reitores.html', target: '_self', visible: true },
-      { id: 'professores-emeritos', label: 'Professores eméritos', url: 'professores-emeritos.html', target: '_self', visible: true }
+      { id: 'inicio', pageId: 'inicio', label: 'Início', url: 'index.html', target: '_self', visible: true },
+      { id: 'linha-do-tempo', pageId: 'linha-do-tempo', label: 'Linha do tempo', url: 'linha-do-tempo.html', target: '_self', visible: true },
+      { id: 'depoimentos-ex-alunos', pageId: 'depoimentos-ex-alunos', label: 'Depoimentos de ex-alunos', url: 'depoimentos-ex-alunos.html', target: '_self', visible: true },
+      { id: 'galeria-diretores-reitores', pageId: 'galeria-diretores-reitores', label: 'Fotos e galeria de diretores e reitores', url: 'galeria-diretores-reitores.html', target: '_self', visible: true },
+      { id: 'professores-emeritos', pageId: 'professores-emeritos', label: 'Professores eméritos', url: 'professores-emeritos.html', target: '_self', visible: true }
     ];
 
     let menuSiteItens = MENU_PADRAO.map(item => ({ ...item }));
@@ -4566,6 +4664,304 @@
       renderMenuPublico();
       renderEditorMenu();
       await salvarMenuNoBanco();
+    }
+
+
+    // =========================================================
+    // GESTÃO DE PÁGINAS DO PORTAL
+    // Páginas do sistema continuam em arquivos próprios.
+    // Novas páginas são armazenadas no D1 em site_config.portal_pages
+    // e publicadas pelo template pagina.html?slug=...
+    // =========================================================
+    const PAGINAS_SISTEMA = [
+      { id:'inicio', tipo:'sistema', titulo:'Página Inicial', url:'index.html', resumo:'Página principal do acervo de turmas.', visivel:true, menu:true, ordem:1, podeExcluir:false },
+      { id:'linha-do-tempo', tipo:'sistema', titulo:'Linha do tempo', url:'linha-do-tempo.html', resumo:'Principais marcos históricos da FMABC.', visivel:true, menu:true, ordem:2, podeExcluir:false },
+      { id:'depoimentos-ex-alunos', tipo:'sistema', titulo:'Depoimentos de ex-alunos', url:'depoimentos-ex-alunos.html', resumo:'Depoimentos enviados por ex-alunos.', visivel:true, menu:true, ordem:3, podeExcluir:false },
+      { id:'galeria-diretores-reitores', tipo:'sistema', titulo:'Fotos e galeria de diretores e reitores', url:'galeria-diretores-reitores.html', resumo:'Galeria institucional de diretores e reitores.', visivel:true, menu:true, ordem:4, podeExcluir:false },
+      { id:'professores-emeritos', tipo:'sistema', titulo:'Professores eméritos', url:'professores-emeritos.html', resumo:'Galeria e registros de professores eméritos.', visivel:true, menu:true, ordem:5, podeExcluir:false }
+    ];
+
+    let paginasCustomizadas = [];
+    let paginaArrastandoId = '';
+    let paginaEditandoId = '';
+
+    function slugSeguroPagina(texto){
+      return String(texto||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,80) || 'nova-pagina';
+    }
+
+    function normalizarPaginaCustom(item, index=0){
+      if(!item || typeof item!=='object') return null;
+      const id=String(item.id||'').trim();
+      const titulo=String(item.titulo||item.title||'').trim();
+      const slug=slugSeguroPagina(item.slug||titulo||`pagina-${index+1}`);
+      if(!id || !titulo || !slug) return null;
+      return {
+        id,
+        tipo:'custom',
+        titulo:titulo.slice(0,100),
+        slug,
+        url:`pagina.html?slug=${encodeURIComponent(slug)}`,
+        resumo:String(item.resumo||item.description||'').trim().slice(0,180),
+        conteudo:String(item.conteudo||item.content||''),
+        imagem:String(item.imagem||item.image||'').trim().slice(0,1000),
+        visivel:item.visivel!==false,
+        menu:item.menu!==false,
+        ordem:Number.isFinite(Number(item.ordem))?Number(item.ordem):9999,
+        podeExcluir:true,
+        updatedAt:item.updatedAt||new Date().toISOString()
+      };
+    }
+
+    function todasPaginasPortal(){
+      const custom=paginasCustomizadas.map(normalizarPaginaCustom).filter(Boolean);
+      return [...PAGINAS_SISTEMA.map(p=>({...p})), ...custom];
+    }
+
+    function paginaPorId(id){ return todasPaginasPortal().find(p=>String(p.id)===String(id)) || null; }
+
+    function obterOrdemPaginas(){
+      return todasPaginasPortal().sort((a,b)=>{
+        const oa=Number.isFinite(Number(a.ordem))?Number(a.ordem):9999;
+        const ob=Number.isFinite(Number(b.ordem))?Number(b.ordem):9999;
+        return oa-ob || String(a.titulo).localeCompare(String(b.titulo),'pt-BR',{sensitivity:'base'});
+      });
+    }
+
+    function atualizarOrdemPaginasAPartirDaLista(lista){
+      lista.forEach((page,index)=>{
+        const ordem=index+1;
+        if(page.tipo==='sistema'){
+          const original=PAGINAS_SISTEMA.find(p=>String(p.id)===String(page.id));
+          if(original) original.ordem=ordem;
+        } else {
+          const original=paginasCustomizadas.find(p=>String(p.id)===String(page.id));
+          if(original) original.ordem=ordem;
+        }
+      });
+    }
+
+    function encontrarMenuDaPagina(page){
+      const pageId=String(page?.id||'');
+      const url=String(page?.url||'');
+      return menuSiteItens.find(item=>String(item.pageId||'')===pageId || String(item.url||'')===url || (pageId && String(item.id||'')===pageId));
+    }
+
+    function sincronizarVisibilidadePaginaComMenu(page){
+      if(!page) return;
+      const item=encontrarMenuDaPagina(page);
+      if(item){ item.visible=page.visivel!==false && page.menu!==false; item.pageId=String(page.id); }
+    }
+
+    function garantirMenuDaPagina(page){
+      if(!page || page.menu===false || page.visivel===false) return;
+      let item=encontrarMenuDaPagina(page);
+      if(!item){
+        item={id:gerarIdMenuUnico(page.id||page.titulo),pageId:String(page.id),label:page.titulo,url:page.url,target:'_self',visible:true};
+        menuSiteItens.push(item);
+      } else {
+        item.pageId=String(page.id); item.label=page.titulo; item.url=page.url; item.visible=true;
+      }
+    }
+
+    function removerMenuDaPagina(pageId){
+      const pid=String(pageId||'');
+      menuSiteItens=menuSiteItens.filter(item=>String(item.pageId||'')!==pid);
+    }
+
+    async function carregarPaginasDoBanco(){
+      try{
+        const resposta=await fetch(`${CLOUDFLARE_API_URL}/api/config/portal_pages?v=${Date.now()}`,{cache:'no-store'});
+        if(resposta.ok){
+          const data=await resposta.json();
+          const itens=Array.isArray(data?.valor?.pages)?data.valor.pages:[];
+          const mapa=new Map(itens.map(p=>[String(p?.id||''),p]));
+          PAGINAS_SISTEMA.forEach((p,index)=>{
+            const salvo=mapa.get(String(p.id));
+            if(salvo){
+              p.visivel=salvo.visivel!==false || p.id==='inicio';
+              p.menu=p.id==='inicio' ? true : salvo.menu!==false;
+              if(Number.isFinite(Number(salvo.ordem))) p.ordem=Number(salvo.ordem);
+            } else if(!Number.isFinite(Number(p.ordem))) p.ordem=index+1;
+          });
+          paginasCustomizadas=itens.map((item,i)=>normalizarPaginaCustom(item,i)).filter(Boolean).map((item,i)=>({...item,ordem:Number.isFinite(Number(itens.find(x=>String(x?.id||'')===String(item.id))?.ordem))?Number(itens.find(x=>String(x?.id||'')===String(item.id))?.ordem):i+10}));
+        } else { paginasCustomizadas=[]; }
+      }catch(error){
+        console.warn('Não foi possível carregar as páginas personalizadas.',error);
+        paginasCustomizadas=[];
+      }
+      renderEditorPaginas();
+    }
+
+    async function salvarPaginasNoBanco(){
+      registrarAtividadeAdmin();
+      if(!localStorage.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return false;}
+      try{
+        const lista=obterOrdemPaginas();
+        atualizarOrdemPaginasAPartirDaLista(lista);
+        const payload=[...PAGINAS_SISTEMA.map(p=>({id:p.id,tipo:'sistema',titulo:p.titulo,url:p.url,resumo:p.resumo,visivel:p.visivel!==false,menu:p.menu!==false,ordem:p.ordem,podeExcluir:false})), ...paginasCustomizadas.map((p,index)=>{const n=normalizarPaginaCustom(p,index);return {...n,ordem:Number.isFinite(Number(p.ordem))?Number(p.ordem):index+10};})];
+        await cloudflareAdminFetch('/api/admin/config/portal_pages',{method:'PUT',body:JSON.stringify({valor:{pages:payload}})});
+        await cloudflareAdminFetch('/api/admin/config/site_menu',{method:'PUT',body:JSON.stringify({valor:{itens:menuSiteItens}})});
+        renderEditorPaginas();
+        renderMenuPublico();
+        showToast('Páginas salvas e menu sincronizado com o Cloudflare.');
+        return true;
+      }catch(error){
+        console.error('Erro ao salvar páginas:',error);
+        showToast('Não foi possível salvar as páginas: '+(error.message||'erro desconhecido'));
+        return false;
+      }
+    }
+
+    function renderEditorPaginas(){
+      const container=document.getElementById('listaPaginasAdmin');
+      if(!container) return;
+      container.innerHTML='';
+      const lista=obterOrdemPaginas();
+      if(!lista.length){container.innerHTML='<div class="page-admin-muted">Nenhuma página disponível.</div>';return;}
+      lista.forEach((page,index)=>{
+        const row=document.createElement('div'); row.className='page-admin-item'; row.draggable=true; row.dataset.id=String(page.id);
+        row.ondragstart=e=>iniciarArrastePagina(e,page.id); row.ondragend=finalizarArrastePagina; row.ondragover=e=>e.preventDefault(); row.ondrop=e=>soltarPagina(e,page.id);
+        const handle=document.createElement('div');handle.className='page-admin-handle';handle.textContent='☰';handle.title='Arraste para reordenar';
+        const number=document.createElement('div');number.className='page-admin-number';number.textContent=String(index+1).padStart(2,'0');
+        const main=document.createElement('div'); main.className='page-admin-main';
+        const strong=document.createElement('strong');strong.textContent=page.titulo; main.appendChild(strong);
+        const small=document.createElement('small');small.textContent=page.url;main.appendChild(small);
+        const badges=document.createElement('div');badges.className='page-admin-badges';
+        const tipo=document.createElement('span');tipo.className='page-admin-badge';tipo.textContent=page.tipo==='sistema'?'Página do sistema':'Página personalizada';badges.appendChild(tipo);
+        const pub=document.createElement('span');pub.className='page-admin-badge'+(page.visivel===false?' off':'');pub.textContent=page.visivel===false?'Oculta':'Publicada';badges.appendChild(pub);
+        const menu=document.createElement('span');menu.className='page-admin-badge'+(page.menu===false?' off':'');menu.textContent=page.menu===false?'Fora do menu':'No menu';badges.appendChild(menu);
+        main.appendChild(badges);
+        const meta=document.createElement('div');meta.className='page-admin-meta';meta.textContent=page.tipo==='sistema'?'Conteúdo mantido no arquivo da página. Use o menu/visibilidade para controlar a publicação.':'Conteúdo editável pelo administrador.';
+        const actions=document.createElement('div'); actions.className='page-admin-btns';
+        const up=document.createElement('button');up.type='button';up.title='Mover para cima';up.textContent='↑';up.disabled=index===0;up.onclick=()=>moverPaginaPortal(page.id,-1);
+        const down=document.createElement('button');down.type='button';down.title='Mover para baixo';down.textContent='↓';down.disabled=index===lista.length-1;down.onclick=()=>moverPaginaPortal(page.id,1);
+        const toggle=document.createElement('button');toggle.type='button';toggle.title=page.visivel===false?'Publicar página':'Ocultar página';toggle.textContent=page.visivel===false?'▶':'◼';toggle.onclick=()=>alternarVisibilidadePagina(page.id);
+        actions.append(up,down,toggle);
+        if(page.tipo==='custom'){
+          const edit=document.createElement('button');edit.type='button';edit.title='Editar página';edit.textContent='✎';edit.onclick=()=>editarPaginaPortal(page.id);actions.appendChild(edit);
+          const duplicate=document.createElement('button');duplicate.type='button';duplicate.title='Duplicar página';duplicate.textContent='⧉';duplicate.onclick=()=>duplicarPaginaPortal(page.id);actions.appendChild(duplicate);
+          const del=document.createElement('button');del.type='button';del.className='page-admin-danger';del.title='Excluir página';del.textContent='×';del.onclick=()=>excluirPaginaPortal(page.id);actions.appendChild(del);
+        }
+        if(page.tipo==='sistema'){
+          const menuBtn=document.createElement('button');menuBtn.type='button';menuBtn.title=page.menu===false?'Adicionar ao menu':'Ocultar do menu';menuBtn.textContent=page.menu===false?'☰':'−';menuBtn.onclick=()=>alternarMenuPagina(page.id);actions.appendChild(menuBtn);
+        }
+        row.append(handle,number,main,meta,actions);container.appendChild(row);
+      });
+    }
+
+    function localizarCustom(id){return paginasCustomizadas.find(p=>String(p.id)===String(id))||null;}
+
+    function moverPaginaPortal(id,delta){
+      const lista=obterOrdemPaginas(); const index=lista.findIndex(p=>String(p.id)===String(id)); const novo=index+delta;
+      if(index<0||novo<0||novo>=lista.length)return;
+      const [movido]=lista.splice(index,1);lista.splice(novo,0,movido);
+      atualizarOrdemPaginasAPartirDaLista(lista);
+      renderEditorPaginas();
+      showToast('Ordem atualizada. Clique em “Salvar alterações das páginas”.');
+    }
+
+    function alternarVisibilidadePagina(id){
+      const custom=localizarCustom(id); if(custom){custom.visivel=custom.visivel===false; sincronizarVisibilidadePaginaComMenu(custom);}
+      const sistema=PAGINAS_SISTEMA.find(p=>String(p.id)===String(id));
+      if(sistema){if(sistema.id==='inicio'){showToast('A Página Inicial não pode ser ocultada.');return;} sistema.visivel=sistema.visivel===false; sincronizarVisibilidadePaginaComMenu(sistema);}
+      renderEditorPaginas();renderMenuPublico();showToast('Visibilidade alterada. Clique em “Salvar alterações das páginas”.');
+    }
+
+    function alternarMenuPagina(id){
+      const custom=localizarCustom(id); if(custom){custom.menu=custom.menu===false; if(custom.menu)garantirMenuDaPagina({...custom,url:`pagina.html?slug=${encodeURIComponent(custom.slug)}`,visivel:custom.visivel}); else removerMenuDaPagina(custom.id);}
+      const sistema=PAGINAS_SISTEMA.find(p=>String(p.id)===String(id)); if(sistema){sistema.menu=sistema.menu===false; if(sistema.menu)garantirMenuDaPagina(sistema); else {const item=encontrarMenuDaPagina(sistema);if(item)item.visible=false;}}
+      renderEditorPaginas();renderMenuPublico();showToast('Presença no menu alterada. Clique em “Salvar alterações das páginas”.');
+    }
+
+    function limparEditorPaginaPortal(){
+      paginaEditandoId='';
+      document.getElementById('paginaEditandoId').value='';
+      document.getElementById('tituloEditorPagina').textContent='Criar nova página';
+      document.getElementById('btnSalvarPaginaPortal').textContent='Salvar página';
+      ['inputPaginaTitulo','inputPaginaSlug','inputPaginaResumo','inputPaginaConteudo','inputPaginaImagemUrl'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+      document.getElementById('inputPaginaVisivel').checked=true;document.getElementById('inputPaginaMenu').checked=true;
+      atualizarPreviewImagemPagina('');
+    }
+
+    function editarPaginaPortal(id){
+      const page=localizarCustom(id); if(!page){showToast('As páginas institucionais existentes permanecem nos arquivos próprios e não são editadas por este formulário.');return;}
+      paginaEditandoId=String(id);document.getElementById('paginaEditandoId').value=paginaEditandoId;
+      document.getElementById('tituloEditorPagina').textContent='Editar página';
+      document.getElementById('btnSalvarPaginaPortal').textContent='Salvar alterações';
+      document.getElementById('inputPaginaTitulo').value=page.titulo||'';
+      document.getElementById('inputPaginaSlug').value=page.slug||'';
+      document.getElementById('inputPaginaResumo').value=page.resumo||'';
+      document.getElementById('inputPaginaConteudo').value=page.conteudo||'';
+      document.getElementById('inputPaginaImagemUrl').value=page.imagem||'';
+      document.getElementById('inputPaginaVisivel').checked=page.visivel!==false;
+      document.getElementById('inputPaginaMenu').checked=page.menu!==false;
+      atualizarPreviewImagemPagina(page.imagem||'');
+      document.getElementById('tabPaginas')?.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+
+    function duplicarPaginaPortal(id){
+      const page=localizarCustom(id);if(!page)return;
+      const base=slugSeguroPagina(page.titulo+' copia');
+      const novo={...page,id:crypto.randomUUID(),titulo:(page.titulo+' (cópia)').slice(0,100),slug:base,visivel:false,menu:false};
+      let slug=novo.slug,c=2;const slugs=new Set(paginasCustomizadas.map(p=>String(p.slug)));while(slugs.has(slug))slug=base+'-'+c++;novo.slug=slug;novo.ordem=paginasCustomizadas.length+10;
+      paginasCustomizadas.push(novo);editarPaginaPortal(novo.id);renderEditorPaginas();showToast('Página duplicada. Revise e salve.');
+    }
+
+    async function excluirPaginaPortal(id){
+      const page=localizarCustom(id);if(!page)return;if(!confirm(`Excluir a página “${page.titulo}”? Esta ação remove a página personalizada do banco e do menu.`))return;
+      paginasCustomizadas=paginasCustomizadas.filter(p=>String(p.id)!==String(id));removerMenuDaPagina(id);limparEditorPaginaPortal();renderEditorPaginas();renderMenuPublico();await salvarPaginasNoBanco();
+    }
+
+    function iniciarArrastePagina(event,id){paginaArrastandoId=String(id);event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/plain',String(id));event.currentTarget.classList.add('dragging');}
+    function finalizarArrastePagina(event){event.currentTarget.classList.remove('dragging');}
+    function soltarPagina(event,idDestino){event.preventDefault();const origem=String(paginaArrastandoId||event.dataTransfer.getData('text/plain')||'');const destino=String(idDestino||'');if(!origem||!destino||origem===destino)return;const lista=obterOrdemPaginas();const oi=lista.findIndex(p=>String(p.id)===origem),di=lista.findIndex(p=>String(p.id)===destino);if(oi<0||di<0)return;const[movido]=lista.splice(oi,1);lista.splice(di,0,movido);atualizarOrdemCustomAPartirDaLista(lista);paginaArrastandoId='';renderEditorPaginas();}
+
+    async function salvarPaginaPortal(event){
+      event.preventDefault();registrarAtividadeAdmin();
+      if(!localStorage.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return;}
+      const titulo=document.getElementById('inputPaginaTitulo').value.trim();
+      let slug=slugSeguroPagina(document.getElementById('inputPaginaSlug').value.trim()||titulo);
+      const resumo=document.getElementById('inputPaginaResumo').value.trim();
+      const conteudo=document.getElementById('inputPaginaConteudo').value;
+      const visivel=document.getElementById('inputPaginaVisivel').checked;
+      const menu=document.getElementById('inputPaginaMenu').checked;
+      const imagemUrl=document.getElementById('inputPaginaImagemUrl').value.trim();
+      if(!titulo){alert('Informe o título da página.');return;}
+      const duplicada=paginasCustomizadas.find(p=>String(p.slug)===slug&&String(p.id)!==String(paginaEditandoId));
+      if(duplicada){slug=slug+'-'+Date.now().toString().slice(-4);}
+      let imagemFinal=imagemUrl;
+      const arquivo=document.getElementById('inputPaginaImagemFile').files?.[0];
+      try{
+        if(arquivo){if(arquivo.size>FMABC_STORAGE_MAX_FILE_SIZE)throw new Error('A imagem deve ter no máximo 6 MB.');const fd=new FormData();fd.append('file',arquivo);const upload=await cloudflareAdminFetch('/api/admin/upload?folder=paginas', {method:'POST',body:fd});imagemFinal=upload.url||imagemFinal;}
+        const agora=new Date().toISOString();
+        if(paginaEditandoId){
+          const page=localizarCustom(paginaEditandoId);if(!page)return;
+          Object.assign(page,{titulo,slug,url:`pagina.html?slug=${encodeURIComponent(slug)}`,resumo,conteudo,imagem:imagemFinal,visivel,menu,updatedAt:agora});
+          if(menu)garantirMenuDaPagina(page);else removerMenuDaPagina(page.id);
+          sincronizarVisibilidadePaginaComMenu(page);
+        }else{
+          const page={id:crypto.randomUUID(),tipo:'custom',titulo,slug,url:`pagina.html?slug=${encodeURIComponent(slug)}`,resumo,conteudo,imagem:imagemFinal,visivel,menu,podeExcluir:true,ordem:paginasCustomizadas.length+10,updatedAt:agora};
+          paginasCustomizadas.push(page);if(menu)garantirMenuDaPagina(page);
+        }
+        const salvo = await salvarPaginasNoBanco();
+        if(!salvo) return;
+        limparEditorPaginaPortal();
+        document.getElementById('inputPaginaImagemFile').value='';
+        renderEditorPaginas();renderMenuPublico();
+      }catch(error){console.error('Erro ao salvar página:',error);alert('Não foi possível salvar a página: '+(error.message||'erro desconhecido'));}
+    }
+
+    function atualizarPreviewImagemPagina(url){
+      const box=document.getElementById('previewPaginaImagem');const img=document.getElementById('previewPaginaImagemImg');if(!box||!img)return;
+      if(url){img.src=url;box.style.display='block';}else{img.src='';box.style.display='none';}
+    }
+
+    async function restaurarPaginasPadrao(){
+      if(!confirm('Restaurar as páginas institucionais padrão e remover todas as páginas personalizadas deste portal?'))return;
+      paginasCustomizadas.forEach(p=>removerMenuDaPagina(p.id));
+      paginasCustomizadas=[];
+      PAGINAS_SISTEMA.forEach((p,index)=>{p.visivel=true;p.menu=true;p.ordem=index+1;garantirMenuDaPagina(p);});
+      limparEditorPaginaPortal();renderEditorPaginas();renderMenuPublico();await salvarPaginasNoBanco();
     }
 
     const appState = {
@@ -5519,6 +5915,9 @@
       document.getElementById(tabId).classList.add('active');
       if (tabId === 'tabMenus') {
         renderEditorMenu();
+      }
+      if (tabId === 'tabPaginas') {
+        renderEditorPaginas();
       }
       if (tabId === 'tabTurmas') {
         renderEditorOrdemTurmas();
