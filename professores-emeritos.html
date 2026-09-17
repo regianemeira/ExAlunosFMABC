@@ -47,4 +47,31 @@ async function carregarPlanoDeFundo(){try{const r=await fetch(`${CLOUDFLARE_API_
 async function carregarRodape(){try{const r=await fetch(`${CLOUDFLARE_API_URL}/api/config/site_footer?v=${Date.now()}`,{cache:'no-store'});if(!r.ok)return;const d=await r.json(),v=d?.valor||{};if(v.endereco)document.getElementById('footerAddress').textContent='Endereço: '+v.endereco;if(v.email)document.getElementById('footerEmail').textContent='Contato via e-mail: '+v.email;}catch(e){}}
 document.addEventListener('DOMContentLoaded',()=>{Promise.all([carregarMenu(),carregarPlanoDeFundo(),carregarRodape()]);});</script>
 
+
+<script id="fmabc-page-visibility-guard">
+(function(){
+  const API='https://fmabc-acervo-api.armredessociais.workers.dev';
+  const path=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  const map={
+    'index.html':'inicio',
+    'linha-do-tempo.html':'linha-do-tempo',
+    'depoimentos-ex-alunos.html':'depoimentos-ex-alunos',
+    'galeria-diretores-reitores.html':'galeria-diretores-reitores',
+    'professores-emeritos.html':'professores-emeritos'
+  };
+  const id=map[path];
+  if(!id || id==='inicio') return;
+  fetch(`${API}/api/config/portal_pages?v=${Date.now()}`,{cache:'no-store'})
+    .then(r=>r.ok?r.json():null)
+    .then(data=>{
+      const pages=Array.isArray(data?.valor?.pages)?data.valor.pages:[];
+      const page=pages.find(p=>String(p?.id||'')===id);
+      if(page && page.visivel===false){
+        document.body.innerHTML=`<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:30px;background:#F7F9F8;font-family:Arial,Helvetica,sans-serif;color:#232738"><div style="max-width:720px;background:#fff;border:1px solid #D8DFDB;border-radius:20px;padding:42px;text-align:center;box-shadow:0 14px 35px rgba(35,39,56,.10)"><h1 style="margin:0 0 12px;color:#4B5172">Página indisponível</h1><p style="margin:0 0 24px;color:#555E70">Esta página foi ocultada temporariamente pela administração do portal.</p><a href="index.html" style="display:inline-block;padding:11px 18px;border-radius:10px;background:#339C5B;color:#fff;text-decoration:none;font-weight:800">Voltar ao início</a></div></div>`;
+        document.title='Página indisponível | Memória FMABC';
+      }
+    }).catch(()=>{});
+})();
+</script>
+
 </body></html>

@@ -50,4 +50,31 @@ document.addEventListener('DOMContentLoaded',()=>{Promise.all([carregarMenu(),ca
 async function carregarTurmas(){const s=document.getElementById('turma');try{const r=await fetch(`${CLOUDFLARE_API_URL}/api/turmas?v=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);const lista=await r.json();s.innerHTML='<option value="">Selecione sua turma...</option>'; (Array.isArray(lista)?lista:[]).forEach(t=>{const o=document.createElement('option');o.value=t.id;o.textContent=`${t.titulo||t.nome||'Turma'}${t.ano?' • '+t.ano:''}`;s.appendChild(o)});if(s.options.length===1)s.innerHTML='<option value="">Nenhuma turma disponível</option>';}catch(e){s.innerHTML='<option value="">Não foi possível carregar as turmas</option>';}}
 document.getElementById('formDepoimento').addEventListener('submit',async e=>{e.preventDefault();const nome=document.getElementById('nome').value.trim(),turma_id=document.getElementById('turma').value,text=document.getElementById('texto').value.trim(),status=document.getElementById('status');if(!nome||!turma_id||!text){status.textContent='Preencha todos os campos.';return}status.textContent='Enviando...';try{const r=await fetch(`${CLOUDFLARE_API_URL}/api/depoimentos`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({turma_id,autor:nome,texto:text})});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.error||'Não foi possível enviar o depoimento.');e.target.reset();status.textContent='Depoimento enviado para análise.';}catch(err){status.textContent=err.message||'Não foi possível enviar o depoimento.';}});carregarTurmas();
 </script>
+
+<script id="fmabc-page-visibility-guard">
+(function(){
+  const API='https://fmabc-acervo-api.armredessociais.workers.dev';
+  const path=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  const map={
+    'index.html':'inicio',
+    'linha-do-tempo.html':'linha-do-tempo',
+    'depoimentos-ex-alunos.html':'depoimentos-ex-alunos',
+    'galeria-diretores-reitores.html':'galeria-diretores-reitores',
+    'professores-emeritos.html':'professores-emeritos'
+  };
+  const id=map[path];
+  if(!id || id==='inicio') return;
+  fetch(`${API}/api/config/portal_pages?v=${Date.now()}`,{cache:'no-store'})
+    .then(r=>r.ok?r.json():null)
+    .then(data=>{
+      const pages=Array.isArray(data?.valor?.pages)?data.valor.pages:[];
+      const page=pages.find(p=>String(p?.id||'')===id);
+      if(page && page.visivel===false){
+        document.body.innerHTML=`<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:30px;background:#F7F9F8;font-family:Arial,Helvetica,sans-serif;color:#232738"><div style="max-width:720px;background:#fff;border:1px solid #D8DFDB;border-radius:20px;padding:42px;text-align:center;box-shadow:0 14px 35px rgba(35,39,56,.10)"><h1 style="margin:0 0 12px;color:#4B5172">Página indisponível</h1><p style="margin:0 0 24px;color:#555E70">Esta página foi ocultada temporariamente pela administração do portal.</p><a href="index.html" style="display:inline-block;padding:11px 18px;border-radius:10px;background:#339C5B;color:#fff;text-decoration:none;font-weight:800">Voltar ao início</a></div></div>`;
+        document.title='Página indisponível | Memória FMABC';
+      }
+    }).catch(()=>{});
+})();
+</script>
+
 </body></html>
