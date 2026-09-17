@@ -208,8 +208,7 @@
       margin-bottom:4px;
     }
 
-    .hero-admin-control-box span#heroRotativoStatusTexto,
-    .hero-admin-control-box span#depoimentosSecaoStatusTexto {
+    .hero-admin-control-box span#heroRotativoStatusTexto {
       display:inline-block;
       color:var(--verde-principal);
       font-size:.78rem;
@@ -2090,11 +2089,245 @@
 
   <style id="fmabc-storage-opt-style">
   </style>
+
+<style id="fmabc-menu-memory-style">
+  html { scroll-behavior: smooth; }
+  section[id], div[id] { scroll-margin-top: 108px; }
+
+  .public-memory-menu {
+    background: rgba(255,255,255,.97);
+    border-bottom: 1px solid rgba(75,81,114,.16);
+    box-shadow: 0 3px 14px rgba(15,23,42,.07);
+    position: relative;
+    z-index: 90;
+  }
+  .public-memory-menu-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+    min-height: 58px;
+    display: flex;
+    align-items: center;
+  }
+  .public-memory-menu-list {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    padding: 8px 0;
+  }
+  .public-memory-menu-link {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    min-height: 38px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    text-decoration: none;
+    color: var(--azul-institucional);
+    font-size: .86rem;
+    font-weight: 800;
+    white-space: nowrap;
+    transition: all .2s ease;
+  }
+  .public-memory-menu-link:hover,
+  .public-memory-menu-link:focus-visible {
+    color: #fff;
+    background: var(--verde-principal);
+    outline: none;
+  }
+  .public-memory-menu-empty {
+    width: 100%;
+    padding: 10px 0;
+    color: var(--slate-muted);
+    font-size: .84rem;
+  }
+
+  .memoria-section {
+    margin-top: 34px;
+    background: rgba(255,255,255,.92);
+    border: 1px solid rgba(75,81,114,.12);
+    border-radius: 18px;
+    padding: 34px;
+    box-shadow: 0 10px 30px rgba(15,23,42,.07);
+  }
+  .memoria-section-kicker {
+    display: inline-block;
+    font-size: .76rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--verde-principal);
+    margin-bottom: 8px;
+  }
+  .memoria-section h2 {
+    margin: 0 0 10px;
+    color: var(--azul-institucional);
+    font-size: clamp(1.45rem, 2.2vw, 2rem);
+  }
+  .memoria-section p {
+    margin: 0;
+    color: var(--slate-muted);
+    line-height: 1.65;
+  }
+  .memoria-coming-soon {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(55,113,102,.07), rgba(51,156,91,.04));
+    border: 1px dashed rgba(55,113,102,.25);
+    color: var(--azul-institucional);
+    font-weight: 700;
+  }
+
+  .menu-admin-intro {
+    margin: 0 0 20px;
+    color: var(--slate-muted);
+    line-height: 1.55;
+    font-size: .9rem;
+  }
+  .menu-admin-box {
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    background: var(--slate-light);
+    padding: 16px;
+    margin-bottom: 18px;
+  }
+  .menu-admin-box h4 {
+    margin: 0 0 12px;
+    color: var(--azul-institucional);
+  }
+  .menu-admin-new-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr 190px auto;
+    gap: 10px;
+    align-items: end;
+  }
+  .menu-admin-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .menu-admin-item {
+    display: grid;
+    grid-template-columns: 34px 1.1fr 1.35fr 150px 86px 86px 76px;
+    gap: 10px;
+    align-items: center;
+    padding: 12px;
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    transition: box-shadow .2s ease, border-color .2s ease, opacity .2s ease;
+  }
+  .menu-admin-item.dragging { opacity: .55; border-color: var(--verde-principal); }
+  .menu-admin-handle {
+    cursor: grab;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--azul-institucional);
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    font-size: 1.05rem;
+    user-select: none;
+  }
+  .menu-admin-position {
+    display: none;
+  }
+  .menu-admin-item label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: .7rem;
+    font-weight: 800;
+    color: var(--slate-muted);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+  }
+  .menu-admin-item .form-control { margin: 0; }
+  .menu-admin-target,
+  .menu-admin-visible {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .menu-admin-visible label { margin-bottom: 0; }
+  .menu-admin-visible-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 0 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--azul-institucional);
+    font-size: .8rem;
+    font-weight: 700;
+  }
+  .menu-admin-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+  }
+  .menu-admin-actions button {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--border-color);
+    border-radius: 7px;
+    background: #fff;
+    color: var(--azul-institucional);
+    cursor: pointer;
+    font-weight: 900;
+  }
+  .menu-admin-actions button:disabled { opacity: .4; cursor: not-allowed; }
+  .menu-admin-delete {
+    color: #b91c1c !important;
+    background: #fff7f7 !important;
+    border-color: #fecaca !important;
+  }
+  .menu-admin-footer {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    margin-top: 14px;
+  }
+  .menu-admin-status {
+    margin-top: 10px;
+    color: var(--slate-muted);
+    font-size: .78rem;
+  }
+
+  @media (max-width: 1050px) {
+    .menu-admin-item {
+      grid-template-columns: 34px 1fr 1fr 150px;
+    }
+    .menu-admin-visible, .menu-admin-actions { grid-column: span 2; }
+    .menu-admin-actions { justify-content: flex-start; }
+    .menu-admin-new-grid { grid-template-columns: 1fr 1.3fr 190px; }
+  }
+  @media (max-width: 768px) {
+    .public-memory-menu-inner { padding: 0 14px; }
+    .public-memory-menu-list { gap: 4px; }
+    .public-memory-menu-link { font-size: .8rem; padding: 8px 12px; }
+    .memoria-section { padding: 24px 18px; }
+    .menu-admin-new-grid { grid-template-columns: 1fr; }
+    .menu-admin-item { grid-template-columns: 30px 1fr; }
+    .menu-admin-item > div:not(.menu-admin-handle) { grid-column: 2; }
+    .menu-admin-actions { grid-column: 2; }
+  }
+</style>
+
 </head>
 <body>
 
   <nav class="top-nav">
-    <a href="#" class="brand-logo">
+    <a href="index.html" class="brand-logo">
       <img src="https://www.fmabc.br/img/logo-fmabc.81be2f48.png" alt="Logotipo FMABC Centro Universitário" class="logo-img">
     </a>
     <div class="admin-nav-actions" id="adminNavActions">
@@ -2105,7 +2338,13 @@
     </div>
   </nav>
 
-  <div class="container">
+  <nav class="public-memory-menu" aria-label="Navegação da memória institucional">
+    <div class="public-memory-menu-inner">
+      <div id="siteMenuContainer" class="public-memory-menu-list"></div>
+    </div>
+  </nav>
+
+  <div class="container" id="inicio">
     
     <section class="hero-memory" id="heroMemory" aria-label="Memórias da FMABC">
       <div class="hero-memory-track" id="heroMemoryTrack"></div>
@@ -2129,7 +2368,7 @@
       </div>
     </section>
 
-    <section class="carrossel-turmas-wrapper" aria-label="Galeria de turmas formadas">
+    <section class="carrossel-turmas-wrapper" id="turmas-acervo" aria-label="Galeria de turmas formadas">
       <div class="carrossel-header">
         <div class="carrossel-heading">
           <span class="carrossel-kicker">Acervo em destaque</span>
@@ -2163,40 +2402,6 @@
       </div>
     </section>
 
-    <section class="secao-depoimento-aluno" id="secaoDepoimentosPublica">
-      <div class="depoimento-header">
-        <h2>🎓 É Ex-Aluno(a) da FMABC? Deixe seu Depoimento!</h2>
-        <p>Compartilhe suas memórias, aprendizados e conquistas. Seu depoimento enriquecerá o acervo histórico da sua turma no portal.</p>
-      </div>
-
-      <form class="form-depoimento-aluno" onsubmit="enviarDepoimentoExAluno(event)">
-        <div class="grid-form-2">
-          <div class="campo-depoimento-wrapper">
-            <label for="depoimentoNome">Seu Nome Completo (ou Nome Social)</label>
-            <input type="text" id="depoimentoNome" class="input-depoimento" placeholder="Ex: Dr. Fernando Medeiros" required>
-          </div>
-          <div class="campo-depoimento-wrapper">
-            <label for="depoimentoTurmaSelect">Sua Turma / Curso</label>
-            <select id="depoimentoTurmaSelect" class="input-depoimento" required>
-              <option value="">Selecione sua turma...</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="campo-depoimento-wrapper">
-          <label for="depoimentoTexto">Seu Depoimento ou Mensagem Especial</label>
-          <textarea id="depoimentoTexto" class="input-depoimento" maxlength="300" placeholder="Escreva aqui uma mensagem sobre seu período na FMABC..." required oninput="atualizarContadorCaracteres()"></textarea>
-          <span class="contador-caracteres" id="contadorCaracteres">0 / 300 caracteres</span>
-        </div>
-
-        <div style="text-align: center;">
-          <button type="submit" class="btn-enviar-depoimento">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-            Enviar Depoimento para o Acervo
-          </button>
-        </div>
-      </form>
-    </section>
 
     <!-- Banner de Redes Sociais -->
     <section class="banner-redes-sociais" aria-label="Redes sociais da FMABC">
@@ -2222,6 +2427,11 @@
         </div>
       </div>
     </section>
+
+
+
+
+
 
   </div>
 
@@ -2330,6 +2540,7 @@
       <div class="admin-body">
         <nav class="admin-sidebar">
           <button class="admin-nav-item active" onclick="switchAdminTab(event, 'tabHome')">Página Inicial</button>
+          <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabMenus')">Gestão de Menus</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabPlanoDeFundo')">Plano de Fundo</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabCursos')">Inclusão de Cursos</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabTurmas')">Gestão de Turmas</button>
@@ -2360,17 +2571,44 @@
               </div>
               <button type="submit" class="btn-save">Atualizar Página Inicial</button>
             </form>
+          </section>
 
-            <div class="hero-admin-control-box" style="margin-top: 22px;">
-              <div>
-                <strong>Seção pública de depoimentos</strong>
-                <span id="depoimentosSecaoStatusTexto">Ativada</span>
-                <p>Quando desativada, a seção para envio de depoimentos deixa de aparecer no portal. Os depoimentos já cadastrados continuam armazenados no acervo.</p>
+          <section id="tabMenus" class="admin-tab-pane">
+            <h3 class="admin-section-title">Gestão de Menus</h3>
+            <p class="menu-admin-intro">Gerencie o menu de navegação do portal sem editar o código. Você pode incluir, editar, ocultar, excluir e reordenar itens. A configuração é salva no Cloudflare e passa a valer para todos os visitantes.</p>
+
+            <div class="menu-admin-box">
+              <h4>Adicionar item ao menu</h4>
+              <form id="formNovoMenuItem" onsubmit="adicionarItemMenu(event)">
+                <div class="menu-admin-new-grid">
+                  <div class="form-group" style="margin:0;">
+                    <label>Nome do item</label>
+                    <input type="text" id="novoMenuNome" class="form-control" placeholder="Ex: História da Instituição" required maxlength="80">
+                  </div>
+                  <div class="form-group" style="margin:0;">
+                    <label>Link / URL</label>
+                    <input type="text" id="novoMenuUrl" class="form-control" placeholder="#linha-do-tempo ou https://exemplo.com" required maxlength="500">
+                  </div>
+                  <div class="form-group" style="margin:0;">
+                    <label>Abrir link</label>
+                    <select id="novoMenuTarget" class="form-control">
+                      <option value="_self">Nesta página</option>
+                      <option value="_blank">Nova aba</option>
+                    </select>
+                  </div>
+                  <button type="submit" class="btn-save">+ Adicionar item</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="menu-admin-box">
+              <h4>Itens do menu</h4>
+              <div id="listaMenuAdmin" class="menu-admin-list"></div>
+              <div class="menu-admin-status" id="statusMenuAdmin">Arraste os itens ou use as setas para alterar a ordem.</div>
+              <div class="menu-admin-footer">
+                <button type="button" class="btn-save" style="background:#64748b;" onclick="restaurarMenuPadrao()">Restaurar menu padrão</button>
+                <button type="button" class="btn-save" onclick="salvarMenuNoBanco()">Salvar alterações do menu</button>
               </div>
-              <label class="switch-control" title="Exibir ou ocultar a seção pública de depoimentos">
-                <input type="checkbox" id="depoimentosSecaoToggle" checked onchange="alterarStatusSecaoDepoimentos()">
-                <span class="switch-slider"></span>
-              </label>
             </div>
           </section>
 
@@ -2849,12 +3087,9 @@
     const HERO_ROTATION_DEFAULT = true;
     let heroRotativoAtivo = HERO_ROTATION_DEFAULT;
 
-    const DEPOIMENTOS_SECAO_DEFAULT = true;
-    let depoimentosSecaoAtiva = DEPOIMENTOS_SECAO_DEFAULT;
-
     async function carregarConfiguracoesInstitucionais() {
       try {
-        const ids = ['hero_rotation_enabled', 'depoimentos_section_enabled'];
+        const ids = ['hero_rotation_enabled'];
         const respostas = await Promise.all(ids.map(async id => {
           const r = await fetch(`${CLOUDFLARE_API_URL}/api/config/${encodeURIComponent(id)}`, { cache: 'no-store' });
           if (!r.ok) throw new Error(`Cloudflare API HTTP ${r.status}`);
@@ -2864,15 +3099,11 @@
           if (item.id === 'hero_rotation_enabled' && typeof item.valor?.enabled === 'boolean') {
             heroRotativoAtivo = item.valor.enabled;
           }
-          if (item.id === 'depoimentos_section_enabled' && typeof item.valor?.enabled === 'boolean') {
-            depoimentosSecaoAtiva = item.valor.enabled;
-          }
         });
       } catch (error) {
         console.warn('Configurações institucionais: usando valores padrão.', error);
       }
       aplicarControleHeroRotativo();
-      aplicarControleSecaoDepoimentos();
     }
 
     function aplicarControleHeroRotativo() {
@@ -2884,37 +3115,6 @@
         status.textContent = heroRotativoAtivo ? 'Ativado' : 'Desativado';
         status.style.color = heroRotativoAtivo ? 'var(--verde-principal)' : '#64748b';
       }
-    }
-
-    function aplicarControleSecaoDepoimentos() {
-      const toggle = document.getElementById('depoimentosSecaoToggle');
-      const status = document.getElementById('depoimentosSecaoStatusTexto');
-      const secao = document.getElementById('secaoDepoimentosPublica');
-
-      if (toggle) toggle.checked = depoimentosSecaoAtiva;
-      if (status) {
-        status.textContent = depoimentosSecaoAtiva ? 'Ativada' : 'Desativada';
-        status.style.color = depoimentosSecaoAtiva ? 'var(--verde-principal)' : '#64748b';
-      }
-      if (secao) {
-        secao.style.display = depoimentosSecaoAtiva ? '' : 'none';
-      }
-    }
-
-    async function alterarStatusSecaoDepoimentos() {
-      const toggle = document.getElementById('depoimentosSecaoToggle');
-      if (!toggle) return;
-
-      const novoStatus = toggle.checked;
-      if (!(await salvarConfigInstitucional('depoimentos_section_enabled', { enabled: novoStatus }))) {
-        toggle.checked = depoimentosSecaoAtiva;
-        aplicarControleSecaoDepoimentos();
-        return;
-      }
-
-      depoimentosSecaoAtiva = novoStatus;
-      aplicarControleSecaoDepoimentos();
-      showToast(novoStatus ? 'Seção de depoimentos ativada.' : 'Seção de depoimentos ocultada do portal.');
     }
 
     async function salvarConfigInstitucional(id, valor) {
@@ -4038,6 +4238,336 @@
       }
     ];
 
+
+    // =========================================================
+    // MENU PRINCIPAL / MEMÓRIA INSTITUCIONAL
+    // Persiste no Cloudflare D1 usando a configuração genérica site_config.
+    // =========================================================
+    const MENU_PADRAO = [
+      { id: 'inicio', label: 'Início', url: 'index.html', target: '_self', visible: true },
+      { id: 'linha-do-tempo', label: 'Linha do tempo', url: 'linha-do-tempo.html', target: '_self', visible: true },
+      { id: 'depoimentos-ex-alunos', label: 'Depoimentos de ex-alunos', url: 'depoimentos-ex-alunos.html', target: '_self', visible: true },
+      { id: 'galeria-diretores-reitores', label: 'Fotos e galeria de diretores e reitores', url: 'galeria-diretores-reitores.html', target: '_self', visible: true },
+      { id: 'professores-emeritos', label: 'Professores eméritos', url: 'professores-emeritos.html', target: '_self', visible: true }
+    ];
+
+    let menuSiteItens = MENU_PADRAO.map(item => ({ ...item }));
+    let menuItemArrastandoId = '';
+
+    function gerarIdMenuUnico(base = 'item-menu') {
+      const normalizado = String(base || 'item-menu').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'item-menu';
+      let id = normalizado;
+      let contador = 2;
+      const existentes = new Set(menuSiteItens.map(item => String(item.id)));
+      while (existentes.has(id)) id = `${normalizado}-${contador++}`;
+      return id;
+    }
+
+    function normalizarUrlMenu(url) {
+      const valor = String(url || '').trim();
+      if (!valor) return '';
+      if (valor.startsWith('#')) return valor;
+      if (/^https?:\/\//i.test(valor)) return valor;
+      if (valor.startsWith('/')) return valor;
+      // Preserva links relativos, necessários para funcionar corretamente em GitHub Pages.
+      return valor.replace(/^\/+/, '');
+    }
+
+    function normalizarMenuItens(valor) {
+      const itens = Array.isArray(valor) ? valor : Array.isArray(valor?.itens) ? valor.itens : [];
+      const usados = new Set();
+      const resultado = [];
+
+      itens.forEach((item, index) => {
+        if (!item || typeof item !== 'object') return;
+        const label = String(item.label ?? item.nome ?? '').trim();
+        const url = normalizarUrlMenu(item.url ?? item.link ?? '');
+        if (!label || !url) return;
+
+        let baseId = String(item.id || `menu-${index + 1}`);
+        let id = baseId;
+        let contador = 2;
+        while (usados.has(id)) id = `${baseId}-${contador++}`;
+        usados.add(id);
+
+        resultado.push({
+          id,
+          label: label.slice(0, 80),
+          url: url.slice(0, 500),
+          target: item.target === '_blank' ? '_blank' : '_self',
+          visible: item.visible !== false
+        });
+      });
+
+      return resultado;
+    }
+
+
+    function migrarLinksMemoriaParaPaginas(itens) {
+      const mapa = {
+        '#inicio': 'index.html',
+        '#linha-do-tempo': 'linha-do-tempo.html',
+        '#depoimentos-ex-alunos': 'depoimentos-ex-alunos.html',
+        '#galeria-diretores-reitores': 'galeria-diretores-reitores.html',
+        '#professores-emeritos': 'professores-emeritos.html'
+      };
+      return itens.map(item => ({ ...item, url: mapa[item.url] || item.url }));
+    }
+
+    function menuTemLinkInterno(item) {
+      return String(item?.url || '').trim().startsWith('#');
+    }
+
+    function renderMenuPublico() {
+      const container = document.getElementById('siteMenuContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const visiveis = menuSiteItens.filter(item => item.visible !== false && item.label && item.url);
+      if (!visiveis.length) {
+        const vazio = document.createElement('div');
+        vazio.className = 'public-memory-menu-empty';
+        vazio.textContent = 'Menu indisponível no momento.';
+        container.appendChild(vazio);
+        return;
+      }
+
+      visiveis.forEach(item => {
+        const link = document.createElement('a');
+        link.className = 'public-memory-menu-link';
+        link.href = item.url;
+        link.textContent = item.label;
+        link.target = item.target === '_blank' ? '_blank' : '_self';
+        if (link.target === '_blank') link.rel = 'noopener noreferrer';
+
+        if (menuTemLinkInterno(item)) {
+          link.addEventListener('click', (event) => {
+            const destino = document.querySelector(item.url);
+            if (destino) {
+              event.preventDefault();
+              destino.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          });
+        }
+
+        container.appendChild(link);
+      });
+    }
+
+    function renderEditorMenu() {
+      const container = document.getElementById('listaMenuAdmin');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (!menuSiteItens.length) {
+        container.innerHTML = '<div style="padding:16px; color:var(--slate-muted); background:#fff; border:1px solid var(--border-color); border-radius:10px;">Nenhum item cadastrado. Adicione um item acima.</div>';
+        return;
+      }
+
+      menuSiteItens.forEach((item, index) => {
+        const row = document.createElement('div');
+        row.className = 'menu-admin-item';
+        row.draggable = true;
+        row.dataset.id = String(item.id);
+        row.ondragstart = event => iniciarArrasteMenu(event, item.id);
+        row.ondragend = finalizarArrasteMenu;
+        row.ondragover = event => event.preventDefault();
+        row.ondrop = event => soltarMenu(event, item.id);
+
+        const handle = document.createElement('div');
+        handle.className = 'menu-admin-handle';
+        handle.title = 'Arraste para reordenar';
+        handle.textContent = '☰';
+
+        const labelBox = document.createElement('div');
+        labelBox.innerHTML = '<label>Nome</label>';
+        const labelInput = document.createElement('input');
+        labelInput.className = 'form-control';
+        labelInput.value = item.label;
+        labelInput.maxLength = 80;
+        labelInput.addEventListener('input', () => { item.label = labelInput.value; });
+        labelBox.appendChild(labelInput);
+
+        const urlBox = document.createElement('div');
+        urlBox.innerHTML = '<label>Link / URL</label>';
+        const urlInput = document.createElement('input');
+        urlInput.className = 'form-control';
+        urlInput.value = item.url;
+        urlInput.maxLength = 500;
+        urlInput.addEventListener('input', () => { item.url = urlInput.value; });
+        urlBox.appendChild(urlInput);
+
+        const targetBox = document.createElement('div');
+        targetBox.className = 'menu-admin-target';
+        targetBox.innerHTML = '<label>Abrir link</label>';
+        const targetSelect = document.createElement('select');
+        targetSelect.className = 'form-control';
+        targetSelect.innerHTML = '<option value="_self">Nesta página</option><option value="_blank">Nova aba</option>';
+        targetSelect.value = item.target === '_blank' ? '_blank' : '_self';
+        targetSelect.addEventListener('change', () => { item.target = targetSelect.value; });
+        targetBox.appendChild(targetSelect);
+
+        const visibleBox = document.createElement('div');
+        visibleBox.className = 'menu-admin-visible';
+        visibleBox.innerHTML = '<label>Visibilidade</label>';
+        const visibleRow = document.createElement('label');
+        visibleRow.className = 'menu-admin-visible-row';
+        const check = document.createElement('input');
+        check.type = 'checkbox';
+        check.checked = item.visible !== false;
+        check.addEventListener('change', () => { item.visible = check.checked; });
+        const checkText = document.createElement('span');
+        checkText.textContent = 'Mostrar no portal';
+        visibleRow.append(check, checkText);
+        visibleBox.appendChild(visibleRow);
+
+        const actions = document.createElement('div');
+        actions.className = 'menu-admin-actions';
+
+        const up = document.createElement('button');
+        up.type = 'button'; up.title = 'Mover para cima'; up.textContent = '↑';
+        up.disabled = index === 0;
+        up.onclick = () => moverMenuItem(item.id, -1);
+
+        const down = document.createElement('button');
+        down.type = 'button'; down.title = 'Mover para baixo'; down.textContent = '↓';
+        down.disabled = index === menuSiteItens.length - 1;
+        down.onclick = () => moverMenuItem(item.id, 1);
+
+        const del = document.createElement('button');
+        del.type = 'button'; del.title = 'Excluir item'; del.textContent = '×';
+        del.className = 'menu-admin-delete';
+        del.onclick = () => removerItemMenu(item.id);
+
+        actions.append(up, down, del);
+        row.append(handle, labelBox, urlBox, targetBox, visibleBox, actions);
+        container.appendChild(row);
+      });
+    }
+
+    async function carregarMenuDoBanco() {
+      try {
+        const resposta = await fetch(`${CLOUDFLARE_API_URL}/api/config/site_menu?v=${Date.now()}`, { cache: 'no-store' });
+        if (!resposta.ok) throw new Error(`Cloudflare API HTTP ${resposta.status}`);
+        const data = await resposta.json();
+        const itens = migrarLinksMemoriaParaPaginas(normalizarMenuItens(data?.valor));
+        menuSiteItens = itens.length ? itens : MENU_PADRAO.map(item => ({ ...item }));
+      } catch (error) {
+        console.warn('Não foi possível carregar o menu do Cloudflare; usando menu padrão.', error);
+        menuSiteItens = MENU_PADRAO.map(item => ({ ...item }));
+      }
+      renderMenuPublico();
+      renderEditorMenu();
+    }
+
+    async function salvarMenuNoBanco() {
+      registrarAtividadeAdmin();
+      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
+        showToast('Sessão administrativa expirada. Faça login novamente.');
+        return false;
+      }
+
+      menuSiteItens = normalizarMenuItens(menuSiteItens);
+      try {
+        await cloudflareAdminFetch('/api/admin/config/site_menu', {
+          method: 'PUT',
+          body: JSON.stringify({ valor: { itens: menuSiteItens } })
+        });
+        renderMenuPublico();
+        renderEditorMenu();
+        showToast('Menu salvo no Cloudflare.');
+        return true;
+      } catch (error) {
+        console.error('Erro ao salvar menu:', error);
+        showToast('Não foi possível salvar o menu: ' + (error.message || 'erro desconhecido'));
+        return false;
+      }
+    }
+
+    function adicionarItemMenu(event) {
+      event.preventDefault();
+      registrarAtividadeAdmin();
+
+      const nome = document.getElementById('novoMenuNome')?.value.trim();
+      const urlRaw = document.getElementById('novoMenuUrl')?.value.trim();
+      const target = document.getElementById('novoMenuTarget')?.value === '_blank' ? '_blank' : '_self';
+      const url = normalizarUrlMenu(urlRaw);
+
+      if (!nome || !url) {
+        alert('Informe o nome e o link do item.');
+        return;
+      }
+      if (urlRaw.toLowerCase().startsWith('javascript:') || urlRaw.toLowerCase().startsWith('data:')) {
+        alert('O link informado não é permitido.');
+        return;
+      }
+
+      menuSiteItens.push({
+        id: gerarIdMenuUnico(nome),
+        label: nome.slice(0, 80),
+        url: url.slice(0, 500),
+        target,
+        visible: true
+      });
+
+      document.getElementById('formNovoMenuItem')?.reset();
+      renderEditorMenu();
+      showToast('Item adicionado ao menu. Clique em salvar para publicar.');
+    }
+
+    function moverMenuItem(id, deslocamento) {
+      const indice = menuSiteItens.findIndex(item => String(item.id) === String(id));
+      const novoIndice = indice + deslocamento;
+      if (indice < 0 || novoIndice < 0 || novoIndice >= menuSiteItens.length) return;
+      const [movido] = menuSiteItens.splice(indice, 1);
+      menuSiteItens.splice(novoIndice, 0, movido);
+      renderEditorMenu();
+    }
+
+    function removerItemMenu(id) {
+      const item = menuSiteItens.find(menuItem => String(menuItem.id) === String(id));
+      if (!item) return;
+      if (!confirm(`Excluir o item "${item.label}" do menu?`)) return;
+      menuSiteItens = menuSiteItens.filter(menuItem => String(menuItem.id) !== String(id));
+      renderEditorMenu();
+      showToast('Item removido do menu. Clique em salvar para publicar.');
+    }
+
+    function iniciarArrasteMenu(event, id) {
+      menuItemArrastandoId = String(id);
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/plain', String(id));
+      event.currentTarget.classList.add('dragging');
+    }
+
+    function finalizarArrasteMenu(event) {
+      event.currentTarget.classList.remove('dragging');
+    }
+
+    function soltarMenu(event, idDestino) {
+      event.preventDefault();
+      const idOrigem = String(menuItemArrastandoId || event.dataTransfer.getData('text/plain') || '');
+      const destino = String(idDestino || '');
+      if (!idOrigem || !destino || idOrigem === destino) return;
+
+      const origemIndex = menuSiteItens.findIndex(item => String(item.id) === idOrigem);
+      const destinoIndex = menuSiteItens.findIndex(item => String(item.id) === destino);
+      if (origemIndex < 0 || destinoIndex < 0) return;
+
+      const [movido] = menuSiteItens.splice(origemIndex, 1);
+      menuSiteItens.splice(destinoIndex, 0, movido);
+      menuItemArrastandoId = '';
+      renderEditorMenu();
+    }
+
+    async function restaurarMenuPadrao() {
+      if (!confirm('Restaurar o menu padrão com os itens definidos para este projeto?')) return;
+      menuSiteItens = MENU_PADRAO.map(item => ({ ...item }));
+      renderMenuPublico();
+      renderEditorMenu();
+      await salvarMenuNoBanco();
+    }
+
     const appState = {
       home: {
         badge: "Acervo Acadêmico FMABC",
@@ -4387,7 +4917,8 @@
         carregarBannerSocial(),
         carregarPlanoDeFundoDoBanco(),
         carregarCursosDoBanco(),
-        carregarOrdemTurmasDoBanco()
+        carregarOrdemTurmasDoBanco(),
+        carregarMenuDoBanco()
       ]);
 
       await carregarTurmasDoBanco();
@@ -4986,8 +5517,8 @@
 
       e.currentTarget.classList.add('active');
       document.getElementById(tabId).classList.add('active');
-      if (tabId === 'tabHome') {
-        aplicarControleSecaoDepoimentos();
+      if (tabId === 'tabMenus') {
+        renderEditorMenu();
       }
       if (tabId === 'tabTurmas') {
         renderEditorOrdemTurmas();
@@ -5010,7 +5541,6 @@
 
       document.getElementById('inputFooterAddress').value = appState.footer.address;
       document.getElementById('inputFooterEmail').value = appState.footer.email;
-      aplicarControleSecaoDepoimentos();
 
       renderListaHeroImagensAdmin();
     }
