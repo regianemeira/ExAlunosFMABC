@@ -4075,7 +4075,7 @@
       itensPorPagina: 5,
       intervaloCarrossel: null,
       carrosselPausado: false,
-      turmas: [...turmasIniciaisPadrao]
+      turmas: []
     };
 
     async function carregarCursosDoBanco() {
@@ -4426,23 +4426,33 @@
 
         const data = await resposta.json();
 
-        if (Array.isArray(data) && data.length > 0) {
-          const turmasRecebidas = data.map(t => ({
-            ...t,
-            titulo: t.titulo || t.nome,
-            qtdFormandos: t.qtdFormandos || '',
-            cardDesc: t.cardDesc || ''
-          }));
-          appState.turmas = obterTurmasOrdenadas().length && appState.turmas.length
-            ? obterTurmasOrdenadas().map(t => turmasRecebidas.find(n => String(n.id) === String(t.id)) || t)
-            : (turmasOrdenacaoConfig.modo === 'manual' ? turmasRecebidas : ordenarTurmasAlfabeticamente(turmasRecebidas));
-        } else {
-          appState.turmas = [];
-        }
+        const turmasRecebidas = Array.isArray(data) ? data.map(t => ({
+          ...t,
+          titulo: t.titulo || t.nome,
+          qtdFormandos: t.qtdFormandos || '',
+          cardDesc: t.cardDesc || ''
+        })) : [];
 
-        // Reaplica a ordem usando os dados recém-chegados do D1.
-        const recebidasOrdenadas = obterTurmasOrdenadas();
-        if (recebidasOrdenadas.length) appState.turmas = recebidasOrdenadas;
+        // O D1 é a fonte oficial dos dados. Não reaproveitamos as turmas
+        // demonstrativas que existiam no HTML antes da migração.
+        appState.turmas = turmasOrdenacaoConfig.modo === 'manual'
+          ? (() => {
+              const porId = new Map(turmasRecebidas.map(t => [String(t.id), t]));
+              const ordenadas = [];
+              const usadas = new Set();
+              (turmasOrdenacaoConfig.ordem || []).forEach(id => {
+                const chave = String(id);
+                const turma = porId.get(chave);
+                if (turma && !usadas.has(chave)) {
+                  ordenadas.push(turma);
+                  usadas.add(chave);
+                }
+              });
+              ordenarTurmasAlfabeticamente(turmasRecebidas.filter(t => !usadas.has(String(t.id))))
+                .forEach(t => ordenadas.push(t));
+              return ordenadas;
+            })()
+          : ordenarTurmasAlfabeticamente(turmasRecebidas);
 
         renderCards();
         renderEditorOrdemTurmas();
