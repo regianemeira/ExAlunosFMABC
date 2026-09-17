@@ -4548,6 +4548,65 @@
       return String(item?.url || '').trim().startsWith('#');
     }
 
+    // Integração entre Gestão de Páginas e Gestão de Menus.
+    // Cada página do CMS possui um item correspondente no menu; as funções
+    // abaixo mantêm esses itens sincronizados sem depender de pageId no banco.
+    function encontrarMenuDaPagina(page) {
+      if (!page) return null;
+      const id = String(page.id || '');
+      const url = normalizarUrlMenu(page.url || (page.tipo === 'custom' && page.slug ? `pagina.html?slug=${encodeURIComponent(page.slug)}` : ''));
+      return menuSiteItens.find(item =>
+        String(item.id || '') === id ||
+        String(item.id || '') === `pagina-${id}` ||
+        (url && normalizarUrlMenu(item.url) === url)
+      ) || null;
+    }
+
+    function garantirMenuDaPagina(page) {
+      if (!page || !page.id) return null;
+      const url = normalizarUrlMenu(page.url || (page.tipo === 'custom' && page.slug ? `pagina.html?slug=${encodeURIComponent(page.slug)}` : ''));
+      if (!url) return null;
+      const existente = encontrarMenuDaPagina({ ...page, url });
+      if (existente) {
+        existente.label = String(page.titulo || page.nome || existente.label || 'Página').slice(0, 80);
+        existente.url = url.slice(0, 500);
+        existente.target = existente.target === '_blank' ? '_blank' : '_self';
+        existente.visible = page.visivel !== false;
+        return existente;
+      }
+
+      const novo = {
+        id: String(page.tipo === 'sistema' ? page.id : `pagina-${page.id}`),
+        label: String(page.titulo || page.nome || 'Página').slice(0, 80),
+        url: url.slice(0, 500),
+        target: '_self',
+        visible: page.visivel !== false
+      };
+      // Coloca novas páginas no final, preservando a ordem atual do menu.
+      menuSiteItens.push(novo);
+      return novo;
+    }
+
+    function removerMenuDaPagina(id) {
+      const alvo = String(id || '');
+      menuSiteItens = menuSiteItens.filter(item => {
+        if (String(item.id || '') === alvo) return false;
+        if (String(item.id || '') === `pagina-${alvo}`) return false;
+        const custom = localizarCustom ? localizarCustom(alvo) : null;
+        if (custom && normalizarUrlMenu(item.url) === `pagina.html?slug=${encodeURIComponent(custom.slug)}`) return false;
+        const sistema = Array.isArray(PAGINAS_SISTEMA) ? PAGINAS_SISTEMA.find(p => String(p.id) === alvo) : null;
+        if (sistema && normalizarUrlMenu(item.url) === normalizarUrlMenu(sistema.url)) return false;
+        return true;
+      });
+    }
+
+    function sincronizarVisibilidadePaginaComMenu(page) {
+      if (!page) return;
+      const item = encontrarMenuDaPagina(page);
+      if (item) item.visible = page.visivel !== false && page.menu !== false;
+      else if (page.menu !== false) garantirMenuDaPagina(page);
+    }
+
     function renderMenuPublico() {
       const container = document.getElementById('siteMenuContainer');
       if (!container) return;
