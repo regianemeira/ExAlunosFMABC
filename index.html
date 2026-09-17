@@ -3193,6 +3193,29 @@
   <div class="toast-msg" id="toastNotification">Alterações salvas com sucesso!</div>
 
   <script>
+    // Notificações administrativas: mantém uma única função global para todos
+    // os módulos do portal e para handlers inline.
+    let __showToastTimer = null;
+    function showToast(message, duration = 3200) {
+      const toast = document.getElementById('toastNotification');
+      if (!toast) {
+        console.info(String(message ?? ''));
+        return;
+      }
+      toast.textContent = String(message ?? '');
+      toast.style.display = 'block';
+      toast.style.opacity = '1';
+      if (__showToastTimer) clearTimeout(__showToastTimer);
+      __showToastTimer = setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => {
+          toast.style.display = 'none';
+          toast.style.opacity = '1';
+        }, 220);
+      }, Math.max(800, Number(duration) || 3200));
+    }
+    window.showToast = showToast;
+
     // =========================================================
     // Cloudflare Worker - backend migrado do portal
     // Hero, Banner Social, Plano de Fundo e demais módulos
