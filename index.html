@@ -707,6 +707,129 @@
     .btn-save { background-color: var(--verde-principal); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; font-size: 0.92rem; cursor: pointer; transition: var(--transition-fast); }
     .btn-save:hover { background-color: var(--verde-escuro); }
 
+    .ordenacao-turmas-panel {
+      margin-top: 22px;
+      padding: 18px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--slate-light);
+    }
+    .ordenacao-turmas-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .ordenacao-turmas-header h4 {
+      margin: 0;
+      color: var(--azul-institucional);
+      font-size: 1.05rem;
+    }
+    .ordenacao-turmas-modos {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .ordenacao-btn {
+      border: 1px solid var(--border-color);
+      background: #FFFFFF;
+      color: var(--azul-institucional);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+    .ordenacao-btn:hover {
+      border-color: var(--verde-principal);
+    }
+    .ordenacao-btn.active {
+      background: var(--verde-principal);
+      color: #FFFFFF;
+      border-color: var(--verde-principal);
+    }
+    .ordenacao-lista {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .ordenacao-item {
+      display: grid;
+      grid-template-columns: 32px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 12px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      cursor: grab;
+    }
+    .ordenacao-item.dragging {
+      opacity: .55;
+      border-color: var(--verde-principal);
+    }
+    .ordenacao-handle {
+      color: var(--slate-muted);
+      font-size: 1.1rem;
+      text-align: center;
+      user-select: none;
+    }
+    .ordenacao-pos {
+      display: inline-flex;
+      min-width: 28px;
+      height: 28px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: var(--verde-pastel-suave);
+      color: var(--verde-escuro);
+      font-size: .8rem;
+      font-weight: 800;
+      margin-right: 8px;
+    }
+    .ordenacao-info strong {
+      display: block;
+      color: var(--azul-institucional);
+    }
+    .ordenacao-info small {
+      color: var(--slate-muted);
+    }
+    .ordenacao-acoes {
+      display: flex;
+      gap: 6px;
+    }
+    .ordenacao-acoes button {
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--border-color);
+      background: #FFFFFF;
+      border-radius: 7px;
+      cursor: pointer;
+      font-weight: 800;
+      color: var(--azul-institucional);
+    }
+    .ordenacao-acoes button:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+    }
+    .ordenacao-rodape {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    @media (max-width: 620px) {
+      .ordenacao-item {
+        grid-template-columns: 26px 1fr;
+      }
+      .ordenacao-acoes {
+        grid-column: 2;
+      }
+    }
     .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; border: 1px solid var(--border-color); }
     .admin-table th, .admin-table td { padding: 12px; border: 1px solid var(--border-color); text-align: left; }
     .admin-table th { background-color: var(--slate-light); color: var(--azul-institucional); font-weight: bold; }
@@ -2402,6 +2525,26 @@
                 <tbody id="tabelaTurmasAdminBody"></tbody>
               </table>
             </div>
+
+            <div class="ordenacao-turmas-panel">
+              <div class="ordenacao-turmas-header">
+                <div>
+                  <h4>Ordem das Turmas no Front-end</h4>
+                  <div style="margin-top:5px; color: var(--slate-muted); font-size:.84rem; line-height:1.45;">
+                    O portal usa ordem alfabética por padrão. Em modo manual, a ordem abaixo será exatamente a ordem exibida no front-end.
+                  </div>
+                </div>
+                <div class="ordenacao-turmas-modos">
+                  <button type="button" id="btnOrdemAlfabetica" class="ordenacao-btn" onclick="definirModoOrdenacaoTurmas('alfabetica')">Automática (A-Z)</button>
+                  <button type="button" id="btnOrdemManual" class="ordenacao-btn" onclick="definirModoOrdenacaoTurmas('manual')">Ordem Manual</button>
+                </div>
+              </div>
+              <div id="ordenacaoTurmasLista" class="ordenacao-lista"></div>
+              <div class="ordenacao-rodape">
+                <button type="button" class="ordenacao-btn" onclick="restaurarOrdemAlfabeticaTurmas()">Restaurar A-Z</button>
+                <button type="button" class="btn-save" onclick="salvarOrdemTurmasNoBanco()">Salvar ordem do front-end</button>
+              </div>
+            </div>
           </section>
 
           <section id="tabModalEdicao" class="admin-tab-pane">
@@ -2633,6 +2776,12 @@
         throw new Error(message);
       }
       return response.json();
+    }
+
+    function urlSemCache(url) {
+      if (!url || typeof url !== 'string') return url;
+      const sep = url.includes('?') ? '&' : '?';
+      return `${url}${sep}v=${Date.now()}`;
     }
 
 
@@ -3657,6 +3806,7 @@
 
       configurarHeroBanner();
       setupEventListeners();
+      await carregarOrdemTurmasDoBanco();
 
       // Primeira carga: busca os dados em paralelo, sem bloquear o Hero visível.
       await sincronizarDadosPublicosEconomicamente(true);
@@ -3714,7 +3864,7 @@
         if (previewImage) {
           previewImage.classList.add('is-changing');
           setTimeout(() => {
-            previewImage.src = urlStorage;
+            previewImage.src = urlSemCache(urlStorage);
             previewImage.onload = () => previewImage.classList.remove('is-changing');
           }, 500);
         }
@@ -3982,6 +4132,237 @@
       });
     }
 
+    let turmasOrdenacaoConfig = { modo: 'alfabetica', ordem: [] };
+    let turmaOrdenacaoArrastandoId = '';
+
+    const turmaCollator = new Intl.Collator('pt-BR', {
+      numeric: true,
+      sensitivity: 'base'
+    });
+
+    function obterNomeTurmaParaOrdenacao(turma) {
+      return String(turma?.titulo || turma?.nome || '').trim();
+    }
+
+    function ordenarTurmasAlfabeticamente(lista) {
+      return [...(Array.isArray(lista) ? lista : [])].sort((a, b) => {
+        const nomeA = obterNomeTurmaParaOrdenacao(a);
+        const nomeB = obterNomeTurmaParaOrdenacao(b);
+        const comparacaoNome = turmaCollator.compare(nomeA, nomeB);
+        if (comparacaoNome !== 0) return comparacaoNome;
+        return turmaCollator.compare(String(a?.ano || ''), String(b?.ano || ''));
+      });
+    }
+
+    function obterTurmasOrdenadas() {
+      const lista = Array.isArray(appState.turmas) ? [...appState.turmas] : [];
+
+      if (turmasOrdenacaoConfig.modo !== 'manual') {
+        return ordenarTurmasAlfabeticamente(lista);
+      }
+
+      const porId = new Map(lista.map(t => [String(t.id), t]));
+      const resultado = [];
+      const usados = new Set();
+
+      (Array.isArray(turmasOrdenacaoConfig.ordem) ? turmasOrdenacaoConfig.ordem : []).forEach(id => {
+        const chave = String(id);
+        const turma = porId.get(chave);
+        if (turma && !usados.has(chave)) {
+          resultado.push(turma);
+          usados.add(chave);
+        }
+      });
+
+      // Turmas novas que ainda não estavam na lista manual entram no final,
+      // em ordem alfabética, sem desaparecer do front-end.
+      ordenarTurmasAlfabeticamente(lista.filter(t => !usados.has(String(t.id))))
+        .forEach(turma => resultado.push(turma));
+
+      return resultado;
+    }
+
+    async function carregarOrdemTurmasDoBanco() {
+      try {
+        const resposta = await fetch(`${CLOUDFLARE_API_URL}/api/config/turmas_order?v=${Date.now()}`, { cache: 'no-store' });
+        if (!resposta.ok) {
+          turmasOrdenacaoConfig = { modo: 'alfabetica', ordem: [] };
+          return;
+        }
+
+        const data = await resposta.json();
+        const valor = data?.valor;
+
+        if (Array.isArray(valor)) {
+          turmasOrdenacaoConfig = { modo: 'manual', ordem: valor.map(String) };
+        } else if (valor && typeof valor === 'object') {
+          turmasOrdenacaoConfig = {
+            modo: valor.modo === 'manual' ? 'manual' : 'alfabetica',
+            ordem: Array.isArray(valor.ordem) ? valor.ordem.map(String) : []
+          };
+        } else {
+          turmasOrdenacaoConfig = { modo: 'alfabetica', ordem: [] };
+        }
+      } catch (err) {
+        console.warn('Não foi possível carregar a ordem das turmas:', err);
+        turmasOrdenacaoConfig = { modo: 'alfabetica', ordem: [] };
+      }
+
+      renderEditorOrdemTurmas();
+    }
+
+    async function salvarOrdemTurmasNoBanco() {
+      registrarAtividadeAdmin();
+      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
+        showToast('Sessão administrativa expirada. Faça login novamente.');
+        return;
+      }
+
+      const listaAtual = obterTurmasOrdenadas();
+      turmasOrdenacaoConfig.ordem = listaAtual.map(t => String(t.id));
+
+      try {
+        await cloudflareAdminFetch('/api/admin/config/turmas_order', {
+          method: 'PUT',
+          body: JSON.stringify({ valor: turmasOrdenacaoConfig })
+        });
+
+        appState.turmas = listaAtual;
+        renderCards();
+        populateDepoimentoTurmasSelect();
+        populateAdminSelects();
+        renderListaTurmasAdmin();
+        renderEditorOrdemTurmas();
+        showToast('Ordem das turmas salva no front-end.');
+      } catch (err) {
+        console.error('Erro ao salvar ordem das turmas:', err);
+        showToast('Não foi possível salvar a ordem: ' + (err.message || 'erro desconhecido'));
+      }
+    }
+
+    function definirModoOrdenacaoTurmas(modo) {
+      if (modo !== 'manual' && modo !== 'alfabetica') return;
+      turmasOrdenacaoConfig.modo = modo;
+      if (modo === 'alfabetica') {
+        appState.turmas = ordenarTurmasAlfabeticamente(appState.turmas);
+      }
+      renderEditorOrdemTurmas();
+      renderCards();
+      populateDepoimentoTurmasSelect();
+      populateAdminSelects();
+      renderListaTurmasAdmin();
+    }
+
+    function restaurarOrdemAlfabeticaTurmas() {
+      turmasOrdenacaoConfig.modo = 'alfabetica';
+      turmasOrdenacaoConfig.ordem = ordenarTurmasAlfabeticamente(appState.turmas).map(t => String(t.id));
+      appState.turmas = ordenarTurmasAlfabeticamente(appState.turmas);
+      renderEditorOrdemTurmas();
+      renderCards();
+      populateDepoimentoTurmasSelect();
+      populateAdminSelects();
+      renderListaTurmasAdmin();
+    }
+
+    function moverTurmaNaOrdem(id, deslocamento) {
+      turmasOrdenacaoConfig.modo = 'manual';
+      const lista = obterTurmasOrdenadas();
+      const ids = lista.map(t => String(t.id));
+      const indice = ids.indexOf(String(id));
+      const novoIndice = indice + deslocamento;
+      if (indice < 0 || novoIndice < 0 || novoIndice >= ids.length) return;
+
+      const [movido] = ids.splice(indice, 1);
+      ids.splice(novoIndice, 0, movido);
+      turmasOrdenacaoConfig.ordem = ids;
+      renderEditorOrdemTurmas();
+    }
+
+    function arrastarTurmaOrdenacao(event, id) {
+      turmaOrdenacaoArrastandoId = String(id);
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/plain', String(id));
+      event.currentTarget.classList.add('dragging');
+    }
+
+    function finalizarArrasteTurmaOrdenacao(event) {
+      event.currentTarget.classList.remove('dragging');
+    }
+
+    function soltarTurmaOrdenacao(event, idDestino) {
+      event.preventDefault();
+      const idOrigem = String(turmaOrdenacaoArrastandoId || event.dataTransfer.getData('text/plain') || '');
+      const idDestinoStr = String(idDestino || '');
+      if (!idOrigem || !idDestinoStr || idOrigem === idDestinoStr) return;
+
+      turmasOrdenacaoConfig.modo = 'manual';
+      const ids = obterTurmasOrdenadas().map(t => String(t.id));
+      const origemIndex = ids.indexOf(idOrigem);
+      const destinoIndex = ids.indexOf(idDestinoStr);
+      if (origemIndex < 0 || destinoIndex < 0) return;
+
+      const [movido] = ids.splice(origemIndex, 1);
+      ids.splice(destinoIndex, 0, movido);
+      turmasOrdenacaoConfig.ordem = ids;
+      turmaOrdenacaoArrastandoId = '';
+      renderEditorOrdemTurmas();
+    }
+
+    function renderEditorOrdemTurmas() {
+      const container = document.getElementById('ordenacaoTurmasLista');
+      if (!container) return;
+
+      document.getElementById('btnOrdemAlfabetica')?.classList.toggle('active', turmasOrdenacaoConfig.modo === 'alfabetica');
+      document.getElementById('btnOrdemManual')?.classList.toggle('active', turmasOrdenacaoConfig.modo === 'manual');
+
+      const lista = obterTurmasOrdenadas();
+      container.innerHTML = '';
+
+      if (!lista.length) {
+        container.innerHTML = '<div style="padding:16px; color:var(--slate-muted); background:#fff; border:1px solid var(--border-color); border-radius:10px;">Nenhuma turma cadastrada.</div>';
+        return;
+      }
+
+      lista.forEach((turma, indice) => {
+        const id = String(turma.id);
+        const item = document.createElement('div');
+        item.className = 'ordenacao-item';
+        item.draggable = true;
+        item.dataset.id = id;
+        item.ondragstart = (event) => arrastarTurmaOrdenacao(event, id);
+        item.ondragend = finalizarArrasteTurmaOrdenacao;
+        item.ondragover = (event) => event.preventDefault();
+        item.ondrop = (event) => soltarTurmaOrdenacao(event, id);
+
+        const acoes = document.createElement('div');
+        acoes.className = 'ordenacao-acoes';
+        const btnCima = document.createElement('button');
+        btnCima.type = 'button';
+        btnCima.title = 'Mover para cima';
+        btnCima.textContent = '↑';
+        btnCima.disabled = turmasOrdenacaoConfig.modo !== 'manual' || indice === 0;
+        btnCima.onclick = () => moverTurmaNaOrdem(id, -1);
+
+        const btnBaixo = document.createElement('button');
+        btnBaixo.type = 'button';
+        btnBaixo.title = 'Mover para baixo';
+        btnBaixo.textContent = '↓';
+        btnBaixo.disabled = turmasOrdenacaoConfig.modo !== 'manual' || indice === lista.length - 1;
+        btnBaixo.onclick = () => moverTurmaNaOrdem(id, 1);
+        acoes.append(btnCima, btnBaixo);
+
+        item.innerHTML = `
+          <div class="ordenacao-handle" title="Arraste para reordenar">☰</div>
+          <div class="ordenacao-info">
+            <strong><span class="ordenacao-pos">${indice + 1}</span>${turma.titulo || turma.nome || 'Turma sem nome'}</strong>
+            <small>${turma.curso || '-'} · ${turma.ano || '-'}</small>
+          </div>
+        `;
+        item.appendChild(acoes);
+        container.appendChild(item);
+      });
+    }
+
     async function cadastrarCurso(event) {
       event.preventDefault();
 
@@ -4019,19 +4400,22 @@
       const agora = Date.now();
       if (!force && agora - ultimaSincronizacaoPublica < DADOS_PUBLICOS_TTL) return;
       ultimaSincronizacaoPublica = agora;
+
       await Promise.allSettled([
         carregarHeroDoBanco(),
         carregarConfiguracoesInstitucionais(),
         carregarBannerSocial(),
         carregarPlanoDeFundoDoBanco(),
         carregarCursosDoBanco(),
-        carregarTurmasDoBanco()
+        carregarOrdemTurmasDoBanco()
       ]);
+
+      await carregarTurmasDoBanco();
     }
 
     async function carregarTurmasDoBanco() {
       try {
-        const resposta = await fetch(`${CLOUDFLARE_API_URL}/api/turmas`, {
+        const resposta = await fetch(`${CLOUDFLARE_API_URL}/api/turmas?v=${Date.now()}`, {
           method: 'GET',
           cache: 'no-store'
         });
@@ -4042,20 +4426,26 @@
 
         const data = await resposta.json();
 
-        // A API do Cloudflare já devolve as turmas em ordem de created_at ASC.
-        // Não aplicar sort aqui: a home deve preservar exatamente a ordem de cadastro.
         if (Array.isArray(data) && data.length > 0) {
-          appState.turmas = data.map(t => ({
+          const turmasRecebidas = data.map(t => ({
             ...t,
             titulo: t.titulo || t.nome,
             qtdFormandos: t.qtdFormandos || '',
             cardDesc: t.cardDesc || ''
           }));
+          appState.turmas = obterTurmasOrdenadas().length && appState.turmas.length
+            ? obterTurmasOrdenadas().map(t => turmasRecebidas.find(n => String(n.id) === String(t.id)) || t)
+            : (turmasOrdenacaoConfig.modo === 'manual' ? turmasRecebidas : ordenarTurmasAlfabeticamente(turmasRecebidas));
         } else {
           appState.turmas = [];
         }
 
+        // Reaplica a ordem usando os dados recém-chegados do D1.
+        const recebidasOrdenadas = obterTurmasOrdenadas();
+        if (recebidasOrdenadas.length) appState.turmas = recebidasOrdenadas;
+
         renderCards();
+        renderEditorOrdemTurmas();
         populateDepoimentoTurmasSelect();
         populateAdminSelects();
         renderListaTurmasAdmin();
@@ -4075,23 +4465,33 @@
     async function salvarTurmaNoBanco(turma) {
       registrarAtividadeAdmin();
       try {
-        if (!isAdminLoggedIn || !localStorage.getItem(ADMIN_TOKEN_KEY)) {
+        const token = localStorage.getItem(ADMIN_TOKEN_KEY);
+        if (!token) {
           showToast('Sessão administrativa expirada. Faça login novamente.');
           return false;
         }
 
         const turmaParaSalvar = { ...turma };
+        let respostaSalvar;
         if (turma?.id) {
-          await cloudflareAdminFetch(`/api/admin/turmas/${encodeURIComponent(turma.id)}`, {
+          respostaSalvar = await cloudflareAdminFetch(`/api/admin/turmas/${encodeURIComponent(turma.id)}`, {
             method: 'PUT',
             body: JSON.stringify(turmaParaSalvar)
           });
+          // Confirma imediatamente no D1 o registro gravado, evitando sucesso falso na interface.
+          const id = encodeURIComponent(turma.id);
+          const confirmacao = await fetch(`${CLOUDFLARE_API_URL}/api/turmas/${id}?verify=${Date.now()}`, { cache: 'no-store' });
+          if (!confirmacao.ok) throw new Error(`Falha ao confirmar alteração: HTTP ${confirmacao.status}`);
+          const persistida = await confirmacao.json();
+          if (String(persistida?.id || '') !== String(turma.id)) throw new Error('A API não retornou a turma alterada.');
+          if (String(turma.img || '') !== String(persistida.img || '')) throw new Error('A nova capa não foi confirmada no banco.');
+          if (String(turma.nome || turma.titulo || '') !== String(persistida.nome || persistida.titulo || '')) throw new Error('Os dados da turma não foram confirmados no banco.');
         } else {
-          const criada = await cloudflareAdminFetch('/api/admin/turmas', {
+          respostaSalvar = await cloudflareAdminFetch('/api/admin/turmas', {
             method: 'POST',
             body: JSON.stringify(turmaParaSalvar)
           });
-          if (criada?.id) turmaParaSalvar.id = criada.id;
+          if (respostaSalvar?.id) turmaParaSalvar.id = respostaSalvar.id;
         }
         return true;
       } catch (err) {
@@ -4120,7 +4520,7 @@
     }
 
     function obterTurmasFiltradas() {
-      return appState.turmas.filter(turma => {
+      return obterTurmasOrdenadas().filter(turma => {
         const atendeCurso = appState.cursoAtivo === 'Todos' || turma.curso === appState.cursoAtivo;
 
         const termo = appState.termoBusca.toLowerCase();
@@ -4143,7 +4543,7 @@
 
       card.innerHTML = `
         <div class="card-img-area">
-          <div class="card-img-bg" style="background-image: url('${turma.img || 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80'}');"></div>
+          <div class="card-img-bg" style="background-image: url('${urlSemCache(turma.img || 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80')}');"></div>
           <div class="card-img-overlay"></div>
           <div class="card-img-header">
             <span class="card-badge">${turma.curso} FMABC</span>
@@ -4380,7 +4780,7 @@
       if (!select) return;
       select.innerHTML = '<option value="">Selecione sua turma...</option>';
 
-      appState.turmas.forEach(t => {
+      obterTurmasOrdenadas().forEach(t => {
         const opt = document.createElement('option');
         opt.value = t.id;
         opt.textContent = `${t.titulo || t.nome} (${t.curso} - ${t.ano})`;
@@ -4596,6 +4996,10 @@
 
       e.currentTarget.classList.add('active');
       document.getElementById(tabId).classList.add('active');
+      if (tabId === 'tabTurmas') {
+        renderEditorOrdemTurmas();
+        renderListaTurmasAdmin();
+      }
       if (tabId === 'tabBannerSocial') {
         renderListaHeroImagensAdmin();
       }
@@ -4637,7 +5041,7 @@
 
       const imgCapa = turma.img || "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80";
       document.getElementById('novoImagemBase64').value = imgCapa;
-      document.getElementById('previewTurmaImg').src = imgCapa;
+      document.getElementById('previewTurmaImg').src = urlSemCache(imgCapa);
 
       document.getElementById('btnSubmit').innerText = 'Salvar Alterações';
       document.getElementById('btnCancelar').style.display = 'inline-block';
@@ -4686,7 +5090,15 @@
 
       if (salvo) {
         await carregarTurmasDoBanco();
-        limparFormulario();
+        renderEditorOrdemTurmas();
+        if (idExistente) {
+          document.getElementById('selectTurmaParaEditar').value = idExistente;
+          await carregarDadosTurmaParaEdicao();
+          showToast('Turma atualizada e confirmada no Cloudflare.');
+        } else {
+          limparFormulario();
+          showToast('Turma cadastrada e confirmada no Cloudflare.');
+        }
       }
     }
 
@@ -4700,7 +5112,7 @@
         return;
       }
 
-      appState.turmas.forEach(turma => {
+      obterTurmasOrdenadas().forEach(turma => {
         const tr = document.createElement('tr');
         
         const turmaData = {
@@ -4738,6 +5150,7 @@
         renderCards();
         populateDepoimentoTurmasSelect();
         populateAdminSelects();
+        renderEditorOrdemTurmas();
         showToast('Turma excluída com sucesso!');
       } catch (err) {
         console.error('Erro ao excluir turma:', err);
@@ -4768,7 +5181,7 @@
 
         selectTurmaEdit.innerHTML = '<option value="">Selecione uma turma...</option>';
 
-        appState.turmas.forEach(t => {
+        obterTurmasOrdenadas().forEach(t => {
           const opt = document.createElement('option');
           opt.value = String(t.id);
           opt.textContent = `${t.titulo || t.nome} (${t.curso} - ${t.ano})`;
@@ -4801,7 +5214,7 @@
 
       if (turma) {
         try {
-          const data = await fetch(`${CLOUDFLARE_API_URL}/api/turmas/${encodeURIComponent(turmaIdSelecionada)}`, { cache: 'no-store' }).then(async r => {
+          const data = await fetch(`${CLOUDFLARE_API_URL}/api/turmas/${encodeURIComponent(turmaIdSelecionada)}?v=${Date.now()}`, { cache: 'no-store' }).then(async r => {
             if (!r.ok) throw new Error(`Cloudflare API HTTP ${r.status}`);
             return r.json();
           });
