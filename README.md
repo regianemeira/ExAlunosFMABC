@@ -1,40 +1,14 @@
-# Acervo de Ex-Alunos FMABC
+# Portal de Memória FMABC — páginas independentes
 
-Portal estático do acervo de turmas do Centro Universitário FMABC, com backend no Cloudflare Workers + D1 + R2.
+A página inicial permanece em `index.html`. Os tópicos do menu de memória agora são páginas separadas:
 
-## Estrutura
+- `linha-do-tempo.html`
+- `depoimentos-ex-alunos.html`
+- `galeria-diretores-reitores.html`
+- `professores-emeritos.html`
 
-- `index.html` — portal e painel administrativo.
-- `worker.js` — código do Cloudflare Worker `fmabc-acervo-api`.
+A página inicial não exibe mais essas quatro seções como blocos de conteúdo. O menu continua sendo carregado do Cloudflare D1 pela configuração `site_menu`. Links antigos salvos como `#linha-do-tempo`, `#depoimentos-ex-alunos`, `#galeria-diretores-reitores` e `#professores-emeritos` são migrados automaticamente para os arquivos correspondentes durante a leitura.
 
-## Publicação do portal
+Os links internos usam caminhos relativos para funcionar no GitHub Pages, inclusive quando o repositório é publicado em uma subpasta.
 
-O `index.html` pode ser publicado como site estático pelo GitHub Pages.
-
-O portal usa a API pública do Worker:
-
-`https://fmabc-acervo-api.armredessociais.workers.dev`
-
-## Segurança
-
-Nenhuma senha administrativa, `ADMIN_PASSWORD`, `MIGRATION_KEY` ou chave secreta do Worker deve ser colocada neste repositório.
-
-Os segredos permanecem configurados em **Cloudflare Workers > Settings > Variables and Secrets**.
-
-O login do painel administrativo é feito pelo endpoint do Worker e a sessão usa um token temporário armazenado no navegador.
-
-## Backend Cloudflare
-
-Bindings esperados no Worker:
-
-- `DB` → D1 `fmabc-acervo`
-- `BUCKET` → R2 `fmabc-acervo`
-
-Secrets esperados:
-
-- `ADMIN_PASSWORD`
-- `MIGRATION_KEY`
-
-## Observação
-
-O frontend não depende do SDK do Supabase e não contém a URL/chave do projeto Supabase. Os dados operacionais do portal são obtidos do Cloudflare D1/R2 por meio do Worker.
+API: https://fmabc-acervo-api.armredessociais.workers.dev
