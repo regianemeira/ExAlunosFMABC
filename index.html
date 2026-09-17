@@ -208,7 +208,8 @@
       margin-bottom:4px;
     }
 
-    .hero-admin-control-box span#heroRotativoStatusTexto {
+    .hero-admin-control-box span#heroRotativoStatusTexto,
+    .hero-admin-control-box span#depoimentosSecaoStatusTexto {
       display:inline-block;
       color:var(--verde-principal);
       font-size:.78rem;
@@ -2162,7 +2163,7 @@
       </div>
     </section>
 
-    <section class="secao-depoimento-aluno">
+    <section class="secao-depoimento-aluno" id="secaoDepoimentosPublica">
       <div class="depoimento-header">
         <h2>🎓 É Ex-Aluno(a) da FMABC? Deixe seu Depoimento!</h2>
         <p>Compartilhe suas memórias, aprendizados e conquistas. Seu depoimento enriquecerá o acervo histórico da sua turma no portal.</p>
@@ -2359,6 +2360,18 @@
               </div>
               <button type="submit" class="btn-save">Atualizar Página Inicial</button>
             </form>
+
+            <div class="hero-admin-control-box" style="margin-top: 22px;">
+              <div>
+                <strong>Seção pública de depoimentos</strong>
+                <span id="depoimentosSecaoStatusTexto">Ativada</span>
+                <p>Quando desativada, a seção para envio de depoimentos deixa de aparecer no portal. Os depoimentos já cadastrados continuam armazenados no acervo.</p>
+              </div>
+              <label class="switch-control" title="Exibir ou ocultar a seção pública de depoimentos">
+                <input type="checkbox" id="depoimentosSecaoToggle" checked onchange="alterarStatusSecaoDepoimentos()">
+                <span class="switch-slider"></span>
+              </label>
+            </div>
           </section>
 
           <!-- ABA DE PLANO DE FUNDO COM PREVIEW E TRANSIÇÃO SUAVE -->
@@ -2836,9 +2849,12 @@
     const HERO_ROTATION_DEFAULT = true;
     let heroRotativoAtivo = HERO_ROTATION_DEFAULT;
 
+    const DEPOIMENTOS_SECAO_DEFAULT = true;
+    let depoimentosSecaoAtiva = DEPOIMENTOS_SECAO_DEFAULT;
+
     async function carregarConfiguracoesInstitucionais() {
       try {
-        const ids = ['hero_rotation_enabled'];
+        const ids = ['hero_rotation_enabled', 'depoimentos_section_enabled'];
         const respostas = await Promise.all(ids.map(async id => {
           const r = await fetch(`${CLOUDFLARE_API_URL}/api/config/${encodeURIComponent(id)}`, { cache: 'no-store' });
           if (!r.ok) throw new Error(`Cloudflare API HTTP ${r.status}`);
@@ -2848,11 +2864,15 @@
           if (item.id === 'hero_rotation_enabled' && typeof item.valor?.enabled === 'boolean') {
             heroRotativoAtivo = item.valor.enabled;
           }
+          if (item.id === 'depoimentos_section_enabled' && typeof item.valor?.enabled === 'boolean') {
+            depoimentosSecaoAtiva = item.valor.enabled;
+          }
         });
       } catch (error) {
         console.warn('Configurações institucionais: usando valores padrão.', error);
       }
       aplicarControleHeroRotativo();
+      aplicarControleSecaoDepoimentos();
     }
 
     function aplicarControleHeroRotativo() {
@@ -2864,6 +2884,37 @@
         status.textContent = heroRotativoAtivo ? 'Ativado' : 'Desativado';
         status.style.color = heroRotativoAtivo ? 'var(--verde-principal)' : '#64748b';
       }
+    }
+
+    function aplicarControleSecaoDepoimentos() {
+      const toggle = document.getElementById('depoimentosSecaoToggle');
+      const status = document.getElementById('depoimentosSecaoStatusTexto');
+      const secao = document.getElementById('secaoDepoimentosPublica');
+
+      if (toggle) toggle.checked = depoimentosSecaoAtiva;
+      if (status) {
+        status.textContent = depoimentosSecaoAtiva ? 'Ativada' : 'Desativada';
+        status.style.color = depoimentosSecaoAtiva ? 'var(--verde-principal)' : '#64748b';
+      }
+      if (secao) {
+        secao.style.display = depoimentosSecaoAtiva ? '' : 'none';
+      }
+    }
+
+    async function alterarStatusSecaoDepoimentos() {
+      const toggle = document.getElementById('depoimentosSecaoToggle');
+      if (!toggle) return;
+
+      const novoStatus = toggle.checked;
+      if (!(await salvarConfigInstitucional('depoimentos_section_enabled', { enabled: novoStatus }))) {
+        toggle.checked = depoimentosSecaoAtiva;
+        aplicarControleSecaoDepoimentos();
+        return;
+      }
+
+      depoimentosSecaoAtiva = novoStatus;
+      aplicarControleSecaoDepoimentos();
+      showToast(novoStatus ? 'Seção de depoimentos ativada.' : 'Seção de depoimentos ocultada do portal.');
     }
 
     async function salvarConfigInstitucional(id, valor) {
@@ -4935,6 +4986,9 @@
 
       e.currentTarget.classList.add('active');
       document.getElementById(tabId).classList.add('active');
+      if (tabId === 'tabHome') {
+        aplicarControleSecaoDepoimentos();
+      }
       if (tabId === 'tabTurmas') {
         renderEditorOrdemTurmas();
         renderListaTurmasAdmin();
@@ -4956,6 +5010,7 @@
 
       document.getElementById('inputFooterAddress').value = appState.footer.address;
       document.getElementById('inputFooterEmail').value = appState.footer.email;
+      aplicarControleSecaoDepoimentos();
 
       renderListaHeroImagensAdmin();
     }
