@@ -2944,7 +2944,7 @@
                     <div>
                       <label class="cms-label">Slug <em>(endereço da página)</em></label>
                       <input id="inputPaginaSlug" class="cms-input" type="text" maxlength="80" placeholder="historia-da-instituicao" required>
-                      <span class="cms-mini-help">Endereço: pagina.html?slug=...</span>
+                      <span class="cms-mini-help">Endereço da página</span>
                     </div>
                     <div>
                       <label class="cms-label">Modelo</label>
@@ -5132,11 +5132,11 @@
     // GESTÃO DE PÁGINAS DO PORTAL — CMS
     // =========================================================
     const PAGINAS_SISTEMA = [
-      { id:'inicio', tipo:'sistema', titulo:'Página Inicial', url:'index.html', resumo:'Página principal do acervo de turmas.', visivel:true, menu:true, ordem:1, podeExcluir:false },
-      { id:'linha-do-tempo', tipo:'sistema', titulo:'Linha do tempo', url:'linha-do-tempo.html', resumo:'Principais marcos históricos da FMABC.', visivel:true, menu:true, ordem:2, podeExcluir:false },
-      { id:'depoimentos-ex-alunos', tipo:'sistema', titulo:'Depoimentos de ex-alunos', url:'depoimentos-ex-alunos.html', resumo:'Depoimentos enviados por ex-alunos.', visivel:true, menu:true, ordem:3, podeExcluir:false },
-      { id:'galeria-diretores-reitores', tipo:'sistema', titulo:'Fotos e galeria de diretores e reitores', url:'galeria-diretores-reitores.html', resumo:'Galeria institucional de diretores e reitores.', visivel:true, menu:true, ordem:4, podeExcluir:false },
-      { id:'professores-emeritos', tipo:'sistema', titulo:'Professores eméritos', url:'professores-emeritos.html', resumo:'Galeria e registros de professores eméritos.', visivel:true, menu:true, ordem:5, podeExcluir:false }
+      { id:'inicio', tipo:'sistema', titulo:'Página Inicial', url:'index.html', resumo:'Página principal do acervo de turmas.', conteudo:'', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'institucional', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:true, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:1, podeExcluir:false },
+      { id:'linha-do-tempo', tipo:'sistema', titulo:'Linha do tempo', url:'linha-do-tempo.html', resumo:'Principais marcos da história da FMABC, organizados cronologicamente.', conteudo:'<p>Área exclusiva para a linha do tempo institucional.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'memoria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:2, podeExcluir:false },
+      { id:'depoimentos-ex-alunos', tipo:'sistema', titulo:'Depoimentos de ex-alunos', url:'depoimentos-ex-alunos.html', resumo:'Memórias, experiências e mensagens de quem fez parte da história da FMABC.', conteudo:'<p>Envie seu depoimento para integrar o acervo histórico da sua turma. O conteúdo será encaminhado para análise antes da publicação.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'memoria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:3, podeExcluir:false },
+      { id:'galeria-diretores-reitores', tipo:'sistema', titulo:'Fotos e galeria de diretores e reitores', url:'galeria-diretores-reitores.html', resumo:'Registro visual das gestões e dos personagens que marcaram a trajetória institucional.', conteudo:'<p>Área exclusiva para fotos e galeria de diretores e reitores.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'galeria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:4, podeExcluir:false },
+      { id:'professores-emeritos', tipo:'sistema', titulo:'Professores eméritos', url:'professores-emeritos.html', resumo:'Memória e reconhecimento dos professores eméritos da instituição.', conteudo:'<p>Área exclusiva para o acervo dos professores eméritos.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'memoria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:5, podeExcluir:false }
     ];
     let paginasCustomizadas=[];
     let paginaArrastandoId='';
@@ -5221,6 +5221,10 @@
           PAGINAS_SISTEMA.forEach((p,index)=>{
             const salvo=mapa.get(String(p.id));
             if(salvo){
+              // As páginas institucionais também são registros administráveis.
+              // Mantemos id/url/tipo fixos, mas carregamos todo o conteúdo e os metadados editáveis do D1.
+              const camposEditaveis=['titulo','resumo','conteudo','conteudoSecundario','informacoesAdicionais','imagem','bannerAlt','modelo','paginaMae','popup','categoria','subcategoria','destaque','mostrarBusca','seoTitulo','seoDescricao','seoKeywords'];
+              camposEditaveis.forEach(campo=>{if(Object.prototype.hasOwnProperty.call(salvo,campo))p[campo]=salvo[campo];});
               p.visivel=salvo.visivel!==false||p.id==='inicio';
               p.menu=p.id==='inicio'?true:salvo.menu!==false;
               if(Number.isFinite(Number(salvo.ordem)))p.ordem=Number(salvo.ordem);
@@ -5299,12 +5303,15 @@
     }
     function editarPaginaPortal(id){
       const page=paginaPorId(id);if(!page)return;
-      paginaEditandoId=String(id);document.getElementById('paginaEditandoId').value=paginaEditandoId;document.getElementById('tituloEditorPagina').textContent='Alterar página';document.getElementById('subtituloEditorPagina').textContent=page.tipo==='sistema'?'Página do sistema: conteúdo estrutural mantido no arquivo correspondente.':'Edite todos os campos disponíveis para esta página.';document.getElementById('btnSalvarPaginaPortal').textContent=page.tipo==='sistema'?'Salvar configurações':'Enviar';
+      paginaEditandoId=String(id);document.getElementById('paginaEditandoId').value=paginaEditandoId;document.getElementById('tituloEditorPagina').textContent='Alterar página';document.getElementById('subtituloEditorPagina').textContent=page.tipo==='sistema'?'Página institucional: título, conteúdo, banner, SEO e opções de publicação podem ser administrados aqui.':'Edite todos os campos disponíveis para esta página.';document.getElementById('btnSalvarPaginaPortal').textContent='Salvar alterações';
       const set=(id,val)=>{const el=document.getElementById(id);if(el)el.value=val??'';};
       set('inputPaginaTitulo',page.titulo);set('inputPaginaSlug',page.slug||'');set('inputPaginaTituloPublico',page.titulo||'');set('inputPaginaResumo',page.resumo||'');set('inputPaginaModelo',page.modelo||'institucional');set('inputPaginaPopup',page.popup||'');set('inputPaginaCategoria',page.categoria||'');set('inputPaginaSubcategoria',page.subcategoria||'');set('inputPaginaVisivel',page.visivel===false?'false':'true');set('inputPaginaDestaque',page.destaque?'true':'false');set('inputPaginaBusca',page.mostrarBusca===false?'false':'true');set('inputPaginaSeoTitulo',page.seoTitulo||'');set('inputPaginaSeoDescricao',page.seoDescricao||'');set('inputPaginaSeoKeywords',page.seoKeywords||'');set('inputPaginaMae',page.paginaMae||'');set('inputPaginaImagemUrl',page.imagem||'');set('inputPaginaBannerAlt',page.bannerAlt||'');document.getElementById('inputPaginaMenu').checked=page.menu!==false;
       definirEditorConteudo('inputPaginaConteudo',page.conteudo||'');definirEditorConteudo('inputPaginaConteudoSecundario',page.conteudoSecundario||'');definirEditorConteudo('inputPaginaInformacoesAdicionais',page.informacoesAdicionais||'');atualizarPreviewImagemPagina(page.imagem||'');preencherSelectPaginaMae(page.paginaMae||'');
-      // Sistema: conteúdo não editável neste painel; os demais metadados seguem editáveis.
-      const ed=document.getElementById('inputPaginaConteudo');if(page.tipo==='sistema'){ed.contentEditable='false';ed.style.background='#eef0f3';document.getElementById('inputPaginaConteudoSecundario').contentEditable='false';document.getElementById('inputPaginaInformacoesAdicionais').contentEditable='false';}else{ed.contentEditable='true';ed.style.background='#fff';document.getElementById('inputPaginaConteudoSecundario').contentEditable='true';document.getElementById('inputPaginaInformacoesAdicionais').contentEditable='true';}
+      const slugField=document.getElementById('inputPaginaSlug');if(slugField){slugField.disabled=page.tipo==='sistema';slugField.title=page.tipo==='sistema'?'O endereço das páginas institucionais é fixo.':'Endereço da página';slugField.style.background=page.tipo==='sistema'?'#eef0f3':'#fff';}
+      const modelField=document.getElementById('inputPaginaModelo');if(modelField){modelField.disabled=page.tipo==='sistema' && ['linha-do-tempo','depoimentos-ex-alunos','galeria-diretores-reitores','professores-emeritos'].includes(page.id);}
+
+      // Todas as páginas (inclusive as institucionais que já existiam) podem ter o conteúdo editado neste painel.
+      ['inputPaginaConteudo','inputPaginaConteudoSecundario','inputPaginaInformacoesAdicionais'].forEach(idEd=>{const alvo=document.getElementById(idEd);if(alvo){alvo.contentEditable='true';alvo.style.background='#fff';}});
       abrirEditorPaginaCMS();
     }
     function duplicarPaginaPortal(id){const page=localizarCustom(id);if(!page)return;const base=slugSeguroPagina(page.titulo+' copia');let slug=base,c=2,slugs=new Set(paginasCustomizadas.map(p=>String(p.slug)));while(slugs.has(slug))slug=base+'-'+c++;const agora=new Date().toISOString();const novo={...page,id:crypto.randomUUID(),titulo:(page.titulo+' (cópia)').slice(0,100),slug,url:`pagina.html?slug=${encodeURIComponent(slug)}`,visivel:false,menu:false,createdAt:agora,updatedAt:agora,ordem:paginasCustomizadas.length+10};paginasCustomizadas.push(novo);editarPaginaPortal(novo.id);showToast('Página duplicada. Revise e salve.');}
@@ -5322,7 +5329,31 @@
         const agora=new Date().toISOString(), dados={titulo:tituloPublico,slug,url:`pagina.html?slug=${encodeURIComponent(slug)}`,resumo,conteudo:lerEditorConteudo('inputPaginaConteudo'),conteudoSecundario:lerEditorConteudo('inputPaginaConteudoSecundario'),informacoesAdicionais:lerEditorConteudo('inputPaginaInformacoesAdicionais'),imagem:imagemFinal,bannerAlt:get('inputPaginaBannerAlt').value.trim(),modelo:get('inputPaginaModelo').value,paginaMae:get('inputPaginaMae').value,popup:get('inputPaginaPopup').value,visivel:get('inputPaginaVisivel').value!=='false',menu:get('inputPaginaMenu').checked,categoria:get('inputPaginaCategoria').value,subcategoria:get('inputPaginaSubcategoria').value,destaque:get('inputPaginaDestaque').value==='true',mostrarBusca:get('inputPaginaBusca').value!=='false',seoTitulo:get('inputPaginaSeoTitulo').value.trim(),seoDescricao:get('inputPaginaSeoDescricao').value.trim(),seoKeywords:get('inputPaginaSeoKeywords').value.trim(),updatedAt:agora};
         if(paginaEditandoId){
           const system=PAGINAS_SISTEMA.find(p=>String(p.id)===String(paginaEditandoId));
-          if(system){Object.assign(system,{titulo:dados.titulo,resumo:dados.resumo,visivel:dados.visivel||system.id==='inicio',menu:system.id==='inicio'?true:dados.menu});const menuObj={...system,url:system.url};if(system.menu)garantirMenuDaPagina(menuObj);else{const mi=encontrarMenuDaPagina(system);if(mi)mi.visible=false;}}
+          if(system){
+            Object.assign(system,{
+              titulo:dados.titulo,
+              resumo:dados.resumo,
+              conteudo:dados.conteudo,
+              conteudoSecundario:dados.conteudoSecundario,
+              informacoesAdicionais:dados.informacoesAdicionais,
+              imagem:dados.imagem,
+              bannerAlt:dados.bannerAlt,
+              modelo:dados.modelo,
+              paginaMae:dados.paginaMae,
+              popup:dados.popup,
+              categoria:dados.categoria,
+              subcategoria:dados.subcategoria,
+              destaque:dados.destaque,
+              mostrarBusca:dados.mostrarBusca,
+              seoTitulo:dados.seoTitulo,
+              seoDescricao:dados.seoDescricao,
+              seoKeywords:dados.seoKeywords,
+              visivel:dados.visivel||system.id==='inicio',
+              menu:system.id==='inicio'?true:dados.menu
+            });
+            const menuObj={...system,url:system.url};
+            if(system.menu)garantirMenuDaPagina(menuObj);else{const mi=encontrarMenuDaPagina(system);if(mi)mi.visible=false;}
+          }
           else{const page=localizarCustom(paginaEditandoId);if(!page)return;Object.assign(page,dados,{id:page.id,tipo:'custom',podeExcluir:true,createdAt:page.createdAt||agora});if(page.menu)garantirMenuDaPagina(page);else removerMenuDaPagina(page.id);sincronizarVisibilidadePaginaComMenu(page);}
         }else{const page={...dados,id:crypto.randomUUID(),tipo:'custom',podeExcluir:true,createdAt:agora,ordem:paginasCustomizadas.length+10};paginasCustomizadas.push(page);if(page.menu)garantirMenuDaPagina(page);}
         const salvo=await salvarPaginasNoBanco();if(!salvo)return;fecharEditorPaginaPortal();renderListaPaginasCMS();renderMenuPublico();showToast('Página salva com sucesso.');

@@ -16,13 +16,165 @@ body::before{content:"";position:fixed;inset:0;background-image:var(--bg-image);
 .form-card{margin-top:28px;background:#fff;border:1px solid var(--br);border-radius:16px;padding:28px;box-shadow:0 6px 20px rgba(75,81,114,.07)}.form-title{margin:0 0 8px;color:var(--azul);font-size:1.25rem}.form-intro{margin:0 0 22px;color:var(--muted)}.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;font-weight:800;color:var(--muted)}.field input,.field textarea,.field select{width:100%;border:1px solid var(--br);border-radius:10px;padding:11px 12px;font:inherit;color:var(--texto);background:#fff;outline:none}.field textarea{min-height:150px;resize:vertical}.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--verde);box-shadow:0 0 0 3px rgba(51,156,91,.12)}.submit-row{text-align:center;margin-top:18px}.btn-submit{border:0;border-radius:10px;background:var(--verde);color:#fff;padding:12px 20px;font-weight:800;cursor:pointer}.btn-submit:hover{background:var(--verde-escuro)}.status{margin-top:14px;text-align:center;color:var(--muted);font-size:.9rem}
 @media(max-width:700px){.top-nav{padding:.7rem 1rem;gap:10px}.logo-img{height:40px}.page-home-link{font-size:.8rem;padding:8px 11px}.public-memory-menu-inner{padding:0 12px}.page-container{padding:28px 14px 48px}.page-hero{padding:32px 24px}.page-content{padding:22px}.grid-2{grid-template-columns:1fr}.field.full{grid-column:auto}}
 </style>
+<style id="fmabc-menu-modern-animation">
+  /* Menu principal no estilo institucional da referência: faixa branca, logo à esquerda e navegação horizontal. */
+  .top-nav {
+    background: #fff !important;
+    border-bottom: 1px solid rgba(75,81,114,.12) !important;
+    box-shadow: 0 4px 18px rgba(20,35,60,.06) !important;
+    padding: 10px clamp(18px, 2.8vw, 34px) !important;
+    min-height: 82px;
+    gap: clamp(18px, 2.4vw, 34px);
+  }
+  .brand-logo {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    padding-right: clamp(8px, 1vw, 18px);
+  }
+  .logo-img {
+    height: 54px !important;
+    max-width: 230px !important;
+    background: transparent !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    filter: none !important;
+    transition: transform .35s cubic-bezier(.2,.7,.2,1), filter .35s ease;
+  }
+  .brand-logo:hover .logo-img {
+    transform: translateY(-1px) scale(1.025);
+    filter: drop-shadow(0 5px 8px rgba(24,54,90,.12));
+  }
+  .public-memory-menu {
+    flex: 1 1 auto;
+    min-width: 0;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    position: static !important;
+  }
+  .public-memory-menu-inner {
+    min-height: 0;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex;
+    align-items: center;
+  }
+  .public-memory-menu-list {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 0;
+    overflow-x: auto;
+    overflow-y: visible;
+    scrollbar-width: none;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+  .public-memory-menu-list::-webkit-scrollbar { display: none; }
+  .public-memory-menu-link {
+    position: relative;
+    flex: 0 0 auto;
+    min-height: 48px;
+    padding: 0 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #30456f !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    text-decoration: none;
+    font-size: .82rem;
+    font-weight: 700;
+    letter-spacing: .015em;
+    white-space: nowrap;
+    transition: color .25s ease, transform .28s cubic-bezier(.2,.7,.2,1), background-color .25s ease;
+    animation: memoriaMenuIn .48s both;
+  }
+  .public-memory-menu-link + .public-memory-menu-link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12px;
+    bottom: 12px;
+    width: 1px;
+    background: rgba(77,101,145,.34);
+    transition: opacity .25s ease, transform .25s ease;
+  }
+  .public-memory-menu-link::after {
+    content: '';
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    bottom: 3px;
+    height: 3px;
+    border-radius: 99px;
+    background: linear-gradient(90deg, #339c5b, #1c8b49);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform .32s cubic-bezier(.2,.7,.2,1);
+  }
+  .public-memory-menu-link:hover,
+  .public-memory-menu-link:focus-visible {
+    color: #1e8c4d !important;
+    transform: translateY(-1px);
+    outline: none;
+  }
+  .public-memory-menu-link:hover::after,
+  .public-memory-menu-link:focus-visible::after,
+  .public-memory-menu-link.active::after,
+  .public-memory-menu-link[aria-current="page"]::after { transform: scaleX(1); }
+  .public-memory-menu-link:hover::before,
+  .public-memory-menu-link:focus-visible::before { opacity: .16; transform: scaleY(.72); }
+  .public-memory-menu-link.active,
+  .public-memory-menu-link[aria-current="page"] { color: #1e8c4d !important; font-weight: 800; }
+  .public-memory-menu-link:nth-child(2){animation-delay:.04s}
+  .public-memory-menu-link:nth-child(3){animation-delay:.08s}
+  .public-memory-menu-link:nth-child(4){animation-delay:.12s}
+  .public-memory-menu-link:nth-child(5){animation-delay:.16s}
+  .public-memory-menu-link:nth-child(6){animation-delay:.20s}
+  .public-memory-menu-link:nth-child(7){animation-delay:.24s}
+  @keyframes memoriaMenuIn {
+    from { opacity: 0; transform: translateY(7px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .admin-nav-actions { margin-left: auto; flex: 0 0 auto; }
+  @media (max-width: 1000px) {
+    .top-nav { gap: 14px; }
+    .public-memory-menu-link { padding: 0 13px; font-size: .78rem; }
+    .public-memory-menu-link::after { left: 13px; right: 13px; }
+  }
+  @media (max-width: 760px) {
+    .top-nav { min-height: auto; flex-wrap: wrap; padding: 10px 14px !important; gap: 8px 14px; }
+    .brand-logo { flex: 1 1 auto; }
+    .logo-img { height: 48px !important; }
+    .public-memory-menu { order: 3; flex: 1 0 100%; }
+    .public-memory-menu-link { min-height: 44px; padding: 0 13px; font-size: .76rem; }
+    .public-memory-menu-link::after { bottom: 1px; left: 12px; right: 12px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .public-memory-menu-link, .logo-img { animation: none !important; transition: none !important; }
+  }
+</style>
 </head>
 <body>
-<nav class="top-nav"><a href="index.html" class="brand-logo"><img src="https://www.fmabc.br/img/logo-fmabc.81be2f48.png" alt="Logotipo FMABC Centro Universitário" class="logo-img"></a><a href="index.html" class="page-home-link">Voltar ao início</a></nav>
-<nav class="public-memory-menu" aria-label="Navegação da memória institucional"><div class="public-memory-menu-inner"><div id="siteMenuContainer" class="public-memory-menu-list"></div></div></nav>
+<nav class="top-nav" aria-label="Navegação principal">
+    <a href="index.html" class="brand-logo">
+      <img src="https://www.fmabc.br/img/logo-fmabc.81be2f48.png" alt="Logotipo FMABC Centro Universitário" class="logo-img">
+    </a>
+
+    <nav class="public-memory-menu" aria-label="Navegação da memória institucional">
+      <div class="public-memory-menu-inner">
+        <div id="siteMenuContainer" class="public-memory-menu-list"></div>
+      </div>
+    </nav>
+  </nav>
 <main class="page-container">
 <section class="page-hero"><span class="page-kicker">Memória FMABC</span><h1 class="page-title">Professores eméritos</h1><p class="page-subtitle">Memória e reconhecimento dos professores eméritos da instituição.</p></section>
-<section class="page-content"><h2 class="placeholder-title">Professores eméritos</h2><p class="placeholder-text">Área exclusiva para o acervo dos professores eméritos.</p></section>
+<section class="page-content"><h2 class="placeholder-title">Professores eméritos</h2><div id="fmabcEditableContent" class="placeholder-text" style="max-width:none"><p>Área exclusiva para o acervo dos professores eméritos.</p></div></section>
 </main>
 <footer class="footer">
   <p id="footerAddress">Endereço: Av. Príncipe de Gales, 821 - Vila Príncipe de Gales, Santo André - SP</p>
@@ -48,6 +200,56 @@ async function carregarRodape(){try{const r=await fetch(`${CLOUDFLARE_API_URL}/a
 document.addEventListener('DOMContentLoaded',()=>{Promise.all([carregarMenu(),carregarPlanoDeFundo(),carregarRodape()]);});</script>
 
 
+\n<script id="fmabc-editable-system-page">
+(function(){
+  const API='https://fmabc-acervo-api.armredessociais.workers.dev';
+  const PAGE_ID='professores-emeritos';
+  const FALLBACK_TITLE='Professores eméritos';
+  const FALLBACK_SUMMARY='Memória e reconhecimento dos professores eméritos da instituição.';
+  function sanitizarHtml(html){
+    const doc=new DOMParser().parseFromString(String(html||''),'text/html');
+    const permitidas=new Set(['P','BR','STRONG','B','EM','I','U','S','H2','H3','H4','UL','OL','LI','A','BLOCKQUOTE','IMG','DIV','SPAN','TABLE','THEAD','TBODY','TR','TH','TD']);
+    doc.body.querySelectorAll('*').forEach(el=>{
+      if(!permitidas.has(el.tagName)){el.replaceWith(...Array.from(el.childNodes));return;}
+      Array.from(el.attributes).forEach(attr=>{const n=attr.name.toLowerCase();if(n.startsWith('on')||n==='srcdoc'||n==='style'){el.removeAttribute(attr.name);}});
+      if(el.tagName==='A'){const href=el.getAttribute('href')||'';if(!/^(https?:|mailto:|tel:|#)/i.test(href))el.removeAttribute('href');else el.setAttribute('rel','noopener noreferrer');}
+      if(el.tagName==='IMG'){const src=el.getAttribute('src')||'';if(!/^(https?:|data:image\/)/i.test(src))el.removeAttribute('src');el.setAttribute('loading','lazy');el.removeAttribute('width');el.removeAttribute('height');}
+    });
+    return doc.body.innerHTML;
+  }
+  function adicionarMeta(name,content){if(!content)return;let m=document.querySelector('meta[name="'+name+'"]');if(!m){m=document.createElement('meta');m.name=name;document.head.appendChild(m);}m.content=content;}
+  function inserirBanner(hero,url,alt){
+    if(!hero||!url)return;
+    let wrap=document.getElementById('fmabcSystemPageBanner');
+    if(!wrap){wrap=document.createElement('div');wrap.id='fmabcSystemPageBanner';wrap.style.cssText='margin-top:26px;border-radius:18px;overflow:hidden;box-shadow:0 12px 30px rgba(0,0,0,.14);background:#fff;';hero.insertAdjacentElement('afterend',wrap);}
+    wrap.innerHTML='';const img=document.createElement('img');img.src=url;img.alt=alt||'';img.style.cssText='display:block;width:100%;max-height:460px;object-fit:cover;';wrap.appendChild(img);
+  }
+  async function carregar(){
+    try{
+      const r=await fetch(API+'/api/config/portal_pages?v='+Date.now(),{cache:'no-store'});
+      if(!r.ok)return;
+      const d=await r.json();const pages=Array.isArray(d?.valor?.pages)?d.valor.pages:[];
+      const page=pages.find(p=>p&&String(p.id||'')===PAGE_ID);if(!page)return;
+      const root=document.querySelector('main.page-container');const hero=root?.querySelector('.page-hero');
+      const title=(page.titulo||FALLBACK_TITLE).trim()||FALLBACK_TITLE;
+      const summary=(page.resumo||FALLBACK_SUMMARY).trim();
+      const titleEl=root?.querySelector('.page-title');if(titleEl)titleEl.textContent=title;
+      const sub=root?.querySelector('.page-subtitle');if(sub)sub.textContent=summary;
+      document.title=(page.seoTitulo||title)+' | Memória FMABC';
+      adicionarMeta('description',page.seoDescricao||summary);adicionarMeta('keywords',page.seoKeywords||'');
+      if(hero&&page.imagem)inserirBanner(hero,page.imagem,page.bannerAlt||title);
+      const contentBox=document.getElementById('fmabcEditableContent');
+      if(contentBox && page.conteudo)contentBox.innerHTML=sanitizarHtml(page.conteudo);
+      const secondary=page.conteudoSecundario||'';
+      const info=page.informacoesAdicionais||'';
+      function addSection(id,titleText,html){let sec=document.getElementById(id);if(!html){if(sec)sec.remove();return;}if(!sec){sec=document.createElement('section');sec.id=id;sec.className='page-content';root.appendChild(sec);}sec.innerHTML='<h2 class="placeholder-title"></h2><div class="placeholder-text" style="max-width:none"></div>';sec.querySelector('h2').textContent=titleText;sec.querySelector('div').innerHTML=sanitizarHtml(html);}
+      addSection('fmabcSecondaryContent','Conteúdo complementar',secondary);
+      addSection('fmabcAdditionalContent','Informações adicionais',info);
+    }catch(e){console.warn('Não foi possível carregar a configuração administrativa da página.',e);}
+  }
+  document.addEventListener('DOMContentLoaded',carregar);
+})();
+</script>\n
 <script id="fmabc-page-visibility-guard">
 (function(){
   const API='https://fmabc-acervo-api.armredessociais.workers.dev';
