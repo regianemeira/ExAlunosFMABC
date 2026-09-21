@@ -2666,6 +2666,43 @@
   }
 </style>
 
+
+<style id="fmabc-reitores-admin-style">
+  .reitores-admin-wrap{display:flex;flex-direction:column;gap:20px}
+  .reitores-admin-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+  .reitores-admin-head h3{margin:0;color:#27304f;font-size:1.45rem}
+  .reitores-admin-head p{margin:6px 0 0;color:#64708a;max-width:820px}
+  .reitores-admin-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .reitores-admin-primary{border:0;border-radius:10px;background:#339c5b;color:#fff;padding:11px 16px;font-weight:800;cursor:pointer;transition:.2s}
+  .reitores-admin-primary:hover{background:#277f48;transform:translateY(-1px)}
+  .reitores-admin-secondary{border:1px solid #d8dfdb;border-radius:10px;background:#fff;color:#33415f;padding:10px 14px;font-weight:700;cursor:pointer}
+  .reitores-admin-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .reitor-admin-card{background:#fff;border:1px solid #e0e5e2;border-radius:16px;overflow:hidden;box-shadow:0 8px 25px rgba(35,39,56,.06);display:grid;grid-template-columns:150px 1fr;min-height:190px}
+  .reitor-admin-photo{width:150px;height:190px;object-fit:cover;background:#eef2ef}
+  .reitor-admin-info{padding:18px;display:flex;flex-direction:column;gap:8px}
+  .reitor-admin-name{font-size:1.02rem;font-weight:800;color:#27304f;margin:0}
+  .reitor-admin-period{font-weight:800;color:#339c5b;font-size:.9rem}
+  .reitor-admin-status{display:inline-flex;align-items:center;width:max-content;gap:6px;padding:5px 9px;border-radius:999px;background:#ecf7f0;color:#247b46;font-weight:800;font-size:.73rem}
+  .reitor-admin-actions{display:flex;gap:8px;margin-top:auto;flex-wrap:wrap}
+  .reitor-admin-actions button{border:1px solid #d9dfdc;background:#fff;color:#33415f;border-radius:9px;padding:8px 11px;font-weight:700;cursor:pointer}
+  .reitor-admin-actions button:hover{border-color:#339c5b;color:#277f48}
+  .reitores-empty{padding:34px;border:1px dashed #ccd6d0;border-radius:14px;background:#fafcfb;text-align:center;color:#6b7588}
+  .reitores-empty strong{display:block;color:#33415f;margin-bottom:5px}
+  .reitores-order-note{font-size:.83rem;color:#64708a}
+  .reitores-modal-overlay{position:fixed;inset:0;background:rgba(17,24,39,.58);display:none;align-items:center;justify-content:center;padding:20px;z-index:12000}
+  .reitores-modal-overlay.active{display:flex}
+  .reitores-modal{width:min(720px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:18px;box-shadow:0 25px 70px rgba(0,0,0,.22)}
+  .reitores-modal-head{padding:20px 22px;border-bottom:1px solid #e8ece9;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .reitores-modal-head h4{margin:0;color:#27304f;font-size:1.18rem}
+  .reitores-modal-close{border:0;background:transparent;color:#6b7588;font-size:24px;cursor:pointer;line-height:1}
+  .reitores-modal-body{padding:22px}
+  .reitores-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .reitores-form-grid .full{grid-column:1/-1}
+  .reitor-photo-preview{width:130px;height:160px;object-fit:cover;border-radius:12px;border:1px solid #dde4df;background:#f5f8f6;display:block}
+  .reitores-upload-row{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+  .reitores-help{font-size:.82rem;color:#6b7588;max-width:480px}
+  @media(max-width:760px){.reitores-admin-grid{grid-template-columns:1fr}.reitor-admin-card{grid-template-columns:110px 1fr}.reitor-admin-photo{width:110px;height:170px}.reitores-form-grid{grid-template-columns:1fr}.reitores-form-grid .full{grid-column:auto}}
+</style>
 </head>
 <body>
 
@@ -2892,6 +2929,7 @@
           <button class="admin-nav-item active" onclick="switchAdminTab(event, 'tabHome')">Página Inicial</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabMenus')">Gestão de Menus</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabPaginas')">Gestão de Páginas</button>
+          <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabReitores')">Galeria de Reitores</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabPlanoDeFundo')">Plano de Fundo</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabCursos')">Inclusão de Cursos</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabTurmas')">Gestão de Turmas</button>
@@ -3129,7 +3167,26 @@
           </section>
 
           <!-- ABA DE PLANO DE FUNDO COM PREVIEW E TRANSIÇÃO SUAVE -->
-          <section id="tabPlanoDeFundo" class="admin-tab-pane">
+          
+          <section id="tabReitores" class="admin-tab-pane">
+            <div class="reitores-admin-wrap">
+              <div class="reitores-admin-head">
+                <div>
+                  <h3>Galeria de Reitores</h3>
+                  <p>Cadastre e organize os reitores que farão parte da galeria pública. A foto é armazenada no Cloudflare R2 e os dados ficam salvos no Cloudflare D1.</p>
+                </div>
+                <div class="reitores-admin-toolbar">
+                  <button type="button" class="reitores-admin-primary" onclick="abrirModalReitor()">+ Novo reitor</button>
+                  <button type="button" class="reitores-admin-secondary" onclick="carregarReitoresDoBanco(true)">Atualizar</button>
+                </div>
+              </div>
+              <div class="menu-admin-status" id="statusReitoresAdmin">Nenhuma alteração pendente.</div>
+              <div id="listaReitoresAdmin" class="reitores-admin-grid"></div>
+              <div class="reitores-order-note">A ordem exibida aqui é a mesma ordem usada na galeria pública. Use as setas para posicionar cada reitor.</div>
+            </div>
+          </section>
+
+<section id="tabPlanoDeFundo" class="admin-tab-pane">
             <h3 class="admin-section-title">Alterar Imagem de Fundo da Página</h3>
             <form onsubmit="salvarPlanoDeFundo(event)">
               <div class="upload-container">
@@ -3477,6 +3534,54 @@
 
 
         </main>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="reitores-modal-overlay" id="modalReitorEditor" aria-hidden="true">
+    <div class="reitores-modal" role="dialog" aria-modal="true" aria-labelledby="tituloModalReitor">
+      <div class="reitores-modal-head">
+        <h4 id="tituloModalReitor">Novo reitor</h4>
+        <button type="button" class="reitores-modal-close" onclick="fecharModalReitor()" aria-label="Fechar">×</button>
+      </div>
+      <div class="reitores-modal-body">
+        <form id="formReitorAdmin" onsubmit="salvarReitorAdmin(event)">
+          <input type="hidden" id="reitorEditId">
+          <div class="reitores-form-grid">
+            <div class="form-group full">
+              <label>Nome completo</label>
+              <input type="text" id="reitorNome" class="form-control" maxlength="180" required placeholder="Ex.: Professor Doutor Nome Completo">
+            </div>
+            <div class="form-group">
+              <label>Ano de início da gestão</label>
+              <input type="number" id="reitorInicio" class="form-control" min="1900" max="2100" required placeholder="1970">
+            </div>
+            <div class="form-group">
+              <label>Ano de término da gestão</label>
+              <input type="number" id="reitorFim" class="form-control" min="1900" max="2100" placeholder="1974">
+            </div>
+            <div class="form-group full">
+              <label>Foto</label>
+              <div class="reitores-upload-row">
+                <img id="reitorPreviewFoto" class="reitor-photo-preview" alt="Pré-visualização da foto">
+                <div>
+                  <input type="file" id="reitorFotoArquivo" accept="image/*" class="form-control">
+                  <p class="reitores-help">Envie uma foto oficial ou de arquivo. A imagem será otimizada e armazenada no R2.</p>
+                  <input type="text" id="reitorFotoUrl" class="form-control" placeholder="ou informe a URL da foto" maxlength="1000">
+                </div>
+              </div>
+            </div>
+            <div class="form-group full" style="display:flex;align-items:center;gap:10px;">
+              <input type="checkbox" id="reitorAtual" style="width:18px;height:18px;">
+              <label for="reitorAtual" style="margin:0;">Marcar como gestão atual</label>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:22px;flex-wrap:wrap;">
+            <button type="button" class="reitores-admin-secondary" onclick="fecharModalReitor()">Cancelar</button>
+            <button type="submit" class="reitores-admin-primary" id="btnSalvarReitor">Salvar reitor</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -4516,6 +4621,7 @@
       setupEventListeners();
       await carregarOrdemTurmasDoBanco();
       await carregarPaginasDoBanco();
+      await carregarReitoresDoBanco(false);
 
       // Primeira carga: busca os dados em paralelo, sem bloquear o Hero visível.
       await sincronizarDadosPublicosEconomicamente(true);
@@ -6366,7 +6472,191 @@
       document.getElementById('adminModalOverlay').classList.remove('active');
     }
 
-    function switchAdminTab(e, tabId) {
+    
+    // =========================================================
+    // GALERIA DE REITORES
+    // =========================================================
+    const REITORES_CONFIG_KEY = 'reitores_galeria';
+    let reitoresGaleria = [];
+    let reitorAtualEditando = null;
+
+    function gerarIdReitor() {
+      return `reitor-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    }
+
+    function normalizarReitor(item, index) {
+      if (!item || typeof item !== 'object') return null;
+      const nome = String(item.nome || '').trim();
+      if (!nome) return null;
+      const inicio = Number(item.inicio);
+      const fim = Number(item.fim);
+      return {
+        id: String(item.id || gerarIdReitor()),
+        nome: nome.slice(0, 180),
+        inicio: Number.isFinite(inicio) ? inicio : '',
+        fim: Number.isFinite(fim) ? fim : '',
+        foto: String(item.foto || '').trim(),
+        atual: item.atual === true,
+        ordem: Number.isFinite(Number(item.ordem)) ? Number(item.ordem) : index + 1
+      };
+    }
+
+    function renderListaReitoresAdmin() {
+      const el = document.getElementById('listaReitoresAdmin');
+      const status = document.getElementById('statusReitoresAdmin');
+      if (!el) return;
+      const lista = [...reitoresGaleria].sort((a,b) => Number(a.ordem||0)-Number(b.ordem||0));
+      if (!lista.length) {
+        el.innerHTML = '<div class="reitores-empty" style="grid-column:1/-1"><strong>Nenhum reitor cadastrado</strong>Cadastre o primeiro reitor para começar a galeria.</div>';
+      } else {
+        el.innerHTML = lista.map((r, idx) => {
+          const periodo = r.inicio ? `${r.inicio} – ${r.fim || 'Atual'}` : 'Período não informado';
+          const foto = r.foto || 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="300" height="400"><rect width="100%" height="100%" fill="#eef2ef"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#7a8598" font-family="Arial" font-size="22">Sem foto</text></svg>');
+          return `<article class="reitor-admin-card">
+            <img class="reitor-admin-photo" src="${escapeHtmlAttr(urlSemCache(foto))}" alt="${escapeHtmlAttr(r.nome)}">
+            <div class="reitor-admin-info">
+              <h4 class="reitor-admin-name">${escapeHtml(r.nome)}</h4>
+              <div class="reitor-admin-period">${escapeHtml(periodo)}</div>
+              ${r.atual ? '<span class="reitor-admin-status">● Gestão atual</span>' : ''}
+              <div class="reitor-admin-actions">
+                <button type="button" onclick="moverReitorAdmin('${r.id}',-1)" ${idx===0?'disabled':''}>↑ Subir</button>
+                <button type="button" onclick="moverReitorAdmin('${r.id}',1)" ${idx===lista.length-1?'disabled':''}>↓ Descer</button>
+                <button type="button" onclick="editarReitorAdmin('${r.id}')">Editar</button>
+                <button type="button" onclick="duplicarReitorAdmin('${r.id}')">Duplicar</button>
+                <button type="button" onclick="excluirReitorAdmin('${r.id}')">Excluir</button>
+              </div>
+            </div>
+          </article>`;
+        }).join('');
+      }
+      if (status) status.textContent = `${lista.length} ${lista.length === 1 ? 'reitor cadastrado' : 'reitores cadastrados'}. Último estado sincronizado com o Cloudflare.`;
+    }
+
+    function escapeHtmlAttr(value){return String(value??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+    function escapeHtml(value){return String(value??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+
+    async function carregarReitoresDoBanco(notify=false) {
+      try {
+        const r = await fetch(`${CLOUDFLARE_API_URL}/api/config/${encodeURIComponent(REITORES_CONFIG_KEY)}?v=${Date.now()}`, {cache:'no-store'});
+        if (!r.ok) throw new Error(`Cloudflare API HTTP ${r.status}`);
+        const data = await r.json();
+        const arr = Array.isArray(data?.valor) ? data.valor : (Array.isArray(data?.valor?.itens) ? data.valor.itens : []);
+        reitoresGaleria = arr.map(normalizarReitor).filter(Boolean).sort((a,b)=>Number(a.ordem||0)-Number(b.ordem||0));
+      } catch (error) {
+        console.error('Erro ao carregar a galeria de reitores:', error);
+        reitoresGaleria = [];
+        if (notify) showToast('Não foi possível carregar a Galeria de Reitores.');
+      }
+      renderListaReitoresAdmin();
+    }
+
+    async function salvarReitoresNoBanco(notify=true) {
+      registrarAtividadeAdmin();
+      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
+        showToast('Sessão administrativa expirada. Faça login novamente.');
+        return false;
+      }
+      try {
+        const payload = [...reitoresGaleria].map((r,i)=>({...r,ordem:i+1}));
+        await cloudflareAdminFetch(`/api/admin/config/${encodeURIComponent(REITORES_CONFIG_KEY)}`,{method:'PUT',body:JSON.stringify({valor:payload})});
+        reitoresGaleria = payload;
+        renderListaReitoresAdmin();
+        if (notify) showToast('Galeria de Reitores salva com sucesso no Cloudflare.');
+        return true;
+      } catch(error) {
+        console.error('Erro ao salvar a Galeria de Reitores:',error);
+        showToast('Não foi possível salvar a Galeria de Reitores: ' + (error.message || 'erro desconhecido'));
+        return false;
+      }
+    }
+
+    function abrirModalReitor(reitor=null) {
+      reitorAtualEditando = reitor ? {...reitor} : null;
+      const modal=document.getElementById('modalReitorEditor');
+      if(!modal)return;
+      document.getElementById('tituloModalReitor').textContent=reitor?'Editar reitor':'Novo reitor';
+      document.getElementById('reitorEditId').value=reitor?.id||'';
+      document.getElementById('reitorNome').value=reitor?.nome||'';
+      document.getElementById('reitorInicio').value=reitor?.inicio||'';
+      document.getElementById('reitorFim').value=reitor?.fim||'';
+      document.getElementById('reitorFotoUrl').value=reitor?.foto||'';
+      document.getElementById('reitorAtual').checked=reitor?.atual===true;
+      document.getElementById('reitorPreviewFoto').src=reitor?.foto?urlSemCache(reitor.foto):'';
+      document.getElementById('reitorFotoArquivo').value='';
+      modal.classList.add('active');modal.setAttribute('aria-hidden','false');
+      setTimeout(()=>document.getElementById('reitorNome')?.focus(),50);
+    }
+    function fecharModalReitor(){const modal=document.getElementById('modalReitorEditor');if(modal){modal.classList.remove('active');modal.setAttribute('aria-hidden','true');}}
+    function editarReitorAdmin(id){const r=reitoresGaleria.find(x=>String(x.id)===String(id));if(r)abrirModalReitor(r);}
+
+    async function salvarReitorAdmin(e) {
+      e.preventDefault();
+      registrarAtividadeAdmin();
+      const id=String(document.getElementById('reitorEditId').value||'').trim();
+      const nome=document.getElementById('reitorNome').value.trim();
+      const inicio=Number(document.getElementById('reitorInicio').value);
+      const fimValor=String(document.getElementById('reitorFim').value||'').trim();
+      const fim=fimValor?Number(fimValor):'';
+      const atual=document.getElementById('reitorAtual').checked;
+      let foto=document.getElementById('reitorFotoUrl').value.trim();
+      const arquivo=document.getElementById('reitorFotoArquivo').files?.[0];
+      if(!nome){showToast('Informe o nome do reitor.');return;}
+      if(!Number.isFinite(inicio)){showToast('Informe o ano de início da gestão.');return;}
+      if(fim!=='' && (!Number.isFinite(fim) || fim<inicio)){showToast('O ano de término deve ser igual ou posterior ao início.');return;}
+      try {
+        if(arquivo){showToast('Enviando foto do reitor para o Cloudflare...');foto=await enviarArquivoParaStorage(arquivo,'reitores');}
+        if(!foto){showToast('Adicione uma foto ou informe a URL da foto.');return;}
+        if(atual) reitoresGaleria.forEach(r=>r.atual=false);
+        const registro={id:id||gerarIdReitor(),nome,inicio,fim,foto,atual,ordem:0};
+        if(id){
+          const idx=reitoresGaleria.findIndex(r=>String(r.id)===id);
+          if(idx>=0){registro.ordem=reitoresGaleria[idx].ordem;reitoresGaleria[idx]=registro;}
+        }else{
+          registro.ordem=reitoresGaleria.length+1;reitoresGaleria.push(registro);
+        }
+        const ok=await salvarReitoresNoBanco(false);
+        if(ok){fecharModalReitor();showToast(id?'Reitor atualizado com sucesso.':'Reitor cadastrado com sucesso.');}
+      }catch(error){console.error(error);showToast('Não foi possível salvar o reitor: '+(error.message||'erro desconhecido'));}
+    }
+
+    async function excluirReitorAdmin(id){
+      const r=reitoresGaleria.find(x=>String(x.id)===String(id));
+      if(!r)return;
+      if(!confirm(`Excluir ${r.nome} da Galeria de Reitores?`))return;
+      reitoresGaleria=reitoresGaleria.filter(x=>String(x.id)!==String(id));
+      await salvarReitoresNoBanco(true);
+    }
+
+    async function duplicarReitorAdmin(id){
+      const r=reitoresGaleria.find(x=>String(x.id)===String(id));
+      if(!r)return;
+      reitoresGaleria.push({...r,id:gerarIdReitor(),nome:`${r.nome} (cópia)`,atual:false,ordem:reitoresGaleria.length+1});
+      await salvarReitoresNoBanco(true);
+    }
+
+    async function moverReitorAdmin(id,direcao){
+      const lista=[...reitoresGaleria].sort((a,b)=>Number(a.ordem||0)-Number(b.ordem||0));
+      const idx=lista.findIndex(x=>String(x.id)===String(id));
+      const novo=idx+direcao;
+      if(idx<0||novo<0||novo>=lista.length)return;
+      [lista[idx],lista[novo]]=[lista[novo],lista[idx]];
+      reitoresGaleria=lista.map((r,i)=>({...r,ordem:i+1}));
+      await salvarReitoresNoBanco(true);
+    }
+
+    document.addEventListener('change', e => {
+      if(e.target?.id==='reitorFotoArquivo'){
+        const file=e.target.files?.[0]; if(!file)return;
+        const reader=new FileReader();reader.onload=()=>{const img=document.getElementById('reitorPreviewFoto');if(img)img.src=reader.result;};reader.readAsDataURL(file);
+      }
+    });
+    document.addEventListener('input', e=>{
+      if(e.target?.id==='reitorFotoUrl'){const v=e.target.value.trim();const img=document.getElementById('reitorPreviewFoto');if(img && v)img.src=urlSemCache(v);}
+    });
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')fecharModalReitor();});
+    document.addEventListener('click',e=>{const modal=document.getElementById('modalReitorEditor');if(modal&&e.target===modal)fecharModalReitor();});
+
+function switchAdminTab(e, tabId) {
       registrarAtividadeAdmin();
       document.querySelectorAll('.admin-nav-item').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.admin-tab-pane').forEach(p => p.classList.remove('active'));
@@ -6378,6 +6668,9 @@
       }
       if (tabId === 'tabPaginas') {
         renderListaPaginasCMS();
+      }
+      if (tabId === 'tabReitores') {
+        carregarReitoresDoBanco(false);
       }
       if (tabId === 'tabTurmas') {
         renderEditorOrdemTurmas();
