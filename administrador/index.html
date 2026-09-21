@@ -2934,8 +2934,8 @@
       <div class="admin-header">
         <h3>FMABC | Painel de Gestão de Conteúdo</h3>
         <div>
-          <button class="btn-close-admin" onclick="fazerLogoutAdmin()" style="margin-right: 8px; background: rgba(220, 38, 38, 0.25); border-color: rgba(239, 68, 68, 0.4);">Sair</button>
-          <button class="btn-close-admin" onclick="fecharAdminModal()">Voltar à Página Inicial ✕</button>
+          <button id="adminLogoutBtn" class="btn-close-admin" onclick="fazerLogoutAdmin()" style="margin-right: 8px; background: rgba(220, 38, 38, 0.25); border-color: rgba(239, 68, 68, 0.4);">Sair</button>
+          <button id="adminBackPortalBtn" class="btn-close-admin" onclick="fecharAdminModal()">Voltar à Página Inicial ✕</button>
         </div>
       </div>
 
@@ -7047,10 +7047,10 @@ function switchAdminTab(e, tabId) {
     overlay.classList.add('active');
     const logged = localStorage.getItem('fmabc_admin_logged') === 'true' && !!localStorage.getItem('fmabc_cf_admin_token');
     overlay.classList.toggle('admin-route-logged-out', !logged);
-    const closeBtn = overlay.querySelector('.btn-close-admin');
-    if (closeBtn) {
-      closeBtn.textContent = 'Voltar ao portal';
-      closeBtn.setAttribute('aria-label', 'Voltar ao portal público');
+    const backBtn = document.getElementById('adminBackPortalBtn');
+    if (backBtn) {
+      backBtn.textContent = 'Voltar ao portal';
+      backBtn.setAttribute('aria-label', 'Voltar ao portal público');
     }
     if (logged) {
       const painel = document.getElementById('painel-admin');
