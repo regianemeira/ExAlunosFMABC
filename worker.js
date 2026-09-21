@@ -118,15 +118,6 @@ async function ensureDepoimentosSchema(env) {
     if (!cols.includes('aprovado')) {
       await env.DB.prepare(`ALTER TABLE depoimentos ADD COLUMN aprovado INTEGER NOT NULL DEFAULT 0`).run();
     }
-    if (!cols.includes('lgpd_aceito')) {
-      await env.DB.prepare(`ALTER TABLE depoimentos ADD COLUMN lgpd_aceito INTEGER NOT NULL DEFAULT 0`).run();
-    }
-    if (!cols.includes('lgpd_aceito_em')) {
-      await env.DB.prepare(`ALTER TABLE depoimentos ADD COLUMN lgpd_aceito_em TEXT`).run();
-    }
-    if (!cols.includes('politica_versao')) {
-      await env.DB.prepare(`ALTER TABLE depoimentos ADD COLUMN politica_versao TEXT`).run();
-    }
   } catch (error) {
     // A falha de preparação do schema não deve ocultar o erro real da rota.
     console.error('Erro ao preparar schema de depoimentos:', error);
@@ -165,11 +156,8 @@ async function createPublicDepoimento(request, env) {
   const turmaId = String(body?.turma_id || '').trim();
   const autor = String(body?.autor || '').trim();
   const texto = String(body?.texto || '').trim();
-  const lgpdAceito = body?.lgpd_aceito === true;
-  const politicaVersao = String(body?.politica_versao || '1.0').trim().slice(0, 20) || '1.0';
 
   if (!turmaId || !autor || !texto) return json({ error: 'Nome, turma e depoimento são obrigatórios.' }, 400);
-  if (!lgpdAceito) return json({ error: 'É necessário aceitar a Política de Privacidade para enviar o depoimento.' }, 400);
   if (autor.length > 160) return json({ error: 'O nome informado é muito longo.' }, 400);
   if (texto.length > 300) return json({ error: 'O depoimento deve ter no máximo 300 caracteres.' }, 400);
 
@@ -178,9 +166,9 @@ async function createPublicDepoimento(request, env) {
 
   const id = crypto.randomUUID();
   await env.DB.prepare(`
-    INSERT INTO depoimentos (id, turma_id, autor, texto, aprovado, lgpd_aceito, lgpd_aceito_em, politica_versao, created_at)
-    VALUES (?, ?, ?, ?, 0, 1, ?, ?, CURRENT_TIMESTAMP)
-  `).bind(id, turmaId, autor, texto, new Date().toISOString(), politicaVersao).run();
+    INSERT INTO depoimentos (id, turma_id, autor, texto, aprovado, created_at)
+    VALUES (?, ?, ?, ?, 0, CURRENT_TIMESTAMP)
+  `).bind(id, turmaId, autor, texto).run();
 
   return json({ ok: true, id, status: 'pendente' }, 201);
 }
@@ -194,7 +182,7 @@ async function listPendingDepoimentos(request, env) {
 
   if (turmaId) {
     const { results = [] } = await env.DB.prepare(`
-      SELECT id, turma_id, autor, texto, lgpd_aceito, lgpd_aceito_em, politica_versao, created_at
+      SELECT id, turma_id, autor, texto, created_at
       FROM depoimentos
       WHERE turma_id = ? AND aprovado = 0
       ORDER BY datetime(created_at) ASC, id ASC
@@ -203,7 +191,7 @@ async function listPendingDepoimentos(request, env) {
   }
 
   const { results = [] } = await env.DB.prepare(`
-    SELECT id, turma_id, autor, texto, lgpd_aceito, lgpd_aceito_em, politica_versao, created_at
+    SELECT id, turma_id, autor, texto, created_at
     FROM depoimentos
     WHERE aprovado = 0
     ORDER BY datetime(created_at) ASC, id ASC
@@ -221,6 +209,98 @@ async function approveDepoimento(request, env, id) {
 
   await env.DB.prepare(`UPDATE depoimentos SET aprovado = 1 WHERE id = ?`).bind(id).run();
   return json({ ok: true, id, aprovado: true });
+}
+
+
+
+async function ensureContatosSchema(env) {
+  await env.DB.prepare(`
+    CREATE TABLE IF NOT EXISTS contatos (
+      id TEXT PRIMARY KEY,
+      protocolo TEXT NOT NULL UNIQUE,
+      nome TEXT NOT NULL,
+      email TEXT NOT NULL,
+      telefone TEXT,
+      curso TEXT,
+      turma TEXT,
+      assunto TEXT NOT NULL,
+      mensagem TEXT NOT NULL,
+      consentimento_lgpd INTEGER NOT NULL DEFAULT 0,
+      politica_versao TEXT,
+      status TEXT NOT NULL DEFAULT 'novo',
+      created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+      updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+    )
+  `).run();
+}
+
+function gerarProtocoloContato() {
+  const agora = new Date();
+  const data = agora.toISOString().slice(0,10).replace(/-/g,'');
+  const sufixo = crypto.randomUUID().replace(/-/g,'').slice(0,8).toUpperCase();
+  return `FMABC-${data}-${sufixo}`;
+}
+
+async function createPublicContato(request, env) {
+  await ensureContatosSchema(env);
+  let body;
+  try { body = await request.json(); } catch { return json({ error: 'JSON inválido.' }, 400); }
+  if (String(body?.honeypot || '').trim()) return json({ ok: true, protocol: 'Recebido' }, 201);
+
+  const nome = String(body?.nome || '').trim();
+  const email = String(body?.email || '').trim().toLowerCase();
+  const telefone = String(body?.telefone || '').trim();
+  const curso = String(body?.curso || '').trim();
+  const turma = String(body?.turma || '').trim();
+  const assunto = String(body?.assunto || '').trim();
+  const mensagem = String(body?.mensagem || '').trim();
+  const consent = Boolean(body?.consentimento_lgpd);
+  const versao = String(body?.politica_versao || '').trim();
+
+  if (!nome || !email || !assunto || !mensagem) return json({ error: 'Preencha os campos obrigatórios.' }, 400);
+  if (!consent) return json({ error: 'É necessário aceitar a Política de Privacidade.' }, 400);
+  if (nome.length > 160 || email.length > 180 || telefone.length > 30 || curso.length > 140 || turma.length > 80 || assunto.length > 120 || mensagem.length > 4000) {
+    return json({ error: 'Um ou mais campos ultrapassam o limite permitido.' }, 400);
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json({ error: 'Informe um e-mail válido.' }, 400);
+
+  const id = crypto.randomUUID();
+  const protocolo = gerarProtocoloContato();
+  await env.DB.prepare(`
+    INSERT INTO contatos (
+      id, protocolo, nome, email, telefone, curso, turma, assunto, mensagem,
+      consentimento_lgpd, politica_versao, status, created_at, updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'novo', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+  `).bind(id, protocolo, nome, email, telefone, curso, turma, assunto, mensagem, 1, versao || '1.0').run();
+
+  return json({ ok: true, id, protocol: protocolo, status: 'novo' }, 201);
+}
+
+async function listAdminContatos(request, env) {
+  const admin = await requireAdmin(request, env);
+  if (!admin) return json({ error: 'Não autorizado.' }, 401);
+  await ensureContatosSchema(env);
+  const { results = [] } = await env.DB.prepare(`
+    SELECT id, protocolo, nome, email, telefone, curso, turma, assunto, mensagem,
+           consentimento_lgpd, politica_versao, status, created_at, updated_at
+    FROM contatos
+    ORDER BY datetime(created_at) DESC, id DESC
+    LIMIT 200
+  `).all();
+  return json(results);
+}
+
+async function updateAdminContatoStatus(request, env, id) {
+  const admin = await requireAdmin(request, env);
+  if (!admin) return json({ error: 'Não autorizado.' }, 401);
+  await ensureContatosSchema(env);
+  let body; try { body = await request.json(); } catch { return json({ error: 'JSON inválido.' }, 400); }
+  const status = String(body?.status || '').trim();
+  const permitidos = new Set(['novo','em_atendimento','respondido','arquivado']);
+  if (!permitidos.has(status)) return json({ error: 'Status inválido.' }, 400);
+  const result = await env.DB.prepare(`UPDATE contatos SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`).bind(status, id).run();
+  if (!result?.meta?.changes) return json({ error: 'Contato não encontrado.' }, 404);
+  return json({ ok: true, id, status });
 }
 
 function mapTurma(row, requestUrl) {
@@ -482,6 +562,17 @@ async function updateSiteConfig(request, env, id) {
 
   const valor = body?.valor ?? null;
   const serialized = typeof valor === "string" ? valor : JSON.stringify(valor);
+  if (serialized.length > 2_000_000) return json({ error: "Configuração muito grande para ser salva." }, 413);
+
+  // Garante que a tabela de configurações exista mesmo em ambientes que
+  // foram criados antes da adoção do CMS. Não altera dados existentes.
+  await env.DB.prepare(`
+    CREATE TABLE IF NOT EXISTS site_config (
+      id TEXT PRIMARY KEY,
+      valor TEXT,
+      updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+    )
+  `).run();
 
   await env.DB.prepare(`
     INSERT INTO site_config (id, valor, updated_at)
@@ -497,7 +588,7 @@ async function updateSiteConfig(request, env, id) {
 
   let parsed = row?.valor;
   try { parsed = JSON.parse(row.valor); } catch {}
-  return json({ id: row.id, valor: parsed, updated_at: row.updated_at });
+  return json({ ok: true, id: row.id, valor: parsed, updated_at: row.updated_at });
 }
 
 function normalizeTurmaBody(body, existing = null) {
@@ -650,6 +741,10 @@ export default {
       }
 
       if (path === "/api/depoimentos" && request.method === "POST") return createPublicDepoimento(request, env);
+      if (path === "/api/contatos" && request.method === "POST") return createPublicContato(request, env);
+      if (path === "/api/admin/contatos" && request.method === "GET") return listAdminContatos(request, env);
+      const adminContatoMatch = path.match(/^\/api\/admin\/contatos\/([^/]+)\/status$/);
+      if (adminContatoMatch && request.method === "PUT") return updateAdminContatoStatus(request, env, decodeURIComponent(adminContatoMatch[1]));
 
       if (path === "/api/admin/depoimentos" && request.method === "GET") return listPendingDepoimentos(request, env);
       const adminDepoimentoMatch = path.match(/^\/api\/admin\/depoimentos\/([^/]+)\/aprovar$/);
@@ -681,11 +776,18 @@ export default {
 
       const configMatch = path.match(/^\/api\/config\/([^/]+)$/);
       if (configMatch && request.method === "GET") {
+        await env.DB.prepare(`
+          CREATE TABLE IF NOT EXISTS site_config (
+            id TEXT PRIMARY KEY,
+            valor TEXT,
+            updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+          )
+        `).run();
         const row = await env.DB.prepare(`SELECT id, valor, updated_at FROM site_config WHERE id = ? LIMIT 1`).bind(configMatch[1]).first();
         if (!row) return json({ error: "Configuração não encontrada." }, 404);
         let valor = row.valor;
         try { valor = JSON.parse(row.valor); } catch {}
-        return json({ id: row.id, valor, updated_at: row.updated_at });
+        return json({ ok: true, id: row.id, valor, updated_at: row.updated_at });
       }
 
       if (path.startsWith("/assets/") && request.method === "GET") {
@@ -716,6 +818,9 @@ export default {
           "PUT /api/admin/turmas/:id",
           "DELETE /api/admin/turmas/:id",
           "POST /api/depoimentos",
+          "POST /api/contatos",
+          "GET /api/admin/contatos",
+          "PUT /api/admin/contatos/:id/status",
           "GET /api/admin/depoimentos?turma_id=...",
           "PUT /api/admin/depoimentos/:id/aprovar",
           "GET /api/cursos",
