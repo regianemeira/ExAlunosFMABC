@@ -2748,6 +2748,58 @@
   .timeline-help{font-size:.82rem;color:#6b7588;max-width:480px}
   @media(max-width:760px){.timeline-admin-item{grid-template-columns:30px 70px 1fr}.timeline-admin-actions{grid-column:2/-1;justify-content:flex-start}.timeline-admin-thumb{width:70px;height:52px}.timeline-form-grid{grid-template-columns:1fr}.timeline-form-grid .full{grid-column:auto}}
 </style>
+
+<style id="fmabc-gallery-admin-style">
+  .gallery-admin-wrap{display:flex;flex-direction:column;gap:18px}
+  .gallery-admin-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+  .gallery-admin-head h3{margin:0;color:#27304f;font-size:1.45rem}
+  .gallery-admin-head p{margin:6px 0 0;color:#64708a;max-width:840px}
+  .gallery-admin-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .gallery-admin-primary{border:0;border-radius:10px;background:#339c5b;color:#fff;padding:11px 16px;font-weight:800;cursor:pointer;transition:.2s}
+  .gallery-admin-primary:hover{background:#277f48;transform:translateY(-1px)}
+  .gallery-admin-secondary{border:1px solid #d8dfdb;border-radius:10px;background:#fff;color:#33415f;padding:10px 14px;font-weight:700;cursor:pointer}
+  .gallery-admin-secondary:hover{border-color:#b9c8bf;background:#f8faf9}
+  .gallery-admin-notice{padding:14px 16px;background:#f3f8f4;border:1px solid #d5e6d9;border-radius:12px;color:#52627a;font-size:.83rem;line-height:1.55}
+  .gallery-admin-toolbar-row{display:grid;grid-template-columns:1fr 220px;gap:10px}
+  .gallery-admin-status{font-size:.76rem;color:#748199}
+  .gallery-admin-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .gallery-admin-card{background:#fff;border:1px solid #e0e5e2;border-radius:16px;overflow:hidden;box-shadow:0 8px 25px rgba(35,39,56,.06);display:grid;grid-template-columns:190px 1fr;min-height:190px}
+  .gallery-admin-card-cover{width:190px;height:190px;object-fit:cover;background:#eef2ef}
+  .gallery-admin-card-body{padding:16px;display:flex;flex-direction:column;min-width:0}
+  .gallery-admin-card-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+  .gallery-admin-card-title{margin:0;color:#293452;font-size:1rem;line-height:1.35}
+  .gallery-admin-card-date{margin-top:5px;color:#6c7890;font-size:.78rem}
+  .gallery-admin-card-desc{margin:10px 0 0;color:#64708a;font-size:.8rem;line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .gallery-admin-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .gallery-admin-pill{font-size:.68rem;font-weight:800;padding:5px 8px;border-radius:999px;background:#edf5ef;color:#2f7d4b;border:1px solid #d7eadc}
+  .gallery-admin-pill.draft{background:#f3f4f6;color:#6b7280;border-color:#e5e7eb}
+  .gallery-admin-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:14px}
+  .gallery-admin-actions button{border:1px solid #d8dfdb;background:#fff;color:#52607d;border-radius:8px;padding:7px 9px;font-size:.72rem;font-weight:800;cursor:pointer}
+  .gallery-admin-actions button:hover{background:#f6f8f7}
+  .gallery-admin-actions button.danger{color:#a33b4d;border-color:#ebcbd2}
+  .gallery-editor-shell{display:none;background:#fff;border:1px solid #dfe6e2;border-radius:16px;overflow:hidden;box-shadow:0 10px 30px rgba(35,39,56,.07)}
+  .gallery-editor-shell.active{display:block}
+  .gallery-editor-head{padding:20px 22px;border-bottom:1px solid #e3e8e5;display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+  .gallery-editor-head h4{margin:0;color:#2d3759;font-size:1.25rem}
+  .gallery-editor-head p{margin:5px 0 0;color:#7a8598;font-size:.76rem}
+  .gallery-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 24px;padding:22px}.gallery-form-grid .full{grid-column:1/-1}
+  .gallery-cover-admin-row{display:grid;grid-template-columns:240px 1fr;gap:16px;align-items:start}
+  .gallery-cover-preview-wrap{width:240px;height:170px;border:1px solid #dfe6e2;border-radius:12px;overflow:hidden;background:#f6f8f7;display:flex;align-items:center;justify-content:center}
+  .gallery-cover-preview{width:100%;height:100%;object-fit:cover;display:block}
+  .gallery-cover-fields{display:flex;flex-direction:column;gap:9px}.gallery-cover-fields small,.gallery-upload-box small{color:#7b879a;font-size:.72rem;line-height:1.45}
+  .gallery-use-first-photo{align-self:flex-start}
+  .gallery-upload-box{border:1px dashed #cbd7d0;background:#fbfcfb;padding:14px;border-radius:12px;display:flex;flex-direction:column;gap:10px}
+  .gallery-add-url-row{display:grid;grid-template-columns:1fr auto;gap:8px}
+  .gallery-photos-admin-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+  .gallery-photo-admin-item{display:grid;grid-template-columns:92px 1fr auto;gap:10px;align-items:center;border:1px solid #e1e6e3;border-radius:12px;padding:8px;background:#fff}
+  .gallery-photo-admin-thumb{width:92px;height:72px;object-fit:cover;border-radius:8px;background:#eef2ef}
+  .gallery-photo-admin-main{min-width:0}.gallery-photo-admin-main strong{display:block;color:#35415e;font-size:.76rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.gallery-photo-admin-main span{display:block;color:#8a95a8;font-size:.65rem;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .gallery-photo-admin-actions{display:flex;flex-direction:column;gap:4px}.gallery-photo-admin-actions button{width:34px;height:28px;border:1px solid #d9e0dc;background:#fff;border-radius:7px;color:#56647d;cursor:pointer;font-weight:800}.gallery-photo-admin-actions button:hover{background:#f5f7f6}.gallery-photo-admin-actions button.danger{color:#a33b4d}
+  .gallery-editor-actions{display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap;padding:16px 22px;background:#f8faf9;border-top:1px solid #e3e8e5}
+  @media(max-width:980px){.gallery-admin-grid{grid-template-columns:1fr}.gallery-form-grid{grid-template-columns:1fr}.gallery-form-grid .full{grid-column:auto}.gallery-cover-admin-row{grid-template-columns:1fr}.gallery-cover-preview-wrap{width:100%;height:220px}}
+  @media(max-width:650px){.gallery-admin-toolbar-row{grid-template-columns:1fr}.gallery-admin-card{grid-template-columns:1fr}.gallery-admin-card-cover{width:100%;height:210px}.gallery-photos-admin-list{grid-template-columns:1fr}.gallery-add-url-row{grid-template-columns:1fr}}
+</style>
+
 </head>
 <body>
 
@@ -2974,6 +3026,7 @@
           <button class="admin-nav-item active" onclick="switchAdminTab(event, 'tabHome')">Página Inicial</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabMenus')">Gestão de Menus</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabPaginas')">Gestão de Páginas</button>
+          <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabGaleriaFotos')">Galeria de Fotos</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabReitores')">Galeria de Reitores</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabLinhaTempo')">Linha do Tempo</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabPlanoDeFundo')">Plano de Fundo</button>
@@ -3243,6 +3296,104 @@
 
 <!-- ABA DE PLANO DE FUNDO COM PREVIEW E TRANSIÇÃO SUAVE -->
           
+          <section id="tabGaleriaFotos" class="admin-tab-pane">
+            <div class="gallery-admin-wrap">
+              <div class="gallery-admin-head">
+                <div>
+                  <h3>Galeria de Fotos</h3>
+                  <p>Crie álbuns de fotos para a nova página institucional. As imagens são armazenadas no Cloudflare R2 e os álbuns no Cloudflare.</p>
+                </div>
+                <div class="gallery-admin-toolbar">
+                  <button type="button" class="gallery-admin-primary" onclick="abrirNovoAlbumGaleria()">+ Novo álbum</button>
+                  <button type="button" class="gallery-admin-secondary" onclick="carregarGaleriaFotosDoBanco(true)">Atualizar</button>
+                </div>
+              </div>
+
+              <div class="gallery-admin-notice">
+                <strong>Como funciona:</strong> cadastre o álbum, informe título e data, escolha uma capa, adicione as fotos e publique quando estiver pronto. A ordem definida aqui é a mesma exibida na página pública.
+              </div>
+
+              <div class="gallery-admin-toolbar-row">
+                <input id="filtroGaleriaFotosAdmin" class="form-control" type="search" placeholder="Pesquisar álbum" oninput="renderListaAlbunsGaleriaAdmin()" autocomplete="off">
+                <select id="filtroGaleriaStatusAdmin" class="form-control" onchange="renderListaAlbunsGaleriaAdmin()">
+                  <option value="">Todos os status</option>
+                  <option value="publicado">Publicados</option>
+                  <option value="rascunho">Rascunhos</option>
+                </select>
+              </div>
+
+              <div class="gallery-admin-status" id="statusGaleriaFotosAdmin">Carregando álbuns...</div>
+              <div id="listaAlbunsGaleriaAdmin" class="gallery-admin-grid"></div>
+
+              <div id="editorAlbumGaleria" class="gallery-editor-shell" aria-hidden="true">
+                <div class="gallery-editor-head">
+                  <div>
+                    <h4 id="tituloEditorAlbumGaleria">Novo álbum</h4>
+                    <p id="subtituloEditorAlbumGaleria">Cadastre as informações do álbum e depois adicione as fotos.</p>
+                  </div>
+                  <button type="button" class="gallery-admin-secondary" onclick="fecharEditorAlbumGaleria()">Fechar</button>
+                </div>
+
+                <form id="formAlbumGaleria" onsubmit="salvarAlbumGaleria(event)">
+                  <input type="hidden" id="albumGaleriaEditId" value="">
+                  <div class="gallery-form-grid">
+                    <div class="form-group">
+                      <label>Título do álbum</label>
+                      <input type="text" id="albumGaleriaTitulo" class="form-control" maxlength="160" required placeholder="Ex.: Colação de Grau Medicina 2026">
+                    </div>
+                    <div class="form-group">
+                      <label>Data do evento</label>
+                      <input type="date" id="albumGaleriaData" class="form-control">
+                    </div>
+                    <div class="form-group full">
+                      <label>Descrição</label>
+                      <textarea id="albumGaleriaDescricao" class="form-control" rows="4" maxlength="800" placeholder="Breve descrição do álbum."></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label>Categoria</label>
+                      <input type="text" id="albumGaleriaCategoria" class="form-control" maxlength="80" placeholder="Ex.: Eventos institucionais">
+                    </div>
+                    <div class="form-group">
+                      <label>Visibilidade</label>
+                      <select id="albumGaleriaPublicado" class="form-control">
+                        <option value="true">Publicado</option>
+                        <option value="false">Rascunho</option>
+                      </select>
+                    </div>
+                    <div class="form-group full">
+                      <label>Capa do álbum</label>
+                      <div class="gallery-cover-admin-row">
+                        <div class="gallery-cover-preview-wrap"><img id="albumGaleriaCapaPreview" class="gallery-cover-preview" alt="Pré-visualização da capa"></div>
+                        <div class="gallery-cover-fields">
+                          <input type="file" id="albumGaleriaCapaArquivo" class="form-control" accept="image/*">
+                          <input type="text" id="albumGaleriaCapaUrl" class="form-control" maxlength="1000" placeholder="ou informe a URL da capa">
+                          <small>Você também pode usar uma das fotos do álbum como capa.</small>
+                          <button type="button" class="gallery-admin-secondary gallery-use-first-photo" onclick="usarPrimeiraFotoComoCapaGaleria()">Usar primeira foto</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group full">
+                      <label>Fotos do álbum</label>
+                      <div class="gallery-upload-box">
+                        <input type="file" id="albumGaleriaFotosArquivos" class="form-control" accept="image/*" multiple>
+                        <div class="gallery-add-url-row">
+                          <input type="text" id="albumGaleriaFotoUrl" class="form-control" maxlength="1000" placeholder="Adicionar uma foto por URL">
+                          <button type="button" class="gallery-admin-secondary" onclick="adicionarFotoUrlGaleria()">Adicionar URL</button>
+                        </div>
+                        <small>É possível selecionar várias imagens de uma vez. Cada arquivo será otimizado antes do envio ao Cloudflare R2.</small>
+                      </div>
+                      <div id="listaFotosAlbumGaleria" class="gallery-photos-admin-list"></div>
+                    </div>
+                  </div>
+                  <div class="gallery-editor-actions">
+                    <button type="button" class="gallery-admin-secondary" onclick="fecharEditorAlbumGaleria()">Cancelar</button>
+                    <button type="submit" class="gallery-admin-primary" id="btnSalvarAlbumGaleria">Salvar álbum</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </section>
+
           <section id="tabReitores" class="admin-tab-pane">
             <div class="reitores-admin-wrap">
               <div class="reitores-admin-head">
@@ -4724,6 +4875,7 @@
       await carregarOrdemTurmasDoBanco();
       await carregarPaginasDoBanco();
       await carregarReitoresDoBanco(false);
+      await carregarGaleriaFotosDoBanco(false);
 
       // Primeira carga: busca os dados em paralelo, sem bloquear o Hero visível.
       await sincronizarDadosPublicosEconomicamente(true);
@@ -4988,6 +5140,7 @@
       { id: 'linha-do-tempo', pageId: 'linha-do-tempo', label: 'Linha do tempo', url: 'linha-do-tempo.html', target: '_self', visible: true },
       { id: 'depoimentos-ex-alunos', pageId: 'depoimentos-ex-alunos', label: 'Depoimentos de ex-alunos', url: 'depoimentos-ex-alunos.html', target: '_self', visible: true },
       { id: 'galeria-diretores-reitores', pageId: 'galeria-diretores-reitores', label: 'Fotos e galeria de diretores e reitores', url: 'galeria-diretores-reitores.html', target: '_self', visible: true },
+      { id: 'galeria-fotos', pageId: 'galeria-fotos', label: 'Galeria de Fotos', url: 'galeria-fotos.html', target: '_self', visible: true },
       { id: 'professores-emeritos', pageId: 'professores-emeritos', label: 'Professores eméritos', url: 'professores-emeritos.html', target: '_self', visible: true }
     ];
 
@@ -5432,7 +5585,8 @@
       { id:'linha-do-tempo', tipo:'sistema', titulo:'Linha do tempo', url:'linha-do-tempo.html', resumo:'Principais marcos da história da FMABC, organizados cronologicamente.', conteudo:'<p>Área exclusiva para a linha do tempo institucional.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'memoria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:2, podeExcluir:false },
       { id:'depoimentos-ex-alunos', tipo:'sistema', titulo:'Depoimentos de ex-alunos', url:'depoimentos-ex-alunos.html', resumo:'Memórias, experiências e mensagens de quem fez parte da história da FMABC.', conteudo:'<p>Envie seu depoimento para integrar o acervo histórico da sua turma. O conteúdo será encaminhado para análise antes da publicação.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'memoria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:3, podeExcluir:false },
       { id:'galeria-diretores-reitores', tipo:'sistema', titulo:'Fotos e galeria de diretores e reitores', url:'galeria-diretores-reitores.html', resumo:'Registro visual das gestões e dos personagens que marcaram a trajetória institucional.', conteudo:'<p>Área exclusiva para fotos e galeria de diretores e reitores.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'galeria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:4, podeExcluir:false },
-      { id:'professores-emeritos', tipo:'sistema', titulo:'Professores eméritos', url:'professores-emeritos.html', resumo:'Memória e reconhecimento dos professores eméritos da instituição.', conteudo:'<p>Área exclusiva para o acervo dos professores eméritos.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'memoria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:5, podeExcluir:false }
+      { id:'galeria-fotos', tipo:'sistema', titulo:'Galeria de Fotos', url:'galeria-fotos.html', resumo:'Álbuns fotográficos institucionais com registros de eventos, cerimônias e momentos históricos.', conteudo:'<p>Galeria institucional de fotos, organizada em álbuns.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'Galeria de Fotos FMABC', modelo:'galeria-fotos', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'fotografia', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:5, podeExcluir:false },
+      { id:'professores-emeritos', tipo:'sistema', titulo:'Professores eméritos', url:'professores-emeritos.html', resumo:'Memória e reconhecimento dos professores eméritos da instituição.', conteudo:'<p>Área exclusiva para o acervo dos professores eméritos.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'memoria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:6, podeExcluir:false }
     ];
     let paginasCustomizadas=[];
     let paginaArrastandoId='';
@@ -5551,6 +5705,10 @@
         console.warn('Não foi possível carregar as páginas personalizadas.',error);
         paginasCustomizadas=[];
       }
+      const galeriaFotosSistema=PAGINAS_SISTEMA.find(p=>p.id==='galeria-fotos');
+      if(galeriaFotosSistema && !encontrarMenuDaPagina(galeriaFotosSistema)){
+        garantirMenuDaPagina(galeriaFotosSistema);
+      }
       renderListaPaginasCMS();preencherSelectPaginaMae();
     }
     async function salvarPaginasNoBanco(){
@@ -5608,12 +5766,12 @@
     }
     function editarPaginaPortal(id){
       const page=paginaPorId(id);if(!page)return;
-      paginaEditandoId=String(id);document.getElementById('paginaEditandoId').value=paginaEditandoId;document.getElementById('tituloEditorPagina').textContent='Alterar página';document.getElementById('subtituloEditorPagina').textContent=page.tipo==='sistema'?'Página institucional: título, conteúdo, banner, SEO e opções de publicação podem ser administrados aqui.':'Edite todos os campos disponíveis para esta página.';document.getElementById('btnSalvarPaginaPortal').textContent='Salvar alterações';
+      paginaEditandoId=String(id);document.getElementById('paginaEditandoId').value=paginaEditandoId;document.getElementById('tituloEditorPagina').textContent='Alterar página';document.getElementById('subtituloEditorPagina').textContent=page.tipo==='sistema' ? (page.id==='galeria-fotos' ? 'Página institucional: título, SEO e opções de publicação são administrados aqui; álbuns e fotos são gerenciados na aba “Galeria de Fotos”.' : 'Página institucional: título, conteúdo, banner, SEO e opções de publicação podem ser administrados aqui.') : 'Edite todos os campos disponíveis para esta página.';document.getElementById('btnSalvarPaginaPortal').textContent='Salvar alterações';
       const set=(id,val)=>{const el=document.getElementById(id);if(el)el.value=val??'';};
       set('inputPaginaTitulo',page.titulo);set('inputPaginaSlug',page.slug||'');set('inputPaginaTituloPublico',page.titulo||'');set('inputPaginaResumo',page.resumo||'');set('inputPaginaModelo',page.modelo||'institucional');set('inputPaginaPopup',page.popup||'');set('inputPaginaCategoria',page.categoria||'');set('inputPaginaSubcategoria',page.subcategoria||'');set('inputPaginaVisivel',page.visivel===false?'false':'true');set('inputPaginaDestaque',page.destaque?'true':'false');set('inputPaginaBusca',page.mostrarBusca===false?'false':'true');set('inputPaginaSeoTitulo',page.seoTitulo||'');set('inputPaginaSeoDescricao',page.seoDescricao||'');set('inputPaginaSeoKeywords',page.seoKeywords||'');set('inputPaginaMae',page.paginaMae||'');set('inputPaginaImagemUrl',page.imagem||'');set('inputPaginaBannerAlt',page.bannerAlt||'');document.getElementById('inputPaginaMenu').checked=page.menu!==false;
       definirEditorConteudo('inputPaginaConteudo',page.conteudo||'');definirEditorConteudo('inputPaginaConteudoSecundario',page.conteudoSecundario||'');definirEditorConteudo('inputPaginaInformacoesAdicionais',page.informacoesAdicionais||'');atualizarPreviewImagemPagina(page.imagem||'');preencherSelectPaginaMae(page.paginaMae||'');
       const slugField=document.getElementById('inputPaginaSlug');if(slugField){slugField.disabled=page.tipo==='sistema';slugField.title=page.tipo==='sistema'?'O endereço das páginas institucionais é fixo.':'Endereço da página';slugField.style.background=page.tipo==='sistema'?'#eef0f3':'#fff';}
-      const modelField=document.getElementById('inputPaginaModelo');if(modelField){modelField.disabled=page.tipo==='sistema' && ['linha-do-tempo','depoimentos-ex-alunos','galeria-diretores-reitores','professores-emeritos'].includes(page.id);}
+      const modelField=document.getElementById('inputPaginaModelo');if(modelField){modelField.disabled=page.tipo==='sistema' && ['linha-do-tempo','depoimentos-ex-alunos','galeria-diretores-reitores','galeria-fotos','professores-emeritos'].includes(page.id);}
 
       // Todas as páginas (inclusive as institucionais que já existiam) podem ter o conteúdo editado neste painel.
       ['inputPaginaConteudo','inputPaginaConteudoSecundario','inputPaginaInformacoesAdicionais'].forEach(idEd=>{const alvo=document.getElementById(idEd);if(alvo){alvo.contentEditable='true';alvo.style.background='#fff';}});
@@ -6953,6 +7111,9 @@ function switchAdminTab(e, tabId) {
       if (tabId === 'tabPaginas') {
         renderListaPaginasCMS();
       }
+      if (tabId === 'tabGaleriaFotos') {
+        carregarGaleriaFotosDoBanco(false);
+      }
       if (tabId === 'tabReitores') {
         carregarReitoresDoBanco(false);
       }
@@ -7436,223 +7597,362 @@ function switchAdminTab(e, tabId) {
 </script>
 
 
-<style id="fmabc-timeline-final-fix-style">
-  /* A página administrativa é independente e oculta elementos irmãos do overlay legado.
-     O editor da Linha do Tempo também precisa ficar acima dessa regra quando aberto. */
-  body.fmabc-admin-standalone > #modalTimelineEditor.active {
-    display:flex !important;
-    position:fixed !important;
-    inset:0 !important;
-    z-index:12050 !important;
-    align-items:center !important;
-    justify-content:center !important;
-    padding:20px !important;
-    background:rgba(17,24,39,.58) !important;
-  }
-  body.fmabc-admin-standalone > #modalTimelineEditor.active .timeline-modal {
-    display:block !important;
-    visibility:visible !important;
-    opacity:1 !important;
-  }
-  #modalTimelineEditor.active .timeline-modal-close,
-  #modalTimelineEditor.active .timeline-btn,
-  #modalTimelineEditor.active input,
-  #modalTimelineEditor.active select,
-  #modalTimelineEditor.active textarea { pointer-events:auto !important; }
-</style>
-<script id="fmabc-timeline-final-fix">
+<script id="fmabc-gallery-admin-script">
 (function(){
-  'use strict';
-  const API = 'https://fmabc-acervo-api.armredessociais.workers.dev';
-  const KEY = 'timeline_events';
-  const TOKEN_KEY = 'fmabc_cf_admin_token';
-  const DEFAULTS = [
-    {id:'timeline-1969',ano:'1969',decada:'1960',titulo:'Autorização da Faculdade de Medicina do ABC',descricao:'Autorização da instituição para funcionar como Faculdade de Medicina do ABC.',foto:'',destaque:true,ordem:1},
-    {id:'timeline-1971',ano:'1971',decada:'1970',titulo:'Primeiro prédio do campus',descricao:'Entrega do primeiro prédio do campus universitário, o Prédio Central.',foto:'',destaque:false,ordem:2},
-    {id:'timeline-1975',ano:'1975',decada:'1970',titulo:'Reconhecimento federal',descricao:'Reconhecimento da Faculdade de Medicina do ABC pelo Decreto Federal nº 76.858; início do Programa de Residência Médica e inauguração de laboratórios no Prédio Central.',foto:'',destaque:false,ordem:3},
-    {id:'timeline-1976',ano:'1976',decada:'1970',titulo:'Primeiro Congresso Médico Universitário do ABC',descricao:'Realização da primeira edição do Congresso Médico Universitário do ABC (COMUABC).',foto:'',destaque:false,ordem:4},
-    {id:'timeline-1982',ano:'1982',decada:'1980',titulo:'Credenciamento da Residência Médica',descricao:'Credenciamento dos programas de Residência Médica pela Comissão Nacional de Residência Médica (CNRM/MEC).',foto:'',destaque:false,ordem:5},
-    {id:'timeline-1983',ano:'1983',decada:'1980',titulo:'Transferência para o sistema estadual',descricao:'Transferência da Faculdade de Medicina do ABC do sistema federal para o sistema estadual de ensino.',foto:'',destaque:false,ordem:6},
-    {id:'timeline-1998',ano:'1998',decada:'1990',titulo:'Início da Pós-Graduação stricto sensu',descricao:'Início do Programa de Pós-Graduação stricto sensu, nível Mestrado, em Ciências da Saúde.',foto:'',destaque:false,ordem:7},
-    {id:'timeline-2000',ano:'2000',decada:'2000',titulo:'Implantação do Curso de Farmácia',descricao:'Implantação do Curso de Graduação em Farmácia e inauguração do Anexo 3 (Bloco CEU).',foto:'',destaque:false,ordem:8},
-    {id:'timeline-2010',ano:'2010',decada:'2010',titulo:'Denominação como Centro Universitário FMABC',descricao:'Denominação da instituição de ensino superior como Centro Universitário FMABC.',foto:'',destaque:false,ordem:9},
-    {id:'timeline-2013',ano:'2013',decada:'2010',titulo:'Retorno ao sistema federal',descricao:'A FMABC retoma ao sistema federal de ensino, em atendimento à legislação nacional.',foto:'',destaque:false,ordem:10},
-    {id:'timeline-2018',ano:'2018',decada:'2010',titulo:'Transformação em Centro Universitário',descricao:'A Faculdade de Medicina do ABC é transformada em Centro Universitário, em processo oficializado pelo Ministério da Educação.',foto:'',destaque:true,ordem:11},
-    {id:'timeline-2020',ano:'2020',decada:'2020',titulo:'Nome Centro Universitário FMABC',descricao:'Autorização da alteração do nome da instituição para Centro Universitário FMABC.',foto:'',destaque:false,ordem:12},
-    {id:'timeline-2023',ano:'2023',decada:'2020',titulo:'Centro de Formação de Psicólogos e Centro de Simulação',descricao:'Inauguração do Centro de Formação de Psicólogos — Clínica Escola do Curso de Psicologia — e do Centro de Simulação.',foto:'',destaque:false,ordem:13}
-  ];
-  let eventos=[];
-  let editandoId='';
-  let arrastandoId='';
-  let carregando=false;
-  let inicializado=false;
+  const GALERIA_FOTOS_CONFIG_KEY = 'fmabc_gallery_albums';
+  let albunsGaleria = [];
+  let albumGaleriaEditandoId = '';
+  let fotosAlbumGaleria = [];
 
-  function esc(v){return String(v ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-  function idNovo(){return (window.crypto&&crypto.randomUUID)?crypto.randomUUID():`timeline-${Date.now()}-${Math.random().toString(36).slice(2,9)}`;}
-  function cloneDefault(){return DEFAULTS.map(x=>({...x}));}
-  function normalize(item,i){if(!item||typeof item!=='object')return null;const titulo=String(item.titulo??'').trim();if(!titulo)return null;return {id:String(item.id||idNovo()),ano:String(item.ano??'').trim().slice(0,30),decada:String(item.decada??'').trim(),titulo:titulo.slice(0,180),descricao:String(item.descricao??'').trim().slice(0,1200),foto:String(item.foto??'').trim().slice(0,2000),destaque:item.destaque===true,ordem:Number.isFinite(Number(item.ordem))?Number(item.ordem):i+1};}
-  function ordenados(){return [...eventos].sort((a,b)=>(Number(a.ordem)||0)-(Number(b.ordem)||0));}
-  function setStatus(msg,ok){const el=document.getElementById('statusTimelineAdmin');if(!el)return;el.textContent=msg;el.style.background=ok===false?'#fff6f6':'#f7fbf8';el.style.borderColor=ok===false?'#f0caca':'#dce5df';el.style.color=ok===false?'#9b2c2c':'#45604e';}
-  function showToastFallback(msg){if(typeof window.showToast==='function')window.showToast(msg);else setStatus(msg,false);}
-  function getToken(){return localStorage.getItem(TOKEN_KEY)||'';}
-  async function api(path,options={}){
-    const headers=new Headers(options.headers||{});
-    if(options.body && !headers.has('Content-Type')) headers.set('Content-Type','application/json');
-    const token=getToken(); if(token)headers.set('Authorization',`Bearer ${token}`);
-    const r=await fetch(`${API}${path}`,{...options,headers,cache:'no-store'});
-    if(!r.ok){let msg=`Cloudflare API HTTP ${r.status}`;try{const e=await r.json();if(e?.error)msg=e.error;}catch{}throw new Error(msg);}
-    return r.json();
+  function gerarIdAlbumGaleria(){
+    if(window.crypto?.randomUUID) return window.crypto.randomUUID();
+    return `album-${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
   }
-  async function carregar(){
-    if(carregando)return; carregando=true;
+
+  function slugGaleria(valor){
+    return String(valor||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,90) || 'album';
+  }
+
+  function escapeGaleria(value){
+    return String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function escapeGaleriaAttr(value){ return escapeGaleria(value); }
+
+  function normalizarFotoGaleria(item,index=0){
+    if(!item || typeof item!=='object') return null;
+    const url=String(item.url||item.src||'').trim();
+    if(!url) return null;
+    return {
+      id:String(item.id||`foto-${Date.now()}-${index}-${Math.random().toString(36).slice(2,6)}`),
+      url:url.slice(0,1000),
+      legenda:String(item.legenda||item.caption||'').trim().slice(0,180),
+      ordem:Number.isFinite(Number(item.ordem)) ? Number(item.ordem) : index+1
+    };
+  }
+
+  function normalizarAlbumGaleria(item,index=0){
+    if(!item || typeof item!=='object') return null;
+    const titulo=String(item.titulo||item.nome||'').trim();
+    if(!titulo) return null;
+    const fotos=Array.isArray(item.fotos) ? item.fotos.map(normalizarFotoGaleria).filter(Boolean) : [];
+    const slug=slugGaleria(item.slug||titulo);
+    return {
+      id:String(item.id||gerarIdAlbumGaleria()),
+      titulo:titulo.slice(0,160),
+      slug,
+      data:String(item.data||item.dataEvento||'').trim().slice(0,20),
+      descricao:String(item.descricao||'').trim().slice(0,800),
+      categoria:String(item.categoria||'').trim().slice(0,80),
+      capa:String(item.capa||item.imagem||'').trim().slice(0,1000),
+      publicado:item.publicado!==false,
+      destaque:item.destaque===true,
+      ordem:Number.isFinite(Number(item.ordem)) ? Number(item.ordem) : index+1,
+      createdAt:item.createdAt||'',
+      updatedAt:item.updatedAt||'' ,
+      fotos:fotos.sort((a,b)=>Number(a.ordem||0)-Number(b.ordem||0))
+    };
+  }
+
+  function ordenarAlbunsGaleria(){
+    albunsGaleria.sort((a,b)=>Number(a.ordem||0)-Number(b.ordem||0) || String(a.titulo).localeCompare(String(b.titulo),'pt-BR',{sensitivity:'base'}));
+    albunsGaleria=albunsGaleria.map((a,i)=>({...a,ordem:i+1}));
+  }
+
+  async function carregarGaleriaFotosDoBanco(notify=false){
     try{
-      const data=await api(`/api/config/${encodeURIComponent(KEY)}?v=${Date.now()}`);
-      const arr=Array.isArray(data?.valor)?data.valor:(Array.isArray(data?.valor?.itens)?data.valor.itens:[]);
-      eventos=arr.map(normalize).filter(Boolean).sort((a,b)=>(a.ordem||0)-(b.ordem||0));
-      if(!eventos.length)eventos=cloneDefault();
-      render();
-      setStatus(`Dados carregados. ${eventos.length} acontecimento(s).`,true);
+      const r=await fetch(`${CLOUDFLARE_API_URL}/api/config/${encodeURIComponent(GALERIA_FOTOS_CONFIG_KEY)}?v=${Date.now()}`,{cache:'no-store'});
+      if(!r.ok) throw new Error(`Cloudflare API HTTP ${r.status}`);
+      const data=await r.json();
+      const valor=data?.valor;
+      const lista=Array.isArray(valor) ? valor : (Array.isArray(valor?.albuns) ? valor.albuns : []);
+      albunsGaleria=lista.map(normalizarAlbumGaleria).filter(Boolean);
+      ordenarAlbunsGaleria();
+      renderListaAlbunsGaleriaAdmin();
+      if(notify) showToast('Galeria de Fotos atualizada.');
     }catch(err){
-      console.error('[Linha do Tempo] carregar:',err);
-      eventos=cloneDefault(); render(); setStatus(`Não foi possível carregar os dados do Cloudflare: ${err.message||err}`,false);
-    }finally{carregando=false;}
-  }
-  async function salvar(sucesso='Linha do Tempo salva com sucesso.'){
-    if(!getToken()){showToastFallback('Sessão administrativa expirada. Faça login novamente.');return false;}
-    try{
-      const payload=ordenados().map((x,i)=>({...x,ordem:i+1}));
-      setStatus('Salvando alterações no Cloudflare...',true);
-      await api(`/api/admin/config/${encodeURIComponent(KEY)}`,{method:'PUT',body:JSON.stringify({valor:payload})});
-      eventos=payload; render(); setStatus(`${sucesso} Último salvamento: ${new Date().toLocaleString('pt-BR')}.`,true); return true;
-    }catch(err){console.error('[Linha do Tempo] salvar:',err);setStatus(`Não foi possível salvar: ${err.message||err}`,false);showToastFallback(`Não foi possível salvar a Linha do Tempo: ${err.message||err}`);return false;}
-  }
-  function openEditor(id){
-    editandoId=String(id||''); const ev=editandoId?eventos.find(x=>String(x.id)===editandoId):null;
-    const ids=['timelineEditId','timelineAno','timelineDecada','timelineTitulo','timelineDescricao','timelineFotoUrl','timelineDestaque'];
-    const modal=document.getElementById('modalTimelineEditor'); if(!modal)return;
-    document.getElementById('tituloModalTimeline').textContent=ev?'Editar acontecimento':'Novo acontecimento';
-    document.getElementById('timelineEditId').value=ev?.id||'';
-    document.getElementById('timelineAno').value=ev?.ano||'';
-    document.getElementById('timelineDecada').value=ev?.decada||'';
-    document.getElementById('timelineTitulo').value=ev?.titulo||'';
-    document.getElementById('timelineDescricao').value=ev?.descricao||'';
-    document.getElementById('timelineFotoUrl').value=ev?.foto||'';
-    document.getElementById('timelineDestaque').checked=ev?.destaque===true;
-    document.getElementById('timelineFotoArquivo').value='';
-    document.getElementById('timelinePreviewFoto').src=ev?.foto||'';
-    modal.classList.add('active'); modal.setAttribute('aria-hidden','false');
-    document.body.classList.add('timeline-editor-open');
-    setTimeout(()=>document.getElementById('timelineTitulo')?.focus(),50);
-  }
-  function closeEditor(){const m=document.getElementById('modalTimelineEditor');if(m){m.classList.remove('active');m.setAttribute('aria-hidden','true');}editandoId='';}
-  async function submitEditor(e){e?.preventDefault();
-    const id=String(document.getElementById('timelineEditId').value||'').trim();
-    const ano=String(document.getElementById('timelineAno').value||'').trim();
-    const decada=String(document.getElementById('timelineDecada').value||'').trim();
-    const titulo=String(document.getElementById('timelineTitulo').value||'').trim();
-    const descricao=String(document.getElementById('timelineDescricao').value||'').trim();
-    let foto=String(document.getElementById('timelineFotoUrl').value||'').trim();
-    const destaque=document.getElementById('timelineDestaque').checked;
-    const file=document.getElementById('timelineFotoArquivo').files?.[0];
-    if(!ano||!titulo){showToastFallback('Informe o ano/período e o título do acontecimento.');return false;}
-    try{
-      if(file){
-        if(typeof window.enviarArquivoParaStorage!=='function')throw new Error('O envio de foto do administrador não está disponível nesta sessão.');
-        setStatus('Enviando foto para o Cloudflare...',true); foto=await window.enviarArquivoParaStorage(file,'linha-do-tempo');
-      }
-      const reg={id:id||idNovo(),ano,decada,titulo,descricao,foto,destaque,ordem:0};
-      if(id){const idx=eventos.findIndex(x=>String(x.id)===id);if(idx<0)throw new Error('Acontecimento não encontrado.');reg.ordem=eventos[idx].ordem;eventos[idx]=reg;}
-      else{reg.ordem=eventos.length+1;eventos.push(reg);}
-      const ok=await salvar(id?'Acontecimento atualizado e salvo com sucesso.':'Acontecimento cadastrado e salvo com sucesso.');
-      if(ok)closeEditor(); return ok;
-    }catch(err){console.error('[Linha do Tempo] editor:',err);showToastFallback(`Não foi possível salvar: ${err.message||err}`);return false;}
-  }
-  async function duplicar(id){const ev=eventos.find(x=>String(x.id)===String(id));if(!ev)return;eventos.push({...ev,id:idNovo(),titulo:`${ev.titulo} (cópia)`,destaque:false,ordem:eventos.length+1});await salvar('Acontecimento duplicado e salvo com sucesso.');}
-  async function excluir(id){const ev=eventos.find(x=>String(x.id)===String(id));if(!ev)return;if(!window.confirm(`Excluir o acontecimento “${ev.titulo}”?`))return;eventos=eventos.filter(x=>String(x.id)!==String(id));await salvar('Acontecimento excluído e salvo com sucesso.');}
-  async function mover(id,d){const list=ordenados();const idx=list.findIndex(x=>String(x.id)===String(id));const j=idx+d;if(idx<0||j<0||j>=list.length)return;[list[idx],list[j]]=[list[j],list[idx]];eventos=list.map((x,i)=>({...x,ordem:i+1}));await salvar('Ordem da Linha do Tempo salva com sucesso.');}
-  async function drop(idDestino){const origem=arrastandoId;if(!origem||String(origem)===String(idDestino))return;const list=ordenados();const a=list.findIndex(x=>String(x.id)===String(origem));const b=list.findIndex(x=>String(x.id)===String(idDestino));if(a<0||b<0)return;const [mov]=list.splice(a,1);list.splice(b,0,mov);eventos=list.map((x,i)=>({...x,ordem:i+1}));arrastandoId='';await salvar('Ordem da Linha do Tempo salva com sucesso.');}
-  async function restaurar(){if(!window.confirm('Restaurar os marcos padrão? Os acontecimentos atualmente cadastrados serão substituídos.'))return;eventos=cloneDefault();await salvar('Marcos padrão restaurados e salvos com sucesso.');}
-  function render(){
-    const el=document.getElementById('listaTimelineAdmin'); if(!el)return;
-    const filtro=(document.getElementById('filtroTimelineAdmin')?.value||'').trim().toLowerCase();
-    const dec=(document.getElementById('filtroTimelineDecada')?.value||'').trim();
-    const all=ordenados(); const list=all.filter(e=>(!filtro||`${e.ano} ${e.titulo} ${e.descricao}`.toLowerCase().includes(filtro))&&(!dec||String(e.decada)===String(dec)));
-    if(!list.length){el.innerHTML='<div class="timeline-admin-empty"><strong>Nenhum acontecimento encontrado.</strong><div>Cadastre um novo marco ou ajuste os filtros.</div></div>';return;}
-    el.innerHTML=list.map(ev=>{const idx=all.findIndex(x=>String(x.id)===String(ev.id));const foto=ev.foto?esc(ev.foto):'';return `<article class="timeline-admin-item" draggable="true" data-timeline-row="${esc(ev.id)}">
-      <div class="timeline-admin-drag" title="Arraste para reordenar">↕</div>
-      ${foto?`<img class="timeline-admin-thumb" src="${foto}" alt="${esc(ev.titulo)}">`:'<div class="timeline-admin-thumb" aria-label="Sem foto"></div>'}
-      <div><div class="timeline-admin-year">${esc(ev.ano)}${ev.destaque?' · Destaque':''}</div><div class="timeline-admin-title">${esc(ev.titulo)}</div><div class="timeline-admin-desc">${esc(ev.descricao||'Sem descrição')}</div></div>
-      <div class="timeline-admin-actions">
-        <button type="button" data-timeline-action="up" data-timeline-id="${esc(ev.id)}" ${idx===0?'disabled':''}>↑</button>
-        <button type="button" data-timeline-action="down" data-timeline-id="${esc(ev.id)}" ${idx===all.length-1?'disabled':''}>↓</button>
-        <button type="button" data-timeline-action="edit" data-timeline-id="${esc(ev.id)}">Editar</button>
-        <button type="button" data-timeline-action="duplicate" data-timeline-id="${esc(ev.id)}">Duplicar</button>
-        <button type="button" data-timeline-action="delete" data-timeline-id="${esc(ev.id)}">Excluir</button>
-      </div></article>`;}).join('');
-  }
-  function bind(){
-    if(inicializado)return; inicializado=true;
-    const novo=document.getElementById('btnNovoEventoTimeline');
-    const atualizar=document.getElementById('btnAtualizarTimeline');
-    const restaurarBtn=document.getElementById('btnRestaurarTimeline');
-    const salvarBtn=document.getElementById('btnSalvarTimelineAlteracoes');
-    const lista=document.getElementById('listaTimelineAdmin');
-    const form=document.getElementById('formTimelineAdmin');
-    const fechar=document.getElementById('btnFecharModalTimeline');
-    const cancelar=document.getElementById('btnCancelarModalTimeline');
-    const filtro=document.getElementById('filtroTimelineAdmin');
-    const decada=document.getElementById('filtroTimelineDecada');
-    if(novo)novo.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();openEditor('');});
-    if(atualizar)atualizar.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();carregar();});
-    if(restaurarBtn)restaurarBtn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();restaurar();});
-    if(salvarBtn)salvarBtn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();salvar('Alterações da Linha do Tempo salvas com sucesso.');});
-    if(fechar)fechar.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();closeEditor();});
-    if(cancelar)cancelar.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();closeEditor();});
-    if(form)form.addEventListener('submit',submitEditor);
-    if(filtro)filtro.addEventListener('input',render);
-    if(decada)decada.addEventListener('change',render);
-    if(lista){
-      lista.addEventListener('click',e=>{const b=e.target.closest('[data-timeline-action]');if(!b||b.disabled)return;e.preventDefault();e.stopPropagation();const id=b.dataset.timelineId;const a=b.dataset.timelineAction;if(a==='up')mover(id,-1);else if(a==='down')mover(id,1);else if(a==='edit')openEditor(id);else if(a==='duplicate')duplicar(id);else if(a==='delete')excluir(id);});
-      lista.addEventListener('dragstart',e=>{const row=e.target.closest('[data-timeline-row]');if(!row)return;arrastandoId=row.dataset.timelineRow;if(e.dataTransfer){e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',arrastandoId);}});
-      lista.addEventListener('dragover',e=>{if(e.target.closest('[data-timeline-row]'))e.preventDefault();});
-      lista.addEventListener('drop',e=>{const row=e.target.closest('[data-timeline-row]');if(!row)return;e.preventDefault();drop(row.dataset.timelineRow);});
+      console.error('Erro ao carregar a Galeria de Fotos:',err);
+      albunsGaleria=[];
+      renderListaAlbunsGaleriaAdmin();
+      if(notify) showToast('Não foi possível carregar a Galeria de Fotos: ' + (err.message||'erro desconhecido'));
     }
-    const modal=document.getElementById('modalTimelineEditor'); if(modal)modal.addEventListener('click',e=>{if(e.target===modal)closeEditor();});
-    document.addEventListener('keydown',e=>{if(e.key==='Escape')closeEditor();});
-    const file=document.getElementById('timelineFotoArquivo'); if(file)file.addEventListener('change',()=>{const f=file.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{const img=document.getElementById('timelinePreviewFoto');if(img)img.src=r.result;};r.readAsDataURL(f);});
-    const url=document.getElementById('timelineFotoUrl'); if(url)url.addEventListener('input',()=>{const img=document.getElementById('timelinePreviewFoto');if(img)img.src=url.value.trim();});
-    // Substitui as funções antigas pelos handlers robustos, evitando dependência de onclick inline.
-    Object.assign(window,{abrirModalEventoTimeline:openEditor,editarEventoTimeline:openEditor,fecharModalEventoTimeline:closeEditor,salvarEventoTimeline:submitEditor,excluirEventoTimeline:excluir,duplicarEventoTimeline:duplicar,moverTimeline:mover,carregarTimelineDoBanco:carregar,renderListaTimelineAdmin:render,salvarTimelineNoBanco:salvar,restaurarTimelinePadrao:restaurar});
-    render(); carregar();
   }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind,{once:true});else bind();
+
+  async function salvarGaleriaFotosNoBanco(notify=true){
+    registrarAtividadeAdmin();
+    if(!localStorage.getItem(ADMIN_TOKEN_KEY)){
+      if(notify) showToast('Sessão administrativa expirada. Faça login novamente.');
+      return false;
+    }
+    ordenarAlbunsGaleria();
+    const payload=albunsGaleria.map((a,i)=>({...a,ordem:i+1,fotos:(a.fotos||[]).map((f,j)=>({...f,ordem:j+1}))}));
+    try{
+      const esperado={albuns:payload};
+      await cloudflareAdminFetch(`/api/admin/config/${encodeURIComponent(GALERIA_FOTOS_CONFIG_KEY)}`,{method:'PUT',body:JSON.stringify({valor:esperado})});
+      await verificarConfigNoCloudflare(GALERIA_FOTOS_CONFIG_KEY,esperado);
+      albunsGaleria=payload;
+      renderListaAlbunsGaleriaAdmin();
+      if(notify) showToast('Galeria de Fotos salva no Cloudflare.');
+      return true;
+    }catch(err){
+      console.error('Erro ao salvar a Galeria de Fotos:',err);
+      if(notify) showToast('Não foi possível salvar a Galeria de Fotos: ' + (err.message||'erro desconhecido'));
+      return false;
+    }
+  }
+
+  function formatarDataGaleria(v){
+    if(!v) return 'Data não informada';
+    const d=new Date(`${v}T12:00:00`);
+    return Number.isNaN(d.getTime()) ? v : d.toLocaleDateString('pt-BR');
+  }
+
+  function renderListaAlbunsGaleriaAdmin(){
+    const container=document.getElementById('listaAlbunsGaleriaAdmin');
+    const status=document.getElementById('statusGaleriaFotosAdmin');
+    if(!container) return;
+    const filtro=String(document.getElementById('filtroGaleriaFotosAdmin')?.value||'').trim().toLowerCase();
+    const statusFiltro=String(document.getElementById('filtroGaleriaStatusAdmin')?.value||'');
+    const lista=albunsGaleria.filter(a=>{
+      const texto=`${a.titulo} ${a.descricao} ${a.categoria}`.toLowerCase();
+      const bateFiltro=!filtro || texto.includes(filtro);
+      const bateStatus=!statusFiltro || (statusFiltro==='publicado' ? a.publicado!==false : a.publicado===false);
+      return bateFiltro && bateStatus;
+    });
+    if(!lista.length){
+      container.innerHTML='<div class="gallery-admin-notice" style="grid-column:1/-1"><strong>Nenhum álbum encontrado.</strong><div>Use “Novo álbum” para criar o primeiro álbum da Galeria de Fotos.</div></div>';
+    }else{
+      container.innerHTML=lista.map((a)=>{
+        const capa=a.capa || a.fotos?.[0]?.url || '';
+        const imagem=capa ? escapeGaleriaAttr(urlSemCache(capa)) : 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="100%" height="100%" fill="#eef2ef"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#7b879a" font-family="Arial" font-size="22">Sem capa</text></svg>');
+        const publicado=a.publicado!==false;
+        return `<article class="gallery-admin-card">
+          <img class="gallery-admin-card-cover" src="${imagem}" alt="${escapeGaleriaAttr(a.titulo)}">
+          <div class="gallery-admin-card-body">
+            <div class="gallery-admin-card-top"><div><h4 class="gallery-admin-card-title">${escapeGaleria(a.titulo)}</h4><div class="gallery-admin-card-date">${escapeGaleria(formatarDataGaleria(a.data))}</div></div></div>
+            <p class="gallery-admin-card-desc">${escapeGaleria(a.descricao||'Sem descrição.')}</p>
+            <div class="gallery-admin-meta"><span class="gallery-admin-pill ${publicado?'':'draft'}">${publicado?'Publicado':'Rascunho'}</span><span class="gallery-admin-pill">${(a.fotos||[]).length} ${(a.fotos||[]).length===1?'foto':'fotos'}</span>${a.categoria?`<span class="gallery-admin-pill">${escapeGaleria(a.categoria)}</span>`:''}</div>
+            <div class="gallery-admin-actions">
+              <button type="button" onclick="moverAlbumGaleria('${escapeGaleriaAttr(a.id)}',-1)" ${Number(a.ordem)<=1?'disabled':''}>Subir</button>
+              <button type="button" onclick="moverAlbumGaleria('${escapeGaleriaAttr(a.id)}',1)" ${Number(a.ordem)>=albunsGaleria.length?'disabled':''}>Descer</button>
+              <button type="button" onclick="editarAlbumGaleria('${escapeGaleriaAttr(a.id)}')">Editar</button>
+              <button type="button" onclick="duplicarAlbumGaleria('${escapeGaleriaAttr(a.id)}')">Duplicar</button>
+              <button type="button" class="danger" onclick="excluirAlbumGaleria('${escapeGaleriaAttr(a.id)}')">Excluir</button>
+            </div>
+          </div>
+        </article>`;
+      }).join('');
+    }
+    if(status){
+      status.textContent=`${lista.length} ${lista.length===1?'álbum exibido':'álbuns exibidos'} de ${albunsGaleria.length} cadastrados.`;
+    }
+  }
+
+  function renderFotosEditorGaleria(){
+    const container=document.getElementById('listaFotosAlbumGaleria');
+    if(!container) return;
+    if(!fotosAlbumGaleria.length){
+      container.innerHTML='<div class="gallery-admin-notice"><strong>Nenhuma foto adicionada.</strong><div>Selecione várias imagens acima ou adicione uma URL.</div></div>';
+      return;
+    }
+    container.innerHTML=fotosAlbumGaleria.map((f,i)=>`<div class="gallery-photo-admin-item">
+      <img class="gallery-photo-admin-thumb" src="${escapeGaleriaAttr(urlSemCache(f.url))}" alt="${escapeGaleriaAttr(f.legenda||`Foto ${i+1}`)}">
+      <div class="gallery-photo-admin-main"><strong>Foto ${i+1}</strong><span>${escapeGaleria(f.url)}</span></div>
+      <div class="gallery-photo-admin-actions">
+        <button type="button" onclick="moverFotoGaleria(${i},-1)" ${i===0?'disabled':''}>↑</button>
+        <button type="button" onclick="moverFotoGaleria(${i},1)" ${i===fotosAlbumGaleria.length-1?'disabled':''}>↓</button>
+        <button type="button" class="danger" onclick="removerFotoGaleria(${i})">×</button>
+      </div>
+    </div>`).join('');
+  }
+
+  function abrirEditorAlbumGaleria(album=null){
+    const shell=document.getElementById('editorAlbumGaleria');
+    const form=document.getElementById('formAlbumGaleria');
+    if(!shell || !form) return;
+    albumGaleriaEditandoId=album ? String(album.id) : '';
+    fotosAlbumGaleria=album ? (album.fotos||[]).map((f,i)=>({...f,ordem:i+1})) : [];
+    document.getElementById('tituloEditorAlbumGaleria').textContent=album?'Editar álbum':'Novo álbum';
+    document.getElementById('subtituloEditorAlbumGaleria').textContent=album?'Atualize os dados e as fotos do álbum.':'Cadastre as informações do álbum e depois adicione as fotos.';
+    document.getElementById('albumGaleriaEditId').value=album?.id||'';
+    document.getElementById('albumGaleriaTitulo').value=album?.titulo||'';
+    document.getElementById('albumGaleriaData').value=album?.data||'';
+    document.getElementById('albumGaleriaDescricao').value=album?.descricao||'';
+    document.getElementById('albumGaleriaCategoria').value=album?.categoria||'';
+    document.getElementById('albumGaleriaPublicado').value=album?.publicado===false?'false':'true';
+    document.getElementById('albumGaleriaCapaUrl').value=album?.capa||'';
+    document.getElementById('albumGaleriaCapaArquivo').value='';
+    document.getElementById('albumGaleriaFotosArquivos').value='';
+    document.getElementById('albumGaleriaFotoUrl').value='';
+    atualizarPreviewCapaGaleria(album?.capa || fotosAlbumGaleria[0]?.url || '');
+    renderFotosEditorGaleria();
+    shell.classList.add('active');shell.setAttribute('aria-hidden','false');
+    shell.scrollIntoView({behavior:'smooth',block:'start'});
+    setTimeout(()=>document.getElementById('albumGaleriaTitulo')?.focus(),80);
+  }
+
+  function abrirNovoAlbumGaleria(){ abrirEditorAlbumGaleria(null); }
+
+  function fecharEditorAlbumGaleria(){
+    const shell=document.getElementById('editorAlbumGaleria');
+    if(shell){shell.classList.remove('active');shell.setAttribute('aria-hidden','true');}
+    albumGaleriaEditandoId='';fotosAlbumGaleria=[];
+  }
+
+  function atualizarPreviewCapaGaleria(url){
+    const img=document.getElementById('albumGaleriaCapaPreview');
+    if(img) img.src=url ? urlSemCache(url) : 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="100%" height="100%" fill="#eef2ef"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#7b879a" font-family="Arial" font-size="22">Sem capa</text></svg>');
+  }
+
+  async function salvarAlbumGaleria(event){
+    event.preventDefault();
+    registrarAtividadeAdmin();
+    if(!localStorage.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return;}
+    const titulo=document.getElementById('albumGaleriaTitulo').value.trim();
+    if(!titulo){showToast('Informe o título do álbum.');return;}
+    let capa=document.getElementById('albumGaleriaCapaUrl').value.trim();
+    const capaArquivo=document.getElementById('albumGaleriaCapaArquivo').files?.[0];
+    try{
+      if(capaArquivo){showToast('Enviando capa para o Cloudflare...');capa=await enviarArquivoParaStorage(capaArquivo,'galeria-fotos');}
+      const agora=new Date().toISOString();
+      const registro={
+        id:albumGaleriaEditandoId || gerarIdAlbumGaleria(),
+        titulo,slug:slugGaleria(titulo),data:document.getElementById('albumGaleriaData').value||'',
+        descricao:document.getElementById('albumGaleriaDescricao').value.trim(),
+        categoria:document.getElementById('albumGaleriaCategoria').value.trim(),
+        capa:capa||fotosAlbumGaleria[0]?.url||'',
+        publicado:document.getElementById('albumGaleriaPublicado').value!=='false',
+        destaque:false,ordem:0,createdAt:agora,updatedAt:agora,
+        fotos:fotosAlbumGaleria.map((f,i)=>({...f,ordem:i+1}))
+      };
+      if(albumGaleriaEditandoId){
+        const idx=albunsGaleria.findIndex(a=>String(a.id)===albumGaleriaEditandoId);
+        if(idx<0) throw new Error('Álbum não encontrado.');
+        registro.ordem=albunsGaleria[idx].ordem||idx+1;
+        registro.createdAt=albunsGaleria[idx].createdAt||agora;
+        albunsGaleria[idx]=registro;
+      }else{
+        registro.ordem=albunsGaleria.length+1;
+        albunsGaleria.push(registro);
+      }
+      if(!registro.capa && registro.fotos.length) registro.capa=registro.fotos[0].url;
+      const estavaEditando=Boolean(albumGaleriaEditandoId);
+      const ok=await salvarGaleriaFotosNoBanco(false);
+      if(ok){fecharEditorAlbumGaleria();showToast(estavaEditando?'Álbum atualizado com sucesso.':'Álbum cadastrado com sucesso.');}
+    }catch(err){
+      console.error('Erro ao salvar álbum:',err);
+      showToast('Não foi possível salvar o álbum: '+(err.message||'erro desconhecido'));
+    }
+  }
+
+  async function adicionarFotosArquivosGaleria(files){
+    const lista=Array.from(files||[]);
+    if(!lista.length) return;
+    try{
+      for(const file of lista){
+        if(!String(file.type||'').startsWith('image/')) throw new Error(`O arquivo ${file.name} não é uma imagem válida.`);
+        showToast(`Enviando ${file.name}...`);
+        const url=await enviarArquivoParaStorage(file,'galeria-fotos');
+        fotosAlbumGaleria.push({id:`foto-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,url,legenda:'',ordem:fotosAlbumGaleria.length+1});
+      }
+      const capaAtual=document.getElementById('albumGaleriaCapaUrl')?.value.trim();
+      if(!capaAtual && fotosAlbumGaleria[0]?.url) atualizarPreviewCapaGaleria(fotosAlbumGaleria[0].url);
+      renderFotosEditorGaleria();
+      const input=document.getElementById('albumGaleriaFotosArquivos');if(input) input.value='';
+      showToast(`${lista.length} ${lista.length===1?'foto adicionada':'fotos adicionadas'} ao álbum.`);
+    }catch(err){
+      console.error(err);
+      showToast('Não foi possível adicionar as fotos: '+(err.message||'erro desconhecido'));
+    }
+  }
+
+  async function adicionarFotoUrlGaleria(){
+    const input=document.getElementById('albumGaleriaFotoUrl');
+    const url=String(input?.value||'').trim();
+    if(!url){showToast('Informe a URL da foto.');return;}
+    try{new URL(url);}catch{showToast('Informe uma URL válida.');return;}
+    fotosAlbumGaleria.push({id:`foto-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,url,legenda:'',ordem:fotosAlbumGaleria.length+1});
+    if(!document.getElementById('albumGaleriaCapaUrl')?.value.trim()) atualizarPreviewCapaGaleria(url);
+    input.value='';renderFotosEditorGaleria();showToast('Foto adicionada ao álbum.');
+  }
+
+  function removerFotoGaleria(index){
+    fotosAlbumGaleria.splice(index,1);fotosAlbumGaleria=fotosAlbumGaleria.map((f,i)=>({...f,ordem:i+1}));
+    const capa=document.getElementById('albumGaleriaCapaUrl')?.value.trim();
+    if(!capa) atualizarPreviewCapaGaleria(fotosAlbumGaleria[0]?.url||'');
+    renderFotosEditorGaleria();
+  }
+
+  function moverFotoGaleria(index,direcao){
+    const novo=index+direcao;if(index<0||novo<0||novo>=fotosAlbumGaleria.length)return;
+    [fotosAlbumGaleria[index],fotosAlbumGaleria[novo]]=[fotosAlbumGaleria[novo],fotosAlbumGaleria[index]];
+    fotosAlbumGaleria=fotosAlbumGaleria.map((f,i)=>({...f,ordem:i+1}));renderFotosEditorGaleria();
+  }
+
+  function usarPrimeiraFotoComoCapaGaleria(){
+    const foto=fotosAlbumGaleria[0];
+    if(!foto){showToast('Adicione pelo menos uma foto primeiro.');return;}
+    document.getElementById('albumGaleriaCapaUrl').value=foto.url;
+    atualizarPreviewCapaGaleria(foto.url);
+  }
+
+  async function editarAlbumGaleria(id){const a=albunsGaleria.find(x=>String(x.id)===String(id));if(a)abrirEditorAlbumGaleria(a);}
+
+  async function duplicarAlbumGaleria(id){
+    const a=albunsGaleria.find(x=>String(x.id)===String(id));if(!a)return;
+    const base=slugGaleria(`${a.titulo} copia`);let slug=base;let i=2;const slugs=new Set(albunsGaleria.map(x=>x.slug));while(slugs.has(slug))slug=`${base}-${i++}`;
+    albunsGaleria.push({...a,id:gerarIdAlbumGaleria(),titulo:`${a.titulo} (cópia)`,slug,publicado:false,ordem:albunsGaleria.length+1,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),fotos:(a.fotos||[]).map(f=>({...f,id:`foto-${Date.now()}-${Math.random().toString(36).slice(2,8)}`}))});
+    await salvarGaleriaFotosNoBanco(true);
+  }
+
+  async function excluirAlbumGaleria(id){
+    const a=albunsGaleria.find(x=>String(x.id)===String(id));if(!a)return;
+    if(!confirm(`Excluir o álbum “${a.titulo}”? Esta ação remove o cadastro do álbum da galeria.`))return;
+    albunsGaleria=albunsGaleria.filter(x=>String(x.id)!==String(id));
+    await salvarGaleriaFotosNoBanco(true);
+  }
+
+  async function moverAlbumGaleria(id,direcao){
+    ordenarAlbunsGaleria();
+    const idx=albunsGaleria.findIndex(x=>String(x.id)===String(id));
+    const novo=idx+direcao;if(idx<0||novo<0||novo>=albunsGaleria.length)return;
+    [albunsGaleria[idx],albunsGaleria[novo]]=[albunsGaleria[novo],albunsGaleria[idx]];
+    albunsGaleria=albunsGaleria.map((a,i)=>({...a,ordem:i+1}));
+    await salvarGaleriaFotosNoBanco(true);
+  }
+
+  document.addEventListener('change',e=>{
+    if(e.target?.id==='albumGaleriaCapaArquivo'){
+      const file=e.target.files?.[0];if(!file)return;
+      const reader=new FileReader();reader.onload=()=>atualizarPreviewCapaGaleria(reader.result);reader.readAsDataURL(file);
+    }
+    if(e.target?.id==='albumGaleriaFotosArquivos') adicionarFotosArquivosGaleria(e.target.files);
+  });
+  document.addEventListener('input',e=>{
+    if(e.target?.id==='albumGaleriaCapaUrl'){
+      const v=e.target.value.trim();if(v) atualizarPreviewCapaGaleria(v);
+    }
+  });
+
+  window.GALERIA_FOTOS_CONFIG_KEY=GALERIA_FOTOS_CONFIG_KEY;
+  window.carregarGaleriaFotosDoBanco=carregarGaleriaFotosDoBanco;
+  window.salvarGaleriaFotosNoBanco=salvarGaleriaFotosNoBanco;
+  window.abrirNovoAlbumGaleria=abrirNovoAlbumGaleria;
+  window.abrirEditorAlbumGaleria=abrirEditorAlbumGaleria;
+  window.fecharEditorAlbumGaleria=fecharEditorAlbumGaleria;
+  window.salvarAlbumGaleria=salvarAlbumGaleria;
+  window.editarAlbumGaleria=editarAlbumGaleria;
+  window.duplicarAlbumGaleria=duplicarAlbumGaleria;
+  window.excluirAlbumGaleria=excluirAlbumGaleria;
+  window.moverAlbumGaleria=moverAlbumGaleria;
+  window.adicionarFotoUrlGaleria=adicionarFotoUrlGaleria;
+  window.removerFotoGaleria=removerFotoGaleria;
+  window.moverFotoGaleria=moverFotoGaleria;
+  window.usarPrimeiraFotoComoCapaGaleria=usarPrimeiraFotoComoCapaGaleria;
+  window.renderListaAlbunsGaleriaAdmin=renderListaAlbunsGaleriaAdmin;
+  window.renderFotosEditorGaleria=renderFotosEditorGaleria;
 })();
 </script>
 
-<style id="fmabc-timeline-compact-size">
-  /* Ajuste de escala da Linha do Tempo no administrador */
-  .timeline-admin-wrap{gap:12px}
-  .timeline-admin-head{gap:10px}
-  .timeline-admin-head h3{font-size:1.15rem}
-  .timeline-admin-head p{font-size:.82rem;margin-top:4px;max-width:760px}
-  .timeline-admin-toolbar{gap:7px}
-  .timeline-btn{padding:7px 11px;font-size:.82rem;border-radius:8px}
-  .timeline-admin-list{gap:8px}
-  .timeline-admin-item{grid-template-columns:34px 72px 1fr auto;gap:10px;border-radius:11px;padding:9px;box-shadow:0 4px 12px rgba(35,39,56,.04)}
-  .timeline-admin-drag{font-size:17px}
-  .timeline-admin-thumb{width:72px;height:50px;border-radius:8px}
-  .timeline-admin-year{font-size:.74rem}
-  .timeline-admin-title{font-size:.9rem;margin:1px 0 2px}
-  .timeline-admin-desc{font-size:.76rem;line-height:1.35}
-  .timeline-admin-actions{gap:4px}
-  .timeline-admin-actions button{padding:5px 7px;border-radius:7px;font-size:.72rem}
-  .timeline-admin-empty{padding:20px;border-radius:10px;font-size:.82rem}
-  .timeline-status{font-size:.78rem !important;padding:8px 10px !important}
-  @media(max-width:760px){
-    .timeline-admin-item{grid-template-columns:26px 62px 1fr;padding:8px;gap:8px}
-    .timeline-admin-thumb{width:62px;height:46px}
-    .timeline-admin-actions button{padding:5px 6px;font-size:.7rem}
-  }
-</style>
 </body>
 </html>
