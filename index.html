@@ -164,7 +164,7 @@
     .hero-title { font-size: 2.5rem; font-weight: bold; letter-spacing: -0.5px; margin-bottom: 12px; line-height: 1.2; }
     .hero-subtitle { font-size: 1.05rem; color: var(--verde-pastel-suave); max-width: 720px; font-weight: normal; margin-bottom: 28px; }
 
-    .search-filter-wrapper { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; justify-content: space-between; position: relative; z-index: 2; }
+    .search-filter-wrapper { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; justify-content: flex-start; position: relative; z-index: 2; }
     .search-box { position: relative; flex: 1; min-width: 280px; max-width: 480px; }
     .search-box input {
       width: 100%; padding: 14px 20px 14px 48px; border: 1px solid rgba(255, 255, 255, 0.25);
@@ -862,7 +862,8 @@
       position: relative;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-start;
+      column-gap: clamp(28px, 4vw, 64px);
       padding: 40px 60px;
       box-shadow: var(--shadow-lg);
       overflow: hidden;
@@ -875,59 +876,85 @@
       background-image: radial-gradient(circle at 10% 50%, rgba(255,255,255,0.06) 0%, transparent 40%);
       pointer-events: none;
     }
+    /* Todas as imagens do banner social usam o mesmo acabamento, inclusive as
+       imagens adicionadas futuramente pelo administrador. */
+    :root {
+      --social-banner-radius: 12px;
+    }
+
     .banner-redes-img {
-      width: 45%;
-      height: 350px; /* Define o tamanho fixo da área da imagem */
+      width: 47%;
+      height: 350px;
       position: relative;
       z-index: 2;
+      flex: 0 0 47%;
+      border-radius: var(--social-banner-radius) !important;
+      overflow: hidden !important;
+      clip-path: inset(0 round var(--social-banner-radius));
+    }
+
+    .banner-redes-img img,
+    .banner-social-track,
+    .banner-social-slide,
+    .banner-social-slide img {
+      border-radius: var(--social-banner-radius) !important;
+      overflow: hidden !important;
     }
 
     .banner-redes-img img {
       width: 100%;
-      height: 100%; /* Força a imagem a preencher o quadro fixo */
-      object-fit: cover; /* Adapta a imagem sem distorcer, preenchendo todo o espaço */
-      border-radius: 12px;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      clip-path: inset(0 round var(--social-banner-radius));
     }
-
 
     .banner-social-track {
-      position:relative;
-      width:100%;
-      height:100%;
-      min-height:320px;
-      overflow:hidden;
-      border-radius:12px;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 320px;
+      overflow: hidden !important;
+      clip-path: inset(0 round var(--social-banner-radius));
     }
+
     .banner-social-slide {
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-      opacity:0;
-      visibility:hidden;
-      transition:opacity 1.5s ease-in-out;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 1.5s ease-in-out;
+      clip-path: inset(0 round var(--social-banner-radius));
     }
+
     .banner-social-slide.active {
-      opacity:1;
-      visibility:visible;
-      z-index:1;
+      opacity: 1;
+      visibility: visible;
+      z-index: 1;
     }
+
     .banner-social-slide img {
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-      border-radius:12px;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      clip-path: inset(0 round var(--social-banner-radius));
     }
 
     .banner-redes-content {
       position: relative;
       z-index: 2;
       color: #FFFFFF;
-      max-width: 50%;
+      width: min(46%, 620px);
+      max-width: 620px;
       display: flex;
       flex-direction: column;
       gap: 16px;
+      margin-left: -8px;
     }
 
     .banner-redes-content h2 {
@@ -987,6 +1014,8 @@
       }
       .banner-redes-content {
         max-width: 100%;
+        width: 100%;
+        margin-left: 0;
         align-items: center;
       }
     }
@@ -1142,13 +1171,16 @@
       width: 47%;
       height: clamp(260px, 20vw, 390px);
       min-height: 260px;
+      flex-basis: 47%;
+      border-radius: 18px;
     }
 
     .banner-social-track { min-height: 100%; }
 
     .banner-redes-content {
-      width: 43%;
+      width: 45%;
       max-width: 620px;
+      margin-left: -10px;
     }
 
     .banner-redes-content h2 {
@@ -2591,6 +2623,33 @@
     .footer-main-info{flex-direction:column;align-items:flex-start;}
     .admin-footer-area{justify-content:flex-start;margin-top:4px;}
   }
+
+    /* Acabamento único para o carrossel de redes sociais.
+       O arredondamento fica somente no contêiner externo, garantindo que
+       todas as imagens atuais e futuras recebam exatamente o mesmo formato. */
+    :root { --social-banner-radius: 12px; }
+    .banner-redes-img {
+      border-radius: var(--social-banner-radius) !important;
+      overflow: hidden !important;
+      clip-path: none !important;
+      -webkit-mask-image: none !important;
+      mask-image: none !important;
+    }
+    .banner-social-track,
+    .banner-social-slide,
+    .banner-social-slide img,
+    .banner-redes-img img {
+      border-radius: 0 !important;
+      overflow: hidden !important;
+      clip-path: none !important;
+      -webkit-mask-image: none !important;
+      mask-image: none !important;
+    }
+    .banner-social-track,
+    .banner-social-slide {
+      width: 100%;
+      height: 100%;
+    }
 </style>
 
 </head>
@@ -2619,7 +2678,6 @@
 
       <div class="hero-controls">
         <div class="hero-dots" id="heroDots" aria-label="Selecionar imagem"></div>
-        <div class="hero-autoplay"><span class="hero-live-dot"></span><span id="heroAutoplayText">Troca automática • 5 turmas por vez</span></div>
       </div>
     </section>
 
@@ -2636,12 +2694,7 @@
     <section class="carrossel-turmas-wrapper" id="turmas-acervo" aria-label="Galeria de turmas formadas">
       <div class="carrossel-header">
         <div class="carrossel-heading">
-          <span class="carrossel-kicker">Acervo em destaque</span>
           <h2>Turmas que fazem parte da nossa história</h2>
-        </div>
-        <div class="carrossel-status" id="carrosselStatus">
-          <span class="status-dot" aria-hidden="true"></span>
-          <span id="carrosselStatusTexto">Troca automática</span>
         </div>
       </div>
 
@@ -2706,14 +2759,6 @@
         <p id="footerAddress">Endereço: Carregando...</p>
         <p id="footerEmail">Contato: Carregando...</p>
       </div>
-      <div class="admin-footer-area">
-        <div class="admin-nav-actions" id="adminNavActions">
-          <button class="btn-admin-access" onclick="abrirAdminModal()" aria-label="Abrir área administrativa">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-5.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8Z"/></svg>
-            Área Administrativa
-          </button>
-        </div>
-      </div>
     </div>
     <div class="developer-credit">Desenvolvido por Regiane Meira</div>
   </footer>
@@ -2734,7 +2779,7 @@
       <button class="modal-close" id="closeModal" aria-label="Fechar">&times;</button>
       
       <div class="modal-header-hero">
-        <span class="card-badge" id="modalCursoBadge">Medicina</span>
+        <span class="card-badge" id="modalCursoBadge">Medicina FMABC</span>
         <h2 id="modalTurmaTitle">Turma L (50)</h2>
         <div class="modal-card-desc-box" id="modalCardDesc"></div>
 
@@ -4267,28 +4312,16 @@
     }
 
     function atualizarNavegacaoAdmin() {
+      // A área administrativa é uma página independente.
+      // O portal público mantém apenas um acesso discreto no rodapé.
       const container = document.getElementById('adminNavActions');
       if (!container) return;
-
-      if (isAdminLoggedIn) {
-        container.innerHTML = `
-          <button class="btn-admin-access" onclick="abrirAdminModal()">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
-            ${currentUserName}
-          </button>
-          <button class="btn-admin-logout" onclick="fazerLogoutAdmin()">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
-            Sair
-          </button>
-        `;
-      } else {
-        container.innerHTML = `
-          <button class="btn-admin-access" onclick="abrirAdminModal()">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-5.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8Z"/></svg>
-            Área Administrativa
-          </button>
-        `;
-      }
+      container.innerHTML = `
+        <a class="btn-admin-access" href="administrador/" aria-label="Abrir área administrativa">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-5.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8Z"/></svg>
+          Área Administrativa
+        </a>
+      `;
     }
 
     function abrirAdminModal() {
@@ -5416,24 +5449,23 @@
       const container = document.getElementById('courseFilterContainer');
       if (!container) return;
 
+      // Exibir somente o botão geral ao lado da busca.
+      // Os demais filtros de curso/turma ficam ocultos na página inicial.
       container.innerHTML = '';
 
-      appState.cursos.forEach(curso => {
-        const nomeCurso = typeof curso === 'object' ? curso.nome : curso;
-        const btn = document.createElement('button');
-        
-        btn.className = `filter-pill ${appState.cursoAtivo === nomeCurso ? 'active' : ''}`;
-        btn.textContent = nomeCurso === 'Todos' ? 'Todas as Turmas' : nomeCurso;
-        btn.onclick = () => {
-          appState.cursoAtivo = nomeCurso;
-          appState.paginaAtual = 1;
-          appState.carrosselPausado = false;
-          renderCourseFilters();
-          renderCards();
-        };
-        
-        container.appendChild(btn);
-      });
+      const btn = document.createElement('button');
+      btn.className = `filter-pill ${appState.cursoAtivo === 'Todos' ? 'active' : ''}`;
+      btn.textContent = 'Pesquisar Turma';
+      btn.type = 'button';
+      btn.onclick = () => {
+        appState.cursoAtivo = 'Todos';
+        appState.paginaAtual = 1;
+        appState.carrosselPausado = false;
+        renderCourseFilters();
+        renderCards();
+      };
+
+      container.appendChild(btn);
     }
 
     let turmasOrdenacaoConfig = { modo: 'alfabetica', ordem: [] };
@@ -5861,7 +5893,7 @@
           <div class="card-img-bg" style="background-image: url('${urlSemCache(turma.img || 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80')}');"></div>
           <div class="card-img-overlay"></div>
           <div class="card-img-header">
-            <span class="card-badge">${turma.curso} FMABC</span>
+            <span class="card-badge">${turma.curso}</span>
           </div>
           <div class="card-title-row">
             <h2>${turma.titulo || turma.nome}</h2>
@@ -6020,14 +6052,14 @@
       if (totalItens === 0) {
         btnAnt.disabled = true;
         btnProx.disabled = true;
-        textoInfo.textContent = '0 turmas encontradas';
+        textoInfo.textContent = 'Nenhuma página';
         if (statusTexto) statusTexto.textContent = 'Nenhuma turma';
         return;
       }
 
       btnAnt.disabled = false;
       btnProx.disabled = false;
-      textoInfo.textContent = `Página ${appState.paginaAtual} de ${totalPaginas} • ${totalItens} turmas • 5 por vez`;
+      textoInfo.textContent = `Página ${appState.paginaAtual} de ${totalPaginas}`;
 
       if (statusTexto) {
         statusTexto.textContent = totalPaginas > 1
