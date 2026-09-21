@@ -2595,42 +2595,74 @@
 
 
 <style id="fmabc-admin-standalone-style">
+  /* Área administrativa independente: sem overlay/modal visual. */
   html, body { min-height: 100%; }
+  html { background: #f5f7fb; }
   body.fmabc-admin-standalone {
     margin: 0 !important;
     background: #f5f7fb !important;
-    overflow: hidden !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
   }
   body.fmabc-admin-standalone > *:not(#adminModalOverlay) {
     display: none !important;
   }
   body.fmabc-admin-standalone #adminModalOverlay {
-    display: flex !important;
-    position: fixed !important;
-    inset: 0 !important;
-    z-index: 99999 !important;
+    display: block !important;
+    position: static !important;
+    inset: auto !important;
+    z-index: auto !important;
     opacity: 1 !important;
     visibility: visible !important;
-    background: #f5f7fb !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    background: transparent !important;
     backdrop-filter: none !important;
     padding: 0 !important;
+    overflow: visible !important;
   }
   body.fmabc-admin-standalone #adminModalOverlay .admin-panel-container {
     width: 100% !important;
     max-width: none !important;
-    height: 100vh !important;
+    min-height: 100vh !important;
+    height: auto !important;
     border-radius: 0 !important;
     border: 0 !important;
     box-shadow: none !important;
+    overflow: visible !important;
+    position: static !important;
+  }
+  body.fmabc-admin-standalone #adminModalOverlay .admin-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 50 !important;
+    box-shadow: 0 2px 10px rgba(31,41,55,.08) !important;
+  }
+  body.fmabc-admin-standalone #adminModalOverlay .admin-body {
+    min-height: calc(100vh - 70px) !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  body.fmabc-admin-standalone #adminModalOverlay .admin-content {
+    overflow: visible !important;
   }
   body.fmabc-admin-standalone #adminModalOverlay .login-box {
-    margin: auto;
+    margin: 48px auto !important;
   }
   body.fmabc-admin-standalone .btn-close-admin {
     display: inline-flex !important;
   }
   body.fmabc-admin-standalone #adminModalOverlay.admin-route-logged-out .btn-close-admin {
     display: none !important;
+  }
+  @media (max-width: 700px) {
+    body.fmabc-admin-standalone #adminModalOverlay .admin-header {
+      position: static !important;
+    }
+    body.fmabc-admin-standalone #adminModalOverlay .admin-body {
+      display: flex !important;
+      flex-direction: column !important;
+    }
   }
 </style>
 
@@ -6715,4 +6747,3 @@
 
 </body>
 </html>
-
