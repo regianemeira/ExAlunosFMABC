@@ -159,6 +159,35 @@ body::before{content:"";position:fixed;inset:0;background-image:var(--bg-image);
     .public-memory-menu-link, .logo-img { animation: none !important; transition: none !important; }
   }
 </style>
+
+<style id="fmabc-reitores-public-style">
+  .reitores-gallery-wrap{margin-top:28px;background:rgba(255,255,255,.95);border:1px solid rgba(75,81,114,.12);border-radius:20px;padding:30px;box-shadow:0 12px 30px rgba(15,23,42,.07)}
+  .reitores-gallery-head{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:22px}
+  .reitores-gallery-kicker{margin:0 0 7px;text-transform:uppercase;letter-spacing:.08em;font-size:.74rem;font-weight:800;color:var(--verde)}
+  .reitores-gallery-title{margin:0;color:var(--azul);font-size:1.45rem}
+  .reitores-gallery-intro{margin:6px 0 0;color:var(--muted);max-width:760px}
+  .reitores-gallery-track{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;align-items:stretch}
+  .reitor-public-card{background:#fff;border:1px solid #e0e6e2;border-radius:16px;overflow:hidden;box-shadow:0 10px 24px rgba(35,39,56,.06);display:flex;flex-direction:column;min-height:100%;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease;position:relative}
+  .reitor-public-card:hover{transform:translateY(-5px);box-shadow:0 16px 34px rgba(35,39,56,.12);border-color:rgba(51,156,91,.45)}
+  .reitor-public-photo-wrap{aspect-ratio:4/5;background:#eef2ef;overflow:hidden;position:relative}
+  .reitor-public-photo-wrap::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(14,31,45,.22));pointer-events:none}
+  .reitor-public-photo{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s ease}
+  .reitor-public-card:hover .reitor-public-photo{transform:scale(1.035)}
+  .reitor-current-badge{position:absolute;top:12px;left:12px;z-index:2;background:var(--verde);color:#fff;padding:6px 10px;border-radius:999px;font-size:.68rem;font-weight:800;letter-spacing:.03em}
+  .reitor-public-body{padding:17px 16px 18px;display:flex;flex-direction:column;gap:8px;flex:1}
+  .reitor-public-name{margin:0;color:var(--azul);font-size:1rem;line-height:1.28}
+  .reitor-public-period{margin:0;color:var(--verde);font-weight:800;font-size:.88rem}
+  .reitor-public-line{height:2px;width:42px;background:linear-gradient(90deg,var(--verde),var(--verde-escuro));border-radius:99px;margin-top:auto}
+  .reitores-public-empty{padding:40px 24px;border:1px dashed #cfd9d2;border-radius:16px;background:#fbfcfb;text-align:center;color:var(--muted)}
+  .reitores-public-empty strong{display:block;color:var(--azul);font-size:1.04rem;margin-bottom:6px}
+  .reitores-public-note{margin-top:20px;color:var(--muted);font-size:.86rem;text-align:center}
+  .reitores-public-controls{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+  .reitores-public-controls button{border:1px solid #d8dfdb;background:#fff;color:var(--azul);width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer;transition:.2s}
+  .reitores-public-controls button:hover{background:#339c5b;color:#fff;border-color:#339c5b;transform:translateY(-1px)}
+  @media(max-width:1100px){.reitores-gallery-track{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  @media(max-width:760px){.reitores-gallery-wrap{padding:22px}.reitores-gallery-track{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}}
+  @media(max-width:500px){.reitores-gallery-track{grid-template-columns:1fr}.reitor-public-photo-wrap{aspect-ratio:3/4}}
+</style>
 </head>
 <body>
 <nav class="top-nav" aria-label="Navegação principal">
@@ -174,7 +203,22 @@ body::before{content:"";position:fixed;inset:0;background-image:var(--bg-image);
   </nav>
 <main class="page-container">
 <section class="page-hero"><span class="page-kicker">Memória FMABC</span><h1 class="page-title">Fotos e galeria de diretores e reitores</h1><p class="page-subtitle">Registro visual das gestões e dos personagens que marcaram a trajetória institucional.</p></section>
-<section class="page-content"><h2 class="placeholder-title">Fotos e galeria de diretores e reitores</h2><div id="fmabcEditableContent" class="placeholder-text" style="max-width:none"><p>Área exclusiva para fotos e galeria de diretores e reitores.</p></div></section>
+<section class="page-content">
+  <h2 class="placeholder-title">Galeria de Reitores</h2>
+  <div id="fmabcEditableContent" class="placeholder-text" style="max-width:none"><p>Conheça os reitores que fizeram parte da trajetória institucional.</p></div>
+</section>
+<section class="reitores-gallery-wrap" aria-labelledby="tituloGaleriaReitores">
+  <div class="reitores-gallery-head">
+    <div>
+      <p class="reitores-gallery-kicker">Nossa história</p>
+      <h2 id="tituloGaleriaReitores" class="reitores-gallery-title">Galeria de Reitores</h2>
+      <p class="reitores-gallery-intro">Lideranças que fizeram parte da trajetória do Centro Universitário FMABC.</p>
+    </div>
+  </div>
+  <div id="reitoresGaleriaPublica" class="reitores-gallery-track"></div>
+  <div id="reitoresPublicEmpty" class="reitores-public-empty" style="display:none"><strong>Galeria em construção</strong>Em breve, os registros históricos dos reitores serão disponibilizados nesta página.</div>
+  <div id="reitoresPublicNote" class="reitores-public-note" style="display:none"></div>
+</section>
 </main>
 <footer class="footer">
   <p id="footerAddress">Endereço: Av. Príncipe de Gales, 821 - Vila Príncipe de Gales, Santo André - SP</p>
@@ -250,6 +294,49 @@ document.addEventListener('DOMContentLoaded',()=>{Promise.all([carregarMenu(),ca
   document.addEventListener('DOMContentLoaded',carregar);
 })();
 </script>\n
+
+<script id="fmabc-reitores-public-script">
+(function(){
+  const API='https://fmabc-acervo-api.armredessociais.workers.dev';
+  const KEY='reitores_galeria';
+  function esc(v){return String(v??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+  function escAttr(v){return String(v??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function cacheBust(url){const s=String(url||'');if(!s)return '';return s+(s.includes('?')?'&':'?')+'v='+Date.now();}
+  function render(items){
+    const grid=document.getElementById('reitoresGaleriaPublica');
+    const empty=document.getElementById('reitoresPublicEmpty');
+    const note=document.getElementById('reitoresPublicNote');
+    if(!grid)return;
+    const lista=(Array.isArray(items)?items:[]).filter(r=>r&&String(r.nome||'').trim()).sort((a,b)=>Number(a.ordem||0)-Number(b.ordem||0));
+    if(!lista.length){grid.style.display='none';if(empty)empty.style.display='block';if(note)note.style.display='none';return;}
+    if(empty)empty.style.display='none';
+    grid.style.display='grid';
+    grid.innerHTML=lista.map(r=>{
+      const nome=String(r.nome||'').trim();
+      const inicio=String(r.inicio||'').trim();
+      const fim=String(r.fim||'').trim();
+      const periodo=inicio?(fim?`${inicio} – ${fim}`:`${inicio} – Atual`):'Período não informado';
+      const foto=String(r.foto||'').trim();
+      const badge=r.atual===true?'<span class="reitor-current-badge">Gestão atual</span>':'';
+      return `<article class="reitor-public-card">
+        <div class="reitor-public-photo-wrap">${badge}${foto?`<img class="reitor-public-photo" loading="lazy" src="${escAttr(cacheBust(foto))}" alt="${escAttr(nome)}">`:'<div class="reitor-public-photo" aria-hidden="true"></div>'}</div>
+        <div class="reitor-public-body"><h3 class="reitor-public-name">${esc(nome)}</h3><p class="reitor-public-period">${esc(periodo)}</p><span class="reitor-public-line" aria-hidden="true"></span></div>
+      </article>`;
+    }).join('');
+    if(note){note.style.display='block';note.textContent=`${lista.length} ${lista.length===1?'registro':'registros'} na galeria.`;}
+  }
+  async function carregar(){
+    try{
+      const r=await fetch(`${API}/api/config/${encodeURIComponent(KEY)}?v=${Date.now()}`,{cache:'no-store'});
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      const d=await r.json();
+      const arr=Array.isArray(d?.valor)?d.valor:(Array.isArray(d?.valor?.itens)?d.valor.itens:[]);
+      render(arr);
+    }catch(e){console.warn('Não foi possível carregar a Galeria de Reitores.',e);render([]);}
+  }
+  document.addEventListener('DOMContentLoaded',carregar);
+})();
+</script>
 <script id="fmabc-page-visibility-guard">
 (function(){
   const API='https://fmabc-acervo-api.armredessociais.workers.dev';
