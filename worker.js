@@ -179,14 +179,23 @@ async function listPendingDepoimentos(request, env) {
   await ensureDepoimentosSchema(env);
   const url = new URL(request.url);
   const turmaId = String(url.searchParams.get('turma_id') || '').trim();
-  if (!turmaId) return json({ error: 'turma_id é obrigatório.' }, 400);
+
+  if (turmaId) {
+    const { results = [] } = await env.DB.prepare(`
+      SELECT id, turma_id, autor, texto, created_at
+      FROM depoimentos
+      WHERE turma_id = ? AND aprovado = 0
+      ORDER BY datetime(created_at) ASC, id ASC
+    `).bind(turmaId).all();
+    return json(results);
+  }
 
   const { results = [] } = await env.DB.prepare(`
     SELECT id, turma_id, autor, texto, created_at
     FROM depoimentos
-    WHERE turma_id = ? AND aprovado = 0
+    WHERE aprovado = 0
     ORDER BY datetime(created_at) ASC, id ASC
-  `).bind(turmaId).all();
+  `).all();
   return json(results);
 }
 
