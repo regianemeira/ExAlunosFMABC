@@ -2848,6 +2848,18 @@
   }
 </style>
 
+
+<!-- FMABC_CURSO_ACOES_V3 -->
+<style id="fmabc-cursos-acoes-v3">
+#listaCursos .card-curso.curso-admin-card{position:relative!important;display:block!important;width:100%!important;box-sizing:border-box!important;padding:16px 18px!important;margin-top:12px!important;min-height:0!important;overflow:visible!important}
+#listaCursos .curso-admin-card-main{display:block!important;width:100%!important;min-width:0!important}
+#listaCursos .curso-admin-actions{position:static!important;transform:none!important;display:flex!important;visibility:visible!important;opacity:1!important;margin-top:14px!important;padding-top:12px!important;border-top:1px solid var(--border-color,#d9e1dd)!important;gap:8px!important;justify-content:flex-start!important;align-items:center!important;width:100%!important;z-index:30!important}
+#listaCursos .curso-admin-actions button{display:inline-flex!important;visibility:visible!important;opacity:1!important;position:relative!important;z-index:31!important;align-items:center!important;justify-content:center!important;min-width:84px!important;height:36px!important;padding:7px 13px!important;border-radius:7px!important;font-size:.78rem!important;font-weight:800!important;line-height:1!important;cursor:pointer!important;box-sizing:border-box!important}
+#listaCursos .curso-admin-actions .editar{background:#e8f5ec!important;color:#246b3e!important;border:1px solid #339c5b!important}
+#listaCursos .curso-admin-actions .excluir{background:#fff1f2!important;color:#b42318!important;border:1px solid #fca5a5!important}
+#listaCursos .curso-admin-actions button:hover{filter:brightness(.97)!important;transform:translateY(-1px)!important}
+</style>
+
 </head>
 <body>
 
@@ -3510,7 +3522,7 @@
             </form>
 
             <h4 style="margin-top: 24px; color: var(--azul-institucional);">Cursos Cadastrados no Banco</h4>
-            <div id="listaCursos" style="margin-top: 12px;"></div>
+            <div id="listaCursos" data-curso-acoes-version="v3" style="margin-top: 12px;"></div>
           </section>
 
           <!-- TAB TURMAS COM PREVIEW E TRANSIÇÃO SUAVE -->
@@ -5925,18 +5937,17 @@
     function renderListaCursosAdmin(cursos) {
       const container = document.getElementById('listaCursos');
       if (!container) return;
-      window.__cursosAdmin = Array.isArray(cursos) ? cursos : [];
       container.innerHTML = '';
-
+      window.__cursosAdmin = Array.isArray(cursos) ? cursos : [];
       if (!Array.isArray(cursos) || cursos.length === 0) {
         container.innerHTML = '<div style="padding:16px;color:var(--slate-muted);background:#fff;border:1px solid var(--border-color);border-radius:8px;">Nenhum curso cadastrado.</div>';
         return;
       }
-
       cursos.forEach(curso => {
         const id = curso?.id;
         const nome = escaparHtmlCurso(curso?.nome || 'Curso sem nome');
         const descricao = escaparHtmlCurso(curso?.descricao || 'Sem descrição informada.');
+        const safeId = escaparHtmlCurso(id);
         const card = document.createElement('div');
         card.className = 'card-curso curso-admin-card';
         card.innerHTML = `
@@ -5945,16 +5956,28 @@
             <p>${descricao}</p>
           </div>
           <div class="curso-admin-actions" aria-label="Ações do curso">
-            <button type="button" class="editar" data-curso-id="${escaparHtmlCurso(id)}">Editar</button>
-            <button type="button" class="excluir" data-curso-id="${escaparHtmlCurso(id)}">Excluir</button>
+            <button type="button" class="editar" data-curso-id="${safeId}" onclick="editarCursoPorId('${safeId}')">Editar</button>
+            <button type="button" class="excluir" data-curso-id="${safeId}" onclick="excluirCursoPorId('${safeId}')">Excluir</button>
           </div>
         `;
-        const btnEditar = card.querySelector('.editar');
-        const btnExcluir = card.querySelector('.excluir');
-        if (btnEditar) btnEditar.addEventListener('click', () => abrirEdicaoCurso(curso));
-        if (btnExcluir) btnExcluir.addEventListener('click', () => excluirCursoAdmin(curso?.id));
+        card.querySelector('.editar')?.addEventListener('click', (event) => event.stopPropagation());
+        card.querySelector('.excluir')?.addEventListener('click', (event) => event.stopPropagation());
         container.appendChild(card);
       });
+    }
+
+    function localizarCursoAdminPorId(id) {
+      return (window.__cursosAdmin || []).find(item => String(item?.id) === String(id));
+    }
+
+    function editarCursoPorId(id) {
+      const curso = localizarCursoAdminPorId(id);
+      if (!curso) { showToast('Curso não encontrado para edição.'); return; }
+      abrirEdicaoCurso(curso);
+    }
+
+    function excluirCursoPorId(id) {
+      return excluirCursoAdmin(id);
     }
 
     function abrirEdicaoCurso(curso) {
@@ -6046,6 +6069,8 @@
     window.fecharEdicaoCurso = fecharEdicaoCurso;
     window.salvarEdicaoCurso = salvarEdicaoCurso;
     window.excluirCursoAdmin = excluirCursoAdmin;
+    window.editarCursoPorId = editarCursoPorId;
+    window.excluirCursoPorId = excluirCursoPorId;
 
     function renderCourseFilters() {
       const container = document.getElementById('courseFilterContainer');
