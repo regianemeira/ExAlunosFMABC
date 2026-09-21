@@ -1,14 +1,19 @@
-# Portal de Memória FMABC — páginas independentes
+# FMABC Acervo — Portal de Memória
 
-A página inicial permanece em `index.html`. Os tópicos do menu de memória agora são páginas separadas:
+Arquivos principais do portal publicado no GitHub Pages:
 
-- `linha-do-tempo.html`
-- `depoimentos-ex-alunos.html`
-- `galeria-diretores-reitores.html`
-- `professores-emeritos.html`
+- `index.html` — página inicial e Área Administrativa.
+- `linha-do-tempo.html` — página institucional editável pelo CMS.
+- `depoimentos-ex-alunos.html` — página institucional editável, mantendo o formulário de depoimentos.
+- `galeria-diretores-reitores.html` — página institucional editável pelo CMS.
+- `professores-emeritos.html` — página institucional editável pelo CMS.
+- `pagina.html` — modelo para novas páginas personalizadas.
+- `worker.js` — Cloudflare Worker/API (não precisa ser alterado para esta atualização).
 
-A página inicial não exibe mais essas quatro seções como blocos de conteúdo. O menu continua sendo carregado do Cloudflare D1 pela configuração `site_menu`. Links antigos salvos como `#linha-do-tempo`, `#depoimentos-ex-alunos`, `#galeria-diretores-reitores` e `#professores-emeritos` são migrados automaticamente para os arquivos correspondentes durante a leitura.
+## Gestão de Páginas
 
-Os links internos usam caminhos relativos para funcionar no GitHub Pages, inclusive quando o repositório é publicado em uma subpasta.
+As quatro páginas institucionais já existentes também são administráveis no menu **Gestão de Páginas**. É possível editar título, resumo, conteúdo, conteúdo complementar, informações adicionais, banner, SEO, visibilidade e presença no menu.
 
-API: https://fmabc-acervo-api.armredessociais.workers.dev
+O conteúdo editado dessas páginas é salvo no Cloudflare D1 na configuração `portal_pages`. Os arquivos HTML institucionais consultam essa configuração quando publicados, sem perder as funções específicas de cada página.
+
+A criação de páginas novas continua usando `pagina.html?slug=...` e os registros personalizados também ficam em `portal_pages`.
