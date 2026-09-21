@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galeria de Fotos | FMABC</title>
+  <meta id="metaDescricaoGaleria" name="description" content="Galeria de Fotos institucional do Centro Universitário FMABC.">
+  <style>
+    :root{--azul:#4B5172;--verde:#339C5B;--verde-escuro:#377166;--verde-soft:#E3EFD3;--bg:#F7F9F8;--texto:#232738;--muted:#667085;--borda:#D8DFDB}
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
+    body{background:var(--bg);color:var(--texto);min-height:100vh}
+    .topbar{position:sticky;top:0;z-index:30;background:var(--azul);border-bottom:2px solid #C6E2B4;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+    .topbar-inner{max-width:1180px;margin:0 auto;padding:12px 22px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+    .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff}
+    .brand img{height:44px;background:#fff;padding:4px 10px;border-radius:8px}
+    .brand span{font-size:.78rem;font-weight:700;letter-spacing:.03em}
+    .back-link{color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.3);padding:8px 12px;border-radius:20px;font-size:.78rem;font-weight:700}
+    .back-link:hover{background:rgba(255,255,255,.08)}
+    .hero{max-width:1180px;margin:0 auto;padding:55px 22px 25px}
+    .eyebrow{color:var(--verde-escuro);font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em}
+    h1{margin-top:9px;font-size:clamp(2rem,4vw,3.1rem);color:#2d3555}
+    .intro{margin-top:12px;max-width:760px;color:var(--muted);font-size:1rem;line-height:1.65}
+    .toolbar{max-width:1180px;margin:0 auto;padding:0 22px 22px;display:grid;grid-template-columns:1fr 220px;gap:10px}
+    .toolbar input,.toolbar select{width:100%;min-height:44px;border:1px solid var(--borda);border-radius:10px;background:#fff;padding:10px 12px;color:#42506c;outline:none}
+    .toolbar input:focus,.toolbar select:focus{border-color:#9db8aa;box-shadow:0 0 0 3px rgba(51,156,91,.08)}
+    .albums{max-width:1180px;margin:0 auto;padding:0 22px 50px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+    .album-card{background:#fff;border:1px solid var(--borda);border-radius:18px;overflow:hidden;box-shadow:0 10px 25px rgba(35,39,56,.06);cursor:pointer;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+    .album-card:hover{transform:translateY(-3px);box-shadow:0 16px 30px rgba(35,39,56,.1);border-color:#bed1c4}
+    .album-cover{width:100%;height:235px;object-fit:cover;display:block;background:#eef2ef}
+    .album-body{padding:16px 17px 18px}
+    .album-date{font-size:.74rem;color:var(--verde-escuro);font-weight:800;text-transform:uppercase;letter-spacing:.07em}
+    .album-title{margin-top:7px;color:#2e3857;font-size:1.1rem;line-height:1.35}
+    .album-desc{margin-top:8px;color:var(--muted);font-size:.82rem;line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+    .album-meta{margin-top:12px;display:flex;gap:7px;flex-wrap:wrap}.pill{background:#edf5ef;border:1px solid #d7eadc;color:#2f7d4b;border-radius:999px;padding:5px 8px;font-size:.68rem;font-weight:800}
+    .empty{grid-column:1/-1;padding:34px 20px;border:1px dashed #cbd7d0;border-radius:16px;background:#fff;text-align:center;color:var(--muted)}
+    .lightbox{position:fixed;inset:0;z-index:100;background:rgba(15,23,42,.88);display:none;align-items:center;justify-content:center;padding:28px}
+    .lightbox.active{display:flex}
+    .lightbox-panel{width:min(1180px,100%);height:min(88vh,820px);display:grid;grid-template-columns:1fr 270px;gap:14px}
+    .lightbox-main{position:relative;background:#0f172a;border-radius:16px;overflow:hidden;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.12)}
+    .lightbox-main img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+    .lb-close,.lb-nav{position:absolute;border:1px solid rgba(255,255,255,.2);background:rgba(15,23,42,.55);color:#fff;border-radius:10px;cursor:pointer}
+    .lb-close{top:12px;right:12px;width:40px;height:40px;font-size:1.35rem}.lb-nav{top:50%;transform:translateY(-50%);width:42px;height:52px;font-size:1.8rem}.lb-prev{left:12px}.lb-next{right:12px}
+    .lightbox-side{background:#fff;border-radius:16px;padding:18px;overflow:auto}.lightbox-side h2{color:#2e3857;font-size:1.25rem}.lightbox-side p{margin-top:8px;color:var(--muted);font-size:.82rem;line-height:1.55}.thumbs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:18px}.thumb{border:2px solid transparent;border-radius:8px;overflow:hidden;cursor:pointer;background:#eef2ef}.thumb.active{border-color:var(--verde)}.thumb img{width:100%;height:82px;object-fit:cover;display:block}
+    footer{max-width:1180px;margin:0 auto;padding:0 22px 45px;color:#7b8498;font-size:.74rem;text-align:center}
+    @media(max-width:980px){.albums{grid-template-columns:repeat(2,minmax(0,1fr))}.lightbox-panel{grid-template-columns:1fr}.lightbox-side{max-height:230px}.thumbs{grid-template-columns:repeat(4,1fr)}}
+    @media(max-width:650px){.topbar-inner{padding:10px 14px}.brand span{display:none}.hero{padding:35px 14px 22px}.toolbar{padding:0 14px 18px;grid-template-columns:1fr}.albums{padding:0 14px 40px;grid-template-columns:1fr}.album-cover{height:220px}.lightbox{padding:10px}.lightbox-panel{height:94vh}.thumbs{grid-template-columns:repeat(4,1fr)}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html" aria-label="Voltar para o Acervo FMABC">
+        <img src="https://www.fmabc.br/img/logo-fmabc.81be2f48.png" alt="Logotipo FMABC">
+        <span>Acervo Acadêmico FMABC</span>
+      </a>
+      <a class="back-link" href="index.html">Voltar ao portal</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="heroGaleriaPagina">
+      <div class="eyebrow">Memória institucional</div>
+      <h1 id="tituloGaleriaPagina">Galeria de Fotos</h1>
+      <p class="intro" id="introGaleriaPagina">Registros fotográficos de eventos, cerimônias e momentos que fazem parte da história do Centro Universitário FMABC.</p>
+    </section>
+
+    <section class="toolbar" aria-label="Filtros da galeria">
+      <input id="buscaGaleriaPublica" type="search" placeholder="Pesquisar álbum" autocomplete="off">
+      <select id="categoriaGaleriaPublica"><option value="">Todas as categorias</option></select>
+    </section>
+
+    <section id="albunsGaleriaPublica" class="albums" aria-live="polite"></section>
+  </main>
+
+  <footer>Centro Universitário FMABC · Galeria de Fotos</footer>
+
+  <div class="lightbox" id="galeriaLightbox" aria-hidden="true">
+    <div class="lightbox-panel">
+      <div class="lightbox-main">
+        <img id="galeriaLightboxImg" alt="">
+        <button type="button" class="lb-close" id="galeriaLightboxClose" aria-label="Fechar">×</button>
+        <button type="button" class="lb-nav lb-prev" id="galeriaLightboxPrev" aria-label="Foto anterior">‹</button>
+        <button type="button" class="lb-nav lb-next" id="galeriaLightboxNext" aria-label="Próxima foto">›</button>
+      </div>
+      <aside class="lightbox-side">
+        <h2 id="galeriaLightboxTitle"></h2>
+        <p id="galeriaLightboxDesc"></p>
+        <div id="galeriaLightboxThumbs" class="thumbs"></div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const CLOUDFLARE_API_URL='https://fmabc-acervo-api.armredessociais.workers.dev';
+    const GALERIA_FOTOS_CONFIG_KEY='fmabc_gallery_albums';
+    let albuns=[];let albumAtual=null;let fotoAtual=0;let paginaGaleria={visivel:true};
+
+    function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+    function semCache(v){return String(v||'')+(String(v||'').includes('?')?'&':'?')+'v='+Date.now();}
+    function dataBR(v){if(!v)return 'Data não informada';const d=new Date(v+'T12:00:00');return Number.isNaN(d.getTime())?v:d.toLocaleDateString('pt-BR');}
+    function normalizarAlbum(a,i){if(!a||typeof a!=='object'||!a.titulo)return null;return {id:String(a.id||i),titulo:String(a.titulo),data:String(a.data||''),descricao:String(a.descricao||''),categoria:String(a.categoria||''),capa:String(a.capa||a.fotos?.[0]?.url||''),publicado:a.publicado!==false,ordem:Number(a.ordem||i+1),fotos:Array.isArray(a.fotos)?a.fotos.filter(f=>f&&f.url).map((f,j)=>({url:String(f.url),legenda:String(f.legenda||''),ordem:Number(f.ordem||j+1)})).sort((x,y)=>x.ordem-y.ordem):[]};}
+    async function carregarPaginaConfig(){
+      try{
+        const r=await fetch(`${CLOUDFLARE_API_URL}/api/config/portal_pages?v=${Date.now()}`,{cache:'no-store'});
+        if(!r.ok)return;
+        const data=await r.json();
+        const lista=Array.isArray(data?.valor?.pages)?data.valor.pages:[];
+        const pagina=lista.find(item=>String(item?.id||'')==='galeria-fotos')||{};
+        paginaGaleria=pagina;
+        if(pagina.visivel===false){
+          document.getElementById('albunsGaleriaPublica').innerHTML='<div class="empty"><strong>Esta página não está publicada.</strong><div style="margin-top:6px">O conteúdo da Galeria de Fotos está temporariamente indisponível.</div></div>';
+          return false;
+        }
+        const titulo=String(pagina.titulo||'Galeria de Fotos');
+        const resumo=String(pagina.resumo||'Registros fotográficos de eventos, cerimônias e momentos que fazem parte da história do Centro Universitário FMABC.');
+        document.getElementById('tituloGaleriaPagina').textContent=titulo;
+        document.getElementById('introGaleriaPagina').textContent=resumo;
+        document.title=`${titulo} | FMABC`;
+        const meta=document.getElementById('metaDescricaoGaleria');if(meta)meta.setAttribute('content',String(pagina.seoDescricao||resumo).slice(0,300));
+        const seoTitle=String(pagina.seoTitulo||'').trim();if(seoTitle)document.title=seoTitle;
+        const imagem=String(pagina.imagem||'').trim();
+        if(imagem){const hero=document.getElementById('heroGaleriaPagina');hero.style.backgroundImage=`linear-gradient(rgba(247,249,248,.92),rgba(247,249,248,.92)),url("${imagem.replace(/"/g,'&quot;')}")`;hero.style.backgroundSize='cover';hero.style.backgroundPosition='center';hero.style.borderRadius='0 0 18px 18px';}
+        return true;
+      }catch(e){return true;}
+    }
+    async function carregar(){
+      const el=document.getElementById('albunsGaleriaPublica');
+      try{
+        const paginaVisivel=await carregarPaginaConfig();
+        if(paginaVisivel===false)return;
+        const r=await fetch(`${CLOUDFLARE_API_URL}/api/config/${encodeURIComponent(GALERIA_FOTOS_CONFIG_KEY)}?v=${Date.now()}`,{cache:'no-store'});
+        if(!r.ok)throw new Error('Falha ao carregar os álbuns.');
+        const data=await r.json();const lista=Array.isArray(data?.valor?.albuns)?data.valor.albuns:(Array.isArray(data?.valor)?data.valor:[]);
+        albuns=lista.map(normalizarAlbum).filter(Boolean).filter(a=>a.publicado&&a.fotos.length).sort((a,b)=>a.ordem-b.ordem);
+        preencherCategorias();render();abrirAlbumPeloUrl();
+      }catch(e){el.innerHTML='<div class="empty">Não foi possível carregar a Galeria de Fotos no momento.</div>';}
+    }
+    function preencherCategorias(){const sel=document.getElementById('categoriaGaleriaPublica');const cats=[...new Set(albuns.map(a=>a.categoria).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'pt-BR'));sel.innerHTML='<option value="">Todas as categorias</option>'+cats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');}
+    function listaFiltrada(){const q=document.getElementById('buscaGaleriaPublica').value.trim().toLowerCase();const c=document.getElementById('categoriaGaleriaPublica').value;return albuns.filter(a=>(!q||`${a.titulo} ${a.descricao} ${a.categoria}`.toLowerCase().includes(q))&&(!c||a.categoria===c));}
+    function render(){const el=document.getElementById('albunsGaleriaPublica');const lista=listaFiltrada();if(!lista.length){el.innerHTML='<div class="empty"><strong>Nenhum álbum encontrado.</strong><div style="margin-top:6px">Tente outro termo de pesquisa ou categoria.</div></div>';return;}el.innerHTML=lista.map((a,i)=>`<article class="album-card" tabindex="0" role="button" onclick="abrirAlbum('${esc(a.id)}')" onkeydown="if(event.key==='Enter'||event.key===' ')abrirAlbum('${esc(a.id)}')"><img class="album-cover" loading="lazy" src="${esc(semCache(a.capa))}" alt="${esc(a.titulo)}"><div class="album-body"><div class="album-date">${esc(dataBR(a.data))}</div><h2 class="album-title">${esc(a.titulo)}</h2><p class="album-desc">${esc(a.descricao||'Confira as fotos deste álbum.')}</p><div class="album-meta"><span class="pill">${a.fotos.length} ${a.fotos.length===1?'foto':'fotos'}</span>${a.categoria?`<span class="pill">${esc(a.categoria)}</span>`:''}</div></div></article>`).join('');}
+    function abrirAlbum(id){const a=albuns.find(x=>String(x.id)===String(id));if(!a)return;albumAtual=a;fotoAtual=0;document.getElementById('galeriaLightbox').classList.add('active');document.getElementById('galeriaLightbox').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';atualizarLightbox();}
+    function atualizarLightbox(){if(!albumAtual)return;const fotos=albumAtual.fotos||[];if(!fotos.length)return;if(fotoAtual<0)fotoAtual=fotos.length-1;if(fotoAtual>=fotos.length)fotoAtual=0;const f=fotos[fotoAtual];document.getElementById('galeriaLightboxImg').src=semCache(f.url);document.getElementById('galeriaLightboxImg').alt=f.legenda||albumAtual.titulo;document.getElementById('galeriaLightboxTitle').textContent=albumAtual.titulo;document.getElementById('galeriaLightboxDesc').textContent=albumAtual.descricao||dataBR(albumAtual.data);document.getElementById('galeriaLightboxThumbs').innerHTML=fotos.map((x,i)=>`<button type="button" class="thumb ${i===fotoAtual?'active':''}" onclick="selecionarFoto(${i})" aria-label="Foto ${i+1}"><img src="${esc(semCache(x.url))}" alt=""></button>`).join('');}
+    function selecionarFoto(i){fotoAtual=i;atualizarLightbox();}
+    function fecharLightbox(){document.getElementById('galeriaLightbox').classList.remove('active');document.getElementById('galeriaLightbox').setAttribute('aria-hidden','true');document.body.style.overflow='';albumAtual=null;}
+    function abrirAlbumPeloUrl(){const p=new URLSearchParams(location.search);const id=p.get('album');if(id)abrirAlbum(id);}
+    document.getElementById('buscaGaleriaPublica').addEventListener('input',render);
+    document.getElementById('categoriaGaleriaPublica').addEventListener('change',render);
+    document.getElementById('galeriaLightboxClose').addEventListener('click',fecharLightbox);
+    document.getElementById('galeriaLightboxPrev').addEventListener('click',()=>{fotoAtual--;atualizarLightbox();});
+    document.getElementById('galeriaLightboxNext').addEventListener('click',()=>{fotoAtual++;atualizarLightbox();});
+    document.getElementById('galeriaLightbox').addEventListener('click',e=>{if(e.target.id==='galeriaLightbox')fecharLightbox();});
+    document.addEventListener('keydown',e=>{if(!albumAtual)return;if(e.key==='Escape')fecharLightbox();if(e.key==='ArrowLeft'){fotoAtual--;atualizarLightbox();}if(e.key==='ArrowRight'){fotoAtual++;atualizarLightbox();}});
+    carregar();
+  </script>
+</body>
+</html>
