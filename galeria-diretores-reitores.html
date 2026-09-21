@@ -203,10 +203,6 @@ body::before{content:"";position:fixed;inset:0;background-image:var(--bg-image);
   </nav>
 <main class="page-container">
 <section class="page-hero"><span class="page-kicker">Memória FMABC</span><h1 class="page-title">Fotos e galeria de diretores e reitores</h1><p class="page-subtitle">Registro visual das gestões e dos personagens que marcaram a trajetória institucional.</p></section>
-<section class="page-content">
-  <h2 class="placeholder-title">Galeria de Reitores</h2>
-  <div id="fmabcEditableContent" class="placeholder-text" style="max-width:none"><p>Conheça os reitores que fizeram parte da trajetória institucional.</p></div>
-</section>
 <section class="reitores-gallery-wrap" aria-labelledby="tituloGaleriaReitores">
   <div class="reitores-gallery-head">
     <div>
@@ -283,7 +279,7 @@ document.addEventListener('DOMContentLoaded',()=>{Promise.all([carregarMenu(),ca
       adicionarMeta('description',page.seoDescricao||summary);adicionarMeta('keywords',page.seoKeywords||'');
       if(hero&&page.imagem)inserirBanner(hero,page.imagem,page.bannerAlt||title);
       const contentBox=document.getElementById('fmabcEditableContent');
-      if(contentBox && page.conteudo)contentBox.innerHTML=sanitizarHtml(page.conteudo);
+      if(contentBox)contentBox.closest('section.page-content')?.remove();
       const secondary=page.conteudoSecundario||'';
       const info=page.informacoesAdicionais||'';
       function addSection(id,titleText,html){let sec=document.getElementById(id);if(!html){if(sec)sec.remove();return;}if(!sec){sec=document.createElement('section');sec.id=id;sec.className='page-content';root.appendChild(sec);}sec.innerHTML='<h2 class="placeholder-title"></h2><div class="placeholder-text" style="max-width:none"></div>';sec.querySelector('h2').textContent=titleText;sec.querySelector('div').innerHTML=sanitizarHtml(html);}
