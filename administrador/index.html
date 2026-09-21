@@ -7628,5 +7628,31 @@ function switchAdminTab(e, tabId) {
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind,{once:true});else bind();
 })();
 </script>
+
+<style id="fmabc-timeline-compact-size">
+  /* Ajuste de escala da Linha do Tempo no administrador */
+  .timeline-admin-wrap{gap:12px}
+  .timeline-admin-head{gap:10px}
+  .timeline-admin-head h3{font-size:1.15rem}
+  .timeline-admin-head p{font-size:.82rem;margin-top:4px;max-width:760px}
+  .timeline-admin-toolbar{gap:7px}
+  .timeline-btn{padding:7px 11px;font-size:.82rem;border-radius:8px}
+  .timeline-admin-list{gap:8px}
+  .timeline-admin-item{grid-template-columns:34px 72px 1fr auto;gap:10px;border-radius:11px;padding:9px;box-shadow:0 4px 12px rgba(35,39,56,.04)}
+  .timeline-admin-drag{font-size:17px}
+  .timeline-admin-thumb{width:72px;height:50px;border-radius:8px}
+  .timeline-admin-year{font-size:.74rem}
+  .timeline-admin-title{font-size:.9rem;margin:1px 0 2px}
+  .timeline-admin-desc{font-size:.76rem;line-height:1.35}
+  .timeline-admin-actions{gap:4px}
+  .timeline-admin-actions button{padding:5px 7px;border-radius:7px;font-size:.72rem}
+  .timeline-admin-empty{padding:20px;border-radius:10px;font-size:.82rem}
+  .timeline-status{font-size:.78rem !important;padding:8px 10px !important}
+  @media(max-width:760px){
+    .timeline-admin-item{grid-template-columns:26px 62px 1fr;padding:8px;gap:8px}
+    .timeline-admin-thumb{width:62px;height:46px}
+    .timeline-admin-actions button{padding:5px 6px;font-size:.7rem}
+  }
+</style>
 </body>
 </html>
