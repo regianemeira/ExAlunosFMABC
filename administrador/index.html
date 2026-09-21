@@ -3221,13 +3221,13 @@
                   <p>Cadastre e organize os principais acontecimentos da história da instituição. Os registros ficam salvos no Cloudflare e podem ser exibidos com foto, texto e destaque.</p>
                 </div>
                 <div class="timeline-admin-toolbar">
-                  <button type="button" class="timeline-btn primary" id="btnNovoEventoTimeline" onclick="window.abrirModalEventoTimeline(''); return false;">+ Novo acontecimento</button>
-                  <button type="button" class="timeline-btn" id="btnAtualizarTimeline" onclick="window.carregarTimelineDoBanco(true); return false;">Atualizar</button>
+                  <button type="button" class="timeline-btn primary" id="btnNovoEventoTimeline">+ Novo acontecimento</button>
+                  <button type="button" class="timeline-btn" id="btnAtualizarTimeline">Atualizar</button>
                 </div>
               </div>
               <div class="timeline-filter">
-                <input id="filtroTimelineAdmin" class="form-control" type="search" placeholder="Pesquisar acontecimento" oninput="renderListaTimelineAdmin()" autocomplete="off">
-                <select id="filtroTimelineDecada" class="form-control" onchange="renderListaTimelineAdmin()">
+                <input id="filtroTimelineAdmin" class="form-control" type="search" placeholder="Pesquisar acontecimento" autocomplete="off">
+                <select id="filtroTimelineDecada" class="form-control">
                   <option value="">Todas as décadas</option>
                   <option value="1960">1960</option><option value="1970">1970</option><option value="1980">1980</option><option value="1990">1990</option><option value="2000">2000</option><option value="2010">2010</option><option value="2020">2020</option>
                 </select>
@@ -3235,8 +3235,8 @@
               <div class="timeline-status" id="statusTimelineAdmin">Nenhuma alteração pendente.</div>
               <div id="listaTimelineAdmin" class="timeline-admin-list"></div>
               <div style="display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;">
-                <button type="button" class="timeline-btn" id="btnRestaurarTimeline" onclick="window.restaurarTimelinePadrao(); return false;">Restaurar marcos padrão</button>
-                <button type="button" class="timeline-btn primary" id="btnSalvarTimelineAlteracoes" onclick="window.salvarTimelineNoBanco(true); return false;">Salvar alterações</button>
+                <button type="button" class="timeline-btn" id="btnRestaurarTimeline">Restaurar marcos padrão</button>
+                <button type="button" class="timeline-btn primary" id="btnSalvarTimelineAlteracoes">Salvar alterações</button>
               </div>
             </div>
           </section>
@@ -3666,10 +3666,10 @@
     <div class="timeline-modal" role="dialog" aria-modal="true" aria-labelledby="tituloModalTimeline">
       <div class="timeline-modal-head">
         <h4 id="tituloModalTimeline">Novo acontecimento</h4>
-        <button type="button" class="timeline-modal-close" id="btnFecharModalTimeline" aria-label="Fechar" onclick="window.fecharModalEventoTimeline(); return false;">×</button>
+        <button type="button" class="timeline-modal-close" id="btnFecharModalTimeline" aria-label="Fechar">×</button>
       </div>
       <div class="timeline-modal-body">
-        <form id="formTimelineAdmin" onsubmit="window.salvarEventoTimeline(event); return false;">
+        <form id="formTimelineAdmin">
           <input type="hidden" id="timelineEditId">
           <div class="timeline-form-grid">
             <div class="form-group"><label>Ano / período</label><input type="text" id="timelineAno" class="form-control" maxlength="30" required placeholder="Ex.: 1969 ou 2018–2019"></div>
@@ -3680,7 +3680,7 @@
             <div class="form-group full" style="display:flex;align-items:center;gap:10px;"><input type="checkbox" id="timelineDestaque" style="width:18px;height:18px;"><label for="timelineDestaque" style="margin:0;">Destacar este acontecimento na página pública</label></div>
           </div>
           <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:22px;flex-wrap:wrap;">
-            <button type="button" class="timeline-btn" id="btnCancelarModalTimeline" onclick="window.fecharModalEventoTimeline(); return false;">Cancelar</button>
+            <button type="button" class="timeline-btn" id="btnCancelarModalTimeline">Cancelar</button>
             <button type="submit" class="timeline-btn primary" id="btnSalvarTimelineEvento">Salvar acontecimento</button>
           </div>
         </form>
@@ -6656,11 +6656,11 @@
           <img class="timeline-admin-thumb" src="${escapeHtmlAttr(urlSemCache(foto))}" alt="${escapeHtmlAttr(ev.titulo)}">
           <div><div class="timeline-admin-year">${escapeHtml(ev.ano)}${ev.destaque?' · Destaque':''}</div><div class="timeline-admin-title">${escapeHtml(ev.titulo)}</div><div class="timeline-admin-desc">${escapeHtml(ev.descricao||'Sem descrição')}</div></div>
           <div class="timeline-admin-actions">
-            <button type="button" data-timeline-action="up" data-timeline-id="${escapeHtmlAttr(ev.id)}" onclick="window.moverTimeline('${escapeHtmlAttr(ev.id)}',-1); return false;" ${idx===0?'disabled':''}>↑</button>
-            <button type="button" data-timeline-action="down" data-timeline-id="${escapeHtmlAttr(ev.id)}" onclick="window.moverTimeline('${escapeHtmlAttr(ev.id)}',1); return false;" ${idx===todos.length-1?'disabled':''}>↓</button>
-            <button type="button" data-timeline-action="edit" data-timeline-id="${escapeHtmlAttr(ev.id)}" onclick="window.editarEventoTimeline('${escapeHtmlAttr(ev.id)}'); return false;">Editar</button>
-            <button type="button" data-timeline-action="duplicate" data-timeline-id="${escapeHtmlAttr(ev.id)}" onclick="window.duplicarEventoTimeline('${escapeHtmlAttr(ev.id)}'); return false;">Duplicar</button>
-            <button type="button" data-timeline-action="delete" data-timeline-id="${escapeHtmlAttr(ev.id)}" onclick="window.excluirEventoTimeline('${escapeHtmlAttr(ev.id)}'); return false;">Excluir</button>
+            <button type="button" data-timeline-action="up" data-timeline-id="${escapeHtmlAttr(ev.id)}" ${idx===0?'disabled':''}>↑</button>
+            <button type="button" data-timeline-action="down" data-timeline-id="${escapeHtmlAttr(ev.id)}" ${idx===todos.length-1?'disabled':''}>↓</button>
+            <button type="button" data-timeline-action="edit" data-timeline-id="${escapeHtmlAttr(ev.id)}">Editar</button>
+            <button type="button" data-timeline-action="duplicate" data-timeline-id="${escapeHtmlAttr(ev.id)}">Duplicar</button>
+            <button type="button" data-timeline-action="delete" data-timeline-id="${escapeHtmlAttr(ev.id)}">Excluir</button>
           </div>
         </article>`;
       }).join('');
@@ -6957,7 +6957,11 @@ function switchAdminTab(e, tabId) {
         carregarReitoresDoBanco(false);
       }
       if (tabId === 'tabLinhaTempo') {
-        carregarTimelineDoBanco(false);
+        if (typeof window.carregarTimelineDoBanco === 'function') {
+          window.carregarTimelineDoBanco(false);
+        } else {
+          carregarTimelineDoBanco(false);
+        }
       }
       if (tabId === 'tabTurmas') {
         renderEditorOrdemTurmas();
@@ -7310,7 +7314,329 @@ function switchAdminTab(e, tabId) {
 
   </script>
 
-<!-- Handlers da Linha do Tempo são definidos diretamente nos controles para garantir funcionamento no painel administrativo. -->
+
+<script id="fmabc-timeline-controller">
+(function(){
+  'use strict';
+
+  const API_BASE = 'https://fmabc-acervo-api.armredessociais.workers.dev';
+  const TOKEN_KEY = 'fmabc_cf_admin_token';
+  const DEFAULT_EVENTS = [
+    {id:'timeline-1969',ano:'1969',decada:'1960',titulo:'Autorização da Faculdade de Medicina do ABC',descricao:'Autorização da instituição para funcionar como Faculdade de Medicina do ABC.',foto:'',destaque:true},
+    {id:'timeline-1971',ano:'1971',decada:'1970',titulo:'Primeiro prédio do campus',descricao:'Entrega do primeiro prédio do campus universitário, o Prédio Central.',foto:'',destaque:false},
+    {id:'timeline-1975',ano:'1975',decada:'1970',titulo:'Reconhecimento federal',descricao:'Reconhecimento da Faculdade de Medicina do ABC pelo Decreto Federal nº 76.858; início do Programa de Residência Médica e inauguração de laboratórios no Prédio Central.',foto:'',destaque:false},
+    {id:'timeline-1976',ano:'1976',decada:'1970',titulo:'Primeiro Congresso Médico Universitário do ABC',descricao:'Realização da primeira edição do Congresso Médico Universitário do ABC (COMUABC).',foto:'',destaque:false},
+    {id:'timeline-1982',ano:'1982',decada:'1980',titulo:'Credenciamento da Residência Médica',descricao:'Credenciamento dos programas de Residência Médica pela Comissão Nacional de Residência Médica (CNRM/MEC).',foto:'',destaque:false},
+    {id:'timeline-1983',ano:'1983',decada:'1980',titulo:'Transferência para o sistema estadual',descricao:'Transferência da Faculdade de Medicina do ABC do sistema federal para o sistema estadual de ensino.',foto:'',destaque:false},
+    {id:'timeline-1998',ano:'1998',decada:'1990',titulo:'Início da Pós-Graduação stricto sensu',descricao:'Início do Programa de Pós-Graduação stricto sensu, nível Mestrado, em Ciências da Saúde.',foto:'',destaque:false},
+    {id:'timeline-2000',ano:'2000',decada:'2000',titulo:'Implantação do Curso de Farmácia',descricao:'Implantação do Curso de Graduação em Farmácia e inauguração do Anexo 3 (Bloco CEU).',foto:'',destaque:false},
+    {id:'timeline-2010',ano:'2010',decada:'2010',titulo:'Denominação como Centro Universitário FMABC',descricao:'Denominação da instituição de ensino superior como Centro Universitário FMABC.',foto:'',destaque:false},
+    {id:'timeline-2013',ano:'2013',decada:'2010',titulo:'Retorno ao sistema federal',descricao:'A FMABC retoma ao sistema federal de ensino, em atendimento à legislação nacional.',foto:'',destaque:false},
+    {id:'timeline-2018',ano:'2018',decada:'2010',titulo:'Transformação em Centro Universitário',descricao:'A Faculdade de Medicina do ABC é transformada em Centro Universitário, em processo oficializado pelo Ministério da Educação.',foto:'',destaque:true},
+    {id:'timeline-2020',ano:'2020',decada:'2020',titulo:'Nome Centro Universitário FMABC',descricao:'Autorização da alteração do nome da instituição para Centro Universitário FMABC.',foto:'',destaque:false},
+    {id:'timeline-2023',ano:'2023',decada:'2020',titulo:'Centro de Formação de Psicólogos e Centro de Simulação',descricao:'Inauguração do Centro de Formação de Psicólogos — Clínica Escola do Curso de Psicologia — e do Centro de Simulação.',foto:'',destaque:false}
+  ];
+
+  let state = DEFAULT_EVENTS.map((x,i)=>({...x,ordem:i+1}));
+  let editId = '';
+  let initialized = false;
+
+  const $ = id => document.getElementById(id);
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const cacheUrl = url => {
+    if(!url) return '';
+    const sep = url.includes('?') ? '&' : '?';
+    return url + sep + 'timeline_cb=' + Date.now();
+  };
+  const toast = msg => {
+    if(typeof window.showToast === 'function') window.showToast(msg);
+    else alert(msg);
+  };
+
+  function normalize(item, index){
+    if(!item || typeof item !== 'object') return null;
+    return {
+      id:String(item.id || ('timeline-'+Date.now()+'-'+Math.random().toString(36).slice(2,8))),
+      ano:String(item.ano || '').trim().slice(0,30),
+      decada:String(item.decada || '').trim(),
+      titulo:String(item.titulo || '').trim().slice(0,180),
+      descricao:String(item.descricao || '').trim().slice(0,1200),
+      foto:String(item.foto || '').trim(),
+      destaque:item.destaque === true,
+      ordem:Number(item.ordem || index + 1)
+    };
+  }
+
+  function setStatus(message){
+    const el=$('statusTimelineAdmin');
+    if(el) el.textContent=message;
+  }
+
+  function getToken(){ return localStorage.getItem(TOKEN_KEY) || ''; }
+
+  async function api(path, options={}){
+    const headers = new Headers(options.headers || {});
+    if(options.body && !(options.body instanceof FormData) && !headers.has('Content-Type')){
+      headers.set('Content-Type','application/json');
+    }
+    const token=getToken();
+    if(token) headers.set('Authorization','Bearer '+token);
+    const r=await fetch(API_BASE+path,{...options,headers,cache:'no-store'});
+    let payload=null;
+    try{ payload=await r.json(); }catch{}
+    if(!r.ok){ throw new Error(payload?.error || `Cloudflare API HTTP ${r.status}`); }
+    return payload;
+  }
+
+  async function uploadFoto(file){
+    if(!file) return '';
+    if(!String(file.type||'').startsWith('image/')) throw new Error('O arquivo precisa ser uma imagem.');
+    if(file.size > 6*1024*1024) throw new Error('A imagem deve ter no máximo 6 MB.');
+    const token=getToken();
+    if(!token) throw new Error('Sessão administrativa expirada. Faça login novamente.');
+    const form=new FormData();
+    form.append('file', file, file.name || ('timeline-'+Date.now()+'.jpg'));
+    const r=await fetch(API_BASE+'/api/admin/upload?folder='+encodeURIComponent('linha-do-tempo'),{
+      method:'POST',headers:{Authorization:'Bearer '+token},body:form
+    });
+    let data=null; try{data=await r.json();}catch{}
+    if(!r.ok) throw new Error(data?.error || `Cloudflare API HTTP ${r.status}`);
+    if(!data?.url) throw new Error('O Worker não retornou a URL da foto.');
+    return data.url;
+  }
+
+  function render(){
+    const el=$('listaTimelineAdmin'); if(!el)return;
+    const filtro=String($('filtroTimelineAdmin')?.value || '').trim().toLowerCase();
+    const decada=String($('filtroTimelineDecada')?.value || '');
+    const all=[...state].sort((a,b)=>Number(a.ordem||0)-Number(b.ordem||0));
+    const list=all.filter(ev=>
+      (!filtro || `${ev.ano} ${ev.titulo} ${ev.descricao}`.toLowerCase().includes(filtro)) &&
+      (!decada || String(ev.decada)===decada)
+    );
+    if(!list.length){
+      el.innerHTML='<div class="timeline-admin-empty"><strong>Nenhum acontecimento encontrado.</strong><div>Cadastre um novo marco ou ajuste os filtros.</div></div>';
+      return;
+    }
+    el.innerHTML=list.map(ev=>{
+      const idx=all.findIndex(x=>String(x.id)===String(ev.id));
+      const foto=ev.foto || 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="120"><rect width="100%" height="100%" fill="#eef2ef"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#738095" font-family="Arial" font-size="14">Sem foto</text></svg>');
+      return `<article class="timeline-admin-item" draggable="false" data-timeline-card="${esc(ev.id)}">
+        <div class="timeline-admin-drag" title="Use as setas para reordenar">↕</div>
+        <img class="timeline-admin-thumb" src="${esc(cacheUrl(foto))}" alt="${esc(ev.titulo)}">
+        <div><div class="timeline-admin-year">${esc(ev.ano)}${ev.destaque?' · Destaque':''}</div><div class="timeline-admin-title">${esc(ev.titulo)}</div><div class="timeline-admin-desc">${esc(ev.descricao||'Sem descrição')}</div></div>
+        <div class="timeline-admin-actions">
+          <button type="button" data-timeline-action="up" data-timeline-id="${esc(ev.id)}" ${idx===0?'disabled':''}>↑</button>
+          <button type="button" data-timeline-action="down" data-timeline-id="${esc(ev.id)}" ${idx===all.length-1?'disabled':''}>↓</button>
+          <button type="button" data-timeline-action="edit" data-timeline-id="${esc(ev.id)}">Editar</button>
+          <button type="button" data-timeline-action="duplicate" data-timeline-id="${esc(ev.id)}">Duplicar</button>
+          <button type="button" data-timeline-action="delete" data-timeline-id="${esc(ev.id)}">Excluir</button>
+        </div>
+      </article>`;
+    }).join('');
+  }
+
+  async function load(notify=false){
+    try{
+      const data=await api('/api/config/timeline_events?v='+Date.now(),{method:'GET'});
+      const arr=Array.isArray(data?.valor) ? data.valor : (Array.isArray(data?.valor?.itens) ? data.valor.itens : []);
+      state=(arr.length ? arr.map(normalize).filter(Boolean) : DEFAULT_EVENTS.map((x,i)=>({...x,ordem:i+1}))).sort((a,b)=>Number(a.ordem||0)-Number(b.ordem||0));
+      setStatus('Linha do Tempo carregada do servidor.');
+    }catch(err){
+      state=DEFAULT_EVENTS.map((x,i)=>({...x,ordem:i+1}));
+      setStatus('Não foi possível carregar o servidor. Os marcos padrão estão sendo exibidos.');
+      console.error('Linha do Tempo:',err);
+      if(notify) toast('Não foi possível carregar a Linha do Tempo.');
+    }
+    render();
+    initialized=true;
+    return state;
+  }
+
+  async function save(notify=true){
+    const token=getToken();
+    if(!token){ toast('Sessão administrativa expirada. Faça login novamente.'); return false; }
+    try{
+      const payload=state.map((x,i)=>({...x,ordem:i+1}));
+      await api('/api/admin/config/timeline_events',{method:'PUT',body:JSON.stringify({valor:payload})});
+      state=payload;
+      render();
+      setStatus('Alterações salvas no Cloudflare.');
+      if(notify) toast('Linha do Tempo salva com sucesso no Cloudflare.');
+      return true;
+    }catch(err){
+      console.error('Erro ao salvar Linha do Tempo:',err);
+      toast('Não foi possível salvar a Linha do Tempo: '+(err.message||'erro desconhecido'));
+      return false;
+    }
+  }
+
+  function openModal(id=''){
+    editId=String(id||'');
+    const ev=editId ? state.find(x=>String(x.id)===editId) : null;
+    const modal=$('modalTimelineEditor'); if(!modal)return;
+    $('tituloModalTimeline').textContent=ev?'Editar acontecimento':'Novo acontecimento';
+    $('timelineEditId').value=ev?.id||'';
+    $('timelineAno').value=ev?.ano||'';
+    $('timelineDecada').value=ev?.decada||'';
+    $('timelineTitulo').value=ev?.titulo||'';
+    $('timelineDescricao').value=ev?.descricao||'';
+    $('timelineFotoUrl').value=ev?.foto||'';
+    $('timelineDestaque').checked=ev?.destaque===true;
+    $('timelineFotoArquivo').value='';
+    $('timelinePreviewFoto').src=ev?.foto ? cacheUrl(ev.foto) : '';
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden','false');
+    setTimeout(()=>$('timelineTitulo')?.focus(),50);
+  }
+
+  function closeModal(){
+    const modal=$('modalTimelineEditor');
+    if(modal){ modal.classList.remove('active'); modal.setAttribute('aria-hidden','true'); }
+    editId='';
+  }
+
+  async function submitForm(event){
+    if(event) event.preventDefault();
+    const id=String($('timelineEditId')?.value||'').trim();
+    const ano=String($('timelineAno')?.value||'').trim();
+    const decada=String($('timelineDecada')?.value||'').trim();
+    const titulo=String($('timelineTitulo')?.value||'').trim();
+    const descricao=String($('timelineDescricao')?.value||'').trim();
+    const arquivo=$('timelineFotoArquivo')?.files?.[0];
+    let foto=String($('timelineFotoUrl')?.value||'').trim();
+    if(!ano || !titulo){ toast('Informe o ano/período e o título do acontecimento.'); return false; }
+    try{
+      if(arquivo){ toast('Enviando foto do acontecimento...'); foto=await uploadFoto(arquivo); }
+      const registro={id:id||('timeline-'+Date.now()+'-'+Math.random().toString(36).slice(2,8)),ano,decada,titulo,descricao,foto,destaque:$('timelineDestaque')?.checked===true,ordem:0};
+      if(id){
+        const idx=state.findIndex(x=>String(x.id)===id);
+        if(idx>=0){registro.ordem=state[idx].ordem;state[idx]=registro;}
+        else state.push(registro);
+      }else{ registro.ordem=state.length+1; state.push(registro); }
+      const ok=await save(false);
+      if(ok){ closeModal(); toast(id?'Acontecimento atualizado com sucesso.':'Acontecimento cadastrado com sucesso.'); }
+      return ok;
+    }catch(err){ console.error(err); toast('Não foi possível salvar o acontecimento: '+(err.message||'erro desconhecido')); return false; }
+  }
+
+  async function remove(id){
+    const ev=state.find(x=>String(x.id)===String(id));
+    if(!ev)return;
+    if(!confirm(`Excluir o acontecimento “${ev.titulo}”?`))return;
+    state=state.filter(x=>String(x.id)!==String(id));
+    const ok=await save(true);
+    if(!ok){ await load(false); }
+  }
+
+  async function duplicate(id){
+    const ev=state.find(x=>String(x.id)===String(id)); if(!ev)return;
+    state.push({...ev,id:'timeline-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),titulo:ev.titulo+' (cópia)',destaque:false,ordem:state.length+1});
+    await save(true);
+  }
+
+  async function move(id,direction){
+    const list=[...state].sort((a,b)=>Number(a.ordem||0)-Number(b.ordem||0));
+    const idx=list.findIndex(x=>String(x.id)===String(id)); const next=idx+direction;
+    if(idx<0 || next<0 || next>=list.length)return;
+    [list[idx],list[next]]=[list[next],list[idx]];
+    state=list.map((x,i)=>({...x,ordem:i+1}));
+    await save(true);
+  }
+
+  async function restore(){
+    if(!confirm('Restaurar os marcos padrão da Linha do Tempo? Os acontecimentos cadastrados manualmente serão substituídos.'))return;
+    state=DEFAULT_EVENTS.map((x,i)=>({...x,ordem:i+1}));
+    render();
+    await save(true);
+  }
+
+  function manualRender(){ render(); }
+
+  function bind(){
+    if(initialized===false) render();
+    const novo=$('btnNovoEventoTimeline');
+    const atualizar=$('btnAtualizarTimeline');
+    const restaurar=$('btnRestaurarTimeline');
+    const salvar=$('btnSalvarTimelineAlteracoes');
+    const fechar=$('btnFecharModalTimeline');
+    const cancelar=$('btnCancelarModalTimeline');
+    const form=$('formTimelineAdmin');
+    const lista=$('listaTimelineAdmin');
+    const filtro=$('filtroTimelineAdmin');
+    const decada=$('filtroTimelineDecada');
+
+    if(novo && !novo.dataset.timelineController){novo.dataset.timelineController='1';novo.addEventListener('click',e=>{e.preventDefault();openModal('');});}
+    if(atualizar && !atualizar.dataset.timelineController){atualizar.dataset.timelineController='1';atualizar.addEventListener('click',e=>{e.preventDefault();load(true);});}
+    if(restaurar && !restaurar.dataset.timelineController){restaurar.dataset.timelineController='1';restaurar.addEventListener('click',e=>{e.preventDefault();restore();});}
+    if(salvar && !salvar.dataset.timelineController){salvar.dataset.timelineController='1';salvar.addEventListener('click',e=>{e.preventDefault();save(true);});}
+    if(fechar && !fechar.dataset.timelineController){fechar.dataset.timelineController='1';fechar.addEventListener('click',e=>{e.preventDefault();closeModal();});}
+    if(cancelar && !cancelar.dataset.timelineController){cancelar.dataset.timelineController='1';cancelar.addEventListener('click',e=>{e.preventDefault();closeModal();});}
+    if(form && !form.dataset.timelineController){form.dataset.timelineController='1';form.addEventListener('submit',e=>submitForm(e));}
+    if(filtro && !filtro.dataset.timelineController){filtro.dataset.timelineController='1';filtro.addEventListener('input',manualRender);}
+    if(decada && !decada.dataset.timelineController){decada.dataset.timelineController='1';decada.addEventListener('change',manualRender);}
+    if(lista && !lista.dataset.timelineController){
+      lista.dataset.timelineController='1';
+      lista.addEventListener('click',e=>{
+        const btn=e.target.closest('[data-timeline-action]'); if(!btn || btn.disabled)return;
+        e.preventDefault(); e.stopPropagation();
+        const id=btn.getAttribute('data-timeline-id')||'';
+        const action=btn.getAttribute('data-timeline-action');
+        if(action==='edit')openModal(id);
+        else if(action==='duplicate')duplicate(id);
+        else if(action==='delete')remove(id);
+        else if(action==='up')move(id,-1);
+        else if(action==='down')move(id,1);
+      });
+    }
+    const nav=document.querySelector('.admin-nav-item[onclick*="tabLinhaTempo"]');
+    if(nav && !nav.dataset.timelineController){
+      nav.dataset.timelineController='1';
+      nav.addEventListener('click',()=>setTimeout(()=>{bind();load(false);},20));
+    }
+    const modal=$('modalTimelineEditor');
+    if(modal && !modal.dataset.timelineController){
+      modal.dataset.timelineController='1';
+      modal.addEventListener('click',e=>{if(e.target===modal)closeModal();});
+    }
+    const fotoArquivo=$('timelineFotoArquivo');
+    if(fotoArquivo && !fotoArquivo.dataset.timelineController){
+      fotoArquivo.dataset.timelineController='1';
+      fotoArquivo.addEventListener('change',()=>{
+        const f=fotoArquivo.files?.[0]; if(!f)return;
+        const reader=new FileReader(); reader.onload=()=>{if($('timelinePreviewFoto'))$('timelinePreviewFoto').src=reader.result;}; reader.readAsDataURL(f);
+      });
+    }
+    const fotoUrl=$('timelineFotoUrl');
+    if(fotoUrl && !fotoUrl.dataset.timelineController){
+      fotoUrl.dataset.timelineController='1';
+      fotoUrl.addEventListener('input',()=>{const v=fotoUrl.value.trim();if(v && $('timelinePreviewFoto'))$('timelinePreviewFoto').src=cacheUrl(v);});
+    }
+  }
+
+  const apiObj={
+    abrirModalEventoTimeline:openModal,
+    editarEventoTimeline:openModal,
+    fecharModalEventoTimeline:closeModal,
+    salvarEventoTimeline:submitForm,
+    excluirEventoTimeline:remove,
+    duplicarEventoTimeline:duplicate,
+    moverTimeline:move,
+    restaurarTimelinePadrao:restore,
+    carregarTimelineDoBanco:load,
+    renderListaTimelineAdmin:manualRender,
+    salvarTimelineNoBanco:save,
+    arrastarTimeline:()=>{},
+    soltarTimeline:()=>{}
+  };
+  Object.assign(window,apiObj);
+
+  function start(){ bind(); load(false); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start,{once:true});
+  else start();
+  window.addEventListener('load',bind,{once:true});
+})();
+</script>
 
 <script id="fmabc-admin-standalone-script">
 (function(){
