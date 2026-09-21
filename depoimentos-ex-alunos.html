@@ -159,6 +159,23 @@ body::before{content:"";position:fixed;inset:0;background-image:var(--bg-image);
     .public-memory-menu-link, .logo-img { animation: none !important; transition: none !important; }
   }
 </style>
+
+<style id="fmabc-lgpd-style">
+  .lgpd-footer-links{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}
+  .lgpd-footer-links a{color:inherit;text-decoration:underline;text-underline-offset:3px;font-weight:700}
+  .lgpd-notice{position:fixed;left:18px;right:18px;bottom:18px;z-index:10000;background:#fff;border:1px solid #d8dfdb;border-radius:14px;box-shadow:0 16px 38px rgba(35,39,56,.18);padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:18px;max-width:1100px;margin:0 auto;font-family:Arial,'Helvetica Neue',Helvetica,sans-serif}
+  .lgpd-notice-text{color:#45506a;font-size:.84rem;line-height:1.55}
+  .lgpd-notice-text strong{color:#2e3b62}
+  .lgpd-notice-actions{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+  .lgpd-notice-actions a,.lgpd-notice-actions button{border-radius:8px;padding:9px 13px;font-size:.78rem;font-weight:800;cursor:pointer;text-decoration:none;border:1px solid #d7dee7;background:#fff;color:#4b5172}
+  .lgpd-notice-actions button{background:#339c5b;border-color:#339c5b;color:#fff}
+  .lgpd-consent{display:flex;gap:10px;align-items:flex-start;margin-top:14px;padding:12px 14px;background:#f5f8f6;border:1px solid #dfe8e2;border-radius:10px;color:#4c586e;font-size:.83rem;line-height:1.5}
+  .lgpd-consent input{margin-top:3px;width:17px;height:17px;accent-color:#339c5b;flex:0 0 auto}
+  .lgpd-consent a{color:#2f8d52;font-weight:800}
+  .lgpd-consent-error{display:none;margin-top:8px;color:#a43b4d;font-size:.79rem;font-weight:700}
+  @media(max-width:700px){.lgpd-notice{left:10px;right:10px;bottom:10px;flex-direction:column;align-items:flex-start}.lgpd-notice-actions{width:100%;justify-content:flex-end}.lgpd-notice-actions a,.lgpd-notice-actions button{flex:1;text-align:center}}
+</style>
+
 </head>
 <body>
 <nav class="top-nav" aria-label="Navegação principal">
@@ -174,11 +191,12 @@ body::before{content:"";position:fixed;inset:0;background-image:var(--bg-image);
   </nav>
 <main class="page-container">
 <section class="page-hero"><span class="page-kicker">Memória FMABC</span><h1 class="page-title">Depoimentos de ex-alunos</h1><p class="page-subtitle">Memórias, experiências e mensagens de quem fez parte da história da FMABC.</p></section>
-<section class="page-content"><h2 class="placeholder-title">Compartilhe sua memória</h2><div id="fmabcEditableContent" class="placeholder-text" style="max-width:none"><p>Envie seu depoimento para integrar o acervo histórico da sua turma. O conteúdo será encaminhado para análise antes da publicação.</p></div><div class="form-card"><form id="formDepoimento" novalidate><div class="grid-2"><div class="field"><label for="nome">Seu nome</label><input id="nome" maxlength="120" required placeholder="Nome completo ou nome social"></div><div class="field"><label for="turma">Sua turma / curso</label><select id="turma" required><option value="">Carregando turmas...</option></select></div><div class="field full"><label for="texto">Seu depoimento</label><textarea id="texto" maxlength="300" required placeholder="Escreva sua mensagem sobre seu período na FMABC..."></textarea></div></div><div class="submit-row"><button type="submit" class="btn-submit">Enviar depoimento</button></div><div class="status" id="status"></div></form></div></section>
+<section class="page-content"><h2 class="placeholder-title">Compartilhe sua memória</h2><div id="fmabcEditableContent" class="placeholder-text" style="max-width:none"><p>Envie seu depoimento para integrar o acervo histórico da sua turma. O conteúdo será encaminhado para análise antes da publicação.</p></div><div class="form-card"><form id="formDepoimento" novalidate><div class="grid-2"><div class="field"><label for="nome">Seu nome</label><input id="nome" maxlength="120" required placeholder="Nome completo ou nome social"></div><div class="field"><label for="turma">Sua turma / curso</label><select id="turma" required><option value="">Carregando turmas...</option></select></div><div class="field full"><label for="texto">Seu depoimento</label><textarea id="texto" maxlength="300" required placeholder="Escreva sua mensagem sobre seu período na FMABC..."></textarea></div></div><div class="lgpd-consent"><input type="checkbox" id="consentimentoLGPD" required><label for="consentimentoLGPD">Li a <a href="politica-privacidade.html" target="_blank" rel="noopener noreferrer">Política de Privacidade</a> e, de forma livre, informada e inequívoca, autorizo o tratamento do meu nome, turma/curso e depoimento para recebimento, análise, aprovação e publicação no Portal de Ex-Alunos FMABC.</label></div><div class="lgpd-consent-error" id="lgpdConsentError">Para enviar o depoimento, marque a opção de ciência e autorização do tratamento dos dados.</div><div class="submit-row"><button type="submit" class="btn-submit">Enviar depoimento</button></div><div class="status" id="status"></div></form></div></section>
 </main>
 <footer class="footer">
   <p id="footerAddress">Endereço: Av. Príncipe de Gales, 821 - Vila Príncipe de Gales, Santo André - SP</p>
   <p id="footerEmail">Contato: contato@fmabc.br</p>
+<div class="lgpd-footer-links" aria-label="Privacidade e proteção de dados"><a href="politica-privacidade.html">Política de Privacidade</a><span aria-hidden="true">|</span><a href="mailto:lgpd@fmabc.br">Canal LGPD: lgpd@fmabc.br</a></div>
   <div class="credit">Desenvolvido por Regiane Meira</div>
 </footer>
 <script>const CLOUDFLARE_API_URL = "https://fmabc-acervo-api.armredessociais.workers.dev";
@@ -200,7 +218,7 @@ async function carregarRodape(){try{const r=await fetch(`${CLOUDFLARE_API_URL}/a
 document.addEventListener('DOMContentLoaded',()=>{Promise.all([carregarMenu(),carregarPlanoDeFundo(),carregarRodape()]);});</script>
 <script>
 async function carregarTurmas(){const s=document.getElementById('turma');try{const r=await fetch(`${CLOUDFLARE_API_URL}/api/turmas?v=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);const lista=await r.json();s.innerHTML='<option value="">Selecione sua turma...</option>'; (Array.isArray(lista)?lista:[]).forEach(t=>{const o=document.createElement('option');o.value=t.id;o.textContent=`${t.titulo||t.nome||'Turma'}${t.ano?' • '+t.ano:''}`;s.appendChild(o)});if(s.options.length===1)s.innerHTML='<option value="">Nenhuma turma disponível</option>';}catch(e){s.innerHTML='<option value="">Não foi possível carregar as turmas</option>';}}
-document.getElementById('formDepoimento').addEventListener('submit',async e=>{e.preventDefault();const nome=document.getElementById('nome').value.trim(),turma_id=document.getElementById('turma').value,text=document.getElementById('texto').value.trim(),status=document.getElementById('status');if(!nome||!turma_id||!text){status.textContent='Preencha todos os campos.';return}status.textContent='Enviando...';try{const r=await fetch(`${CLOUDFLARE_API_URL}/api/depoimentos`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({turma_id,autor:nome,texto:text})});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.error||'Não foi possível enviar o depoimento.');e.target.reset();status.textContent='Depoimento enviado para análise.';}catch(err){status.textContent=err.message||'Não foi possível enviar o depoimento.';}});carregarTurmas();
+document.getElementById('formDepoimento').addEventListener('submit',async e=>{e.preventDefault();const nome=document.getElementById('nome').value.trim(),turma_id=document.getElementById('turma').value,text=document.getElementById('texto').value.trim(),consentimento=document.getElementById('consentimentoLGPD'),consentError=document.getElementById('lgpdConsentError'),status=document.getElementById('status');if(!nome||!turma_id||!text){status.textContent='Preencha todos os campos.';return}if(!consentimento?.checked){consentError.style.display='block';consentimento?.focus();status.textContent='';return}consentError.style.display='none';status.textContent='Enviando...';try{const r=await fetch(`${CLOUDFLARE_API_URL}/api/depoimentos`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({turma_id,autor:nome,texto:text,lgpd_aceito:true,politica_versao:'1.0'})});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.error||'Não foi possível enviar o depoimento.');e.target.reset();status.textContent='Depoimento enviado para análise.';}catch(err){status.textContent=err.message||'Não foi possível enviar o depoimento.';}});carregarTurmas();
 </script>
 
 \n<script id="fmabc-editable-system-page">
@@ -276,6 +294,22 @@ document.getElementById('formDepoimento').addEventListener('submit',async e=>{e.
         document.title='Página indisponível | Memória FMABC';
       }
     }).catch(()=>{});
+})();
+</script>
+
+
+<div class="lgpd-notice" id="fmabcLgpdNotice" role="region" aria-label="Aviso de privacidade">
+  <div class="lgpd-notice-text"><strong>Privacidade e proteção de dados:</strong> este portal trata dados pessoais conforme a legislação aplicável e a Política de Privacidade. Consulte as finalidades, os direitos do titular e o canal LGPD da FMABC.</div>
+  <div class="lgpd-notice-actions"><a href="politica-privacidade.html">Política de Privacidade</a><button type="button" id="fmabcLgpdNoticeClose">Entendi</button></div>
+</div>
+<script id="fmabc-lgpd-notice-script">
+(function(){
+  const key='fmabc_lgpd_notice_v1';
+  const el=document.getElementById('fmabcLgpdNotice');
+  const btn=document.getElementById('fmabcLgpdNoticeClose');
+  if(!el)return;
+  try{ if(localStorage.getItem(key)==='1') el.remove(); }catch(e){}
+  btn?.addEventListener('click',()=>{try{localStorage.setItem(key,'1');}catch(e){}el.remove();});
 })();
 </script>
 

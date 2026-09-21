@@ -170,6 +170,23 @@ body::before{content:"";position:fixed;inset:0;background-image:var(--bg-image);
   .timeline-loading{text-align:center;padding:30px;color:var(--muted)}
   @media(max-width:780px){.timeline-page-wrap{padding:22px}.timeline-publico::before{left:22px;transform:none}.timeline-evento{grid-template-columns:44px 1fr;gap:12px}.timeline-marker{grid-column:1;width:44px;height:44px;font-size:.64rem}.timeline-evento-slot.left,.timeline-evento-slot.right{grid-column:2}.timeline-evento-card{padding:15px}.timeline-decadas{justify-content:flex-start}}
 </style>
+
+<style id="fmabc-lgpd-style">
+  .lgpd-footer-links{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}
+  .lgpd-footer-links a{color:inherit;text-decoration:underline;text-underline-offset:3px;font-weight:700}
+  .lgpd-notice{position:fixed;left:18px;right:18px;bottom:18px;z-index:10000;background:#fff;border:1px solid #d8dfdb;border-radius:14px;box-shadow:0 16px 38px rgba(35,39,56,.18);padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:18px;max-width:1100px;margin:0 auto;font-family:Arial,'Helvetica Neue',Helvetica,sans-serif}
+  .lgpd-notice-text{color:#45506a;font-size:.84rem;line-height:1.55}
+  .lgpd-notice-text strong{color:#2e3b62}
+  .lgpd-notice-actions{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+  .lgpd-notice-actions a,.lgpd-notice-actions button{border-radius:8px;padding:9px 13px;font-size:.78rem;font-weight:800;cursor:pointer;text-decoration:none;border:1px solid #d7dee7;background:#fff;color:#4b5172}
+  .lgpd-notice-actions button{background:#339c5b;border-color:#339c5b;color:#fff}
+  .lgpd-consent{display:flex;gap:10px;align-items:flex-start;margin-top:14px;padding:12px 14px;background:#f5f8f6;border:1px solid #dfe8e2;border-radius:10px;color:#4c586e;font-size:.83rem;line-height:1.5}
+  .lgpd-consent input{margin-top:3px;width:17px;height:17px;accent-color:#339c5b;flex:0 0 auto}
+  .lgpd-consent a{color:#2f8d52;font-weight:800}
+  .lgpd-consent-error{display:none;margin-top:8px;color:#a43b4d;font-size:.79rem;font-weight:700}
+  @media(max-width:700px){.lgpd-notice{left:10px;right:10px;bottom:10px;flex-direction:column;align-items:flex-start}.lgpd-notice-actions{width:100%;justify-content:flex-end}.lgpd-notice-actions a,.lgpd-notice-actions button{flex:1;text-align:center}}
+</style>
+
 </head>
 <body>
 <nav class="top-nav" aria-label="Navegação principal">
@@ -196,6 +213,7 @@ body::before{content:"";position:fixed;inset:0;background-image:var(--bg-image);
 <footer class="footer">
   <p id="footerAddress">Endereço: Av. Príncipe de Gales, 821 - Vila Príncipe de Gales, Santo André - SP</p>
   <p id="footerEmail">Contato: contato@fmabc.br</p>
+  <div class="lgpd-footer-links" aria-label="Privacidade e proteção de dados"><a href="politica-privacidade.html">Política de Privacidade</a><span aria-hidden="true">|</span><a href="mailto:lgpd@fmabc.br">Canal LGPD: lgpd@fmabc.br</a></div>
   <div class="credit">Desenvolvido por Regiane Meira</div>
 </footer>
 <script>const CLOUDFLARE_API_URL = "https://fmabc-acervo-api.armredessociais.workers.dev";
@@ -219,6 +237,22 @@ document.addEventListener('DOMContentLoaded',()=>{Promise.all([carregarMenu(),ca
 
 \n\n
 
+
+
+<div class="lgpd-notice" id="fmabcLgpdNotice" role="region" aria-label="Aviso de privacidade">
+  <div class="lgpd-notice-text"><strong>Privacidade e proteção de dados:</strong> este portal trata dados pessoais conforme a legislação aplicável e a Política de Privacidade. Consulte as finalidades, os direitos do titular e o canal LGPD da FMABC.</div>
+  <div class="lgpd-notice-actions"><a href="politica-privacidade.html">Política de Privacidade</a><button type="button" id="fmabcLgpdNoticeClose">Entendi</button></div>
+</div>
+<script id="fmabc-lgpd-notice-script">
+(function(){
+  const key='fmabc_lgpd_notice_v1';
+  const el=document.getElementById('fmabcLgpdNotice');
+  const btn=document.getElementById('fmabcLgpdNoticeClose');
+  if(!el)return;
+  try{ if(localStorage.getItem(key)==='1') el.remove(); }catch(e){}
+  btn?.addEventListener('click',()=>{try{localStorage.setItem(key,'1');}catch(e){}el.remove();});
+})();
+</script>
 
 </body></html>
 

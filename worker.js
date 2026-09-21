@@ -118,6 +118,15 @@ async function ensureDepoimentosSchema(env) {
     if (!cols.includes('aprovado')) {
       await env.DB.prepare(`ALTER TABLE depoimentos ADD COLUMN aprovado INTEGER NOT NULL DEFAULT 0`).run();
     }
+    if (!cols.includes('lgpd_aceito')) {
+      await env.DB.prepare(`ALTER TABLE depoimentos ADD COLUMN lgpd_aceito INTEGER NOT NULL DEFAULT 0`).run();
+    }
+    if (!cols.includes('lgpd_aceito_em')) {
+      await env.DB.prepare(`ALTER TABLE depoimentos ADD COLUMN lgpd_aceito_em TEXT`).run();
+    }
+    if (!cols.includes('politica_versao')) {
+      await env.DB.prepare(`ALTER TABLE depoimentos ADD COLUMN politica_versao TEXT`).run();
+    }
   } catch (error) {
     // A falha de preparação do schema não deve ocultar o erro real da rota.
     console.error('Erro ao preparar schema de depoimentos:', error);
@@ -156,8 +165,11 @@ async function createPublicDepoimento(request, env) {
   const turmaId = String(body?.turma_id || '').trim();
   const autor = String(body?.autor || '').trim();
   const texto = String(body?.texto || '').trim();
+  const lgpdAceito = body?.lgpd_aceito === true;
+  const politicaVersao = String(body?.politica_versao || '1.0').trim().slice(0, 20) || '1.0';
 
   if (!turmaId || !autor || !texto) return json({ error: 'Nome, turma e depoimento são obrigatórios.' }, 400);
+  if (!lgpdAceito) return json({ error: 'É necessário aceitar a Política de Privacidade para enviar o depoimento.' }, 400);
   if (autor.length > 160) return json({ error: 'O nome informado é muito longo.' }, 400);
   if (texto.length > 300) return json({ error: 'O depoimento deve ter no máximo 300 caracteres.' }, 400);
 
@@ -166,9 +178,9 @@ async function createPublicDepoimento(request, env) {
 
   const id = crypto.randomUUID();
   await env.DB.prepare(`
-    INSERT INTO depoimentos (id, turma_id, autor, texto, aprovado, created_at)
-    VALUES (?, ?, ?, ?, 0, CURRENT_TIMESTAMP)
-  `).bind(id, turmaId, autor, texto).run();
+    INSERT INTO depoimentos (id, turma_id, autor, texto, aprovado, lgpd_aceito, lgpd_aceito_em, politica_versao, created_at)
+    VALUES (?, ?, ?, ?, 0, 1, ?, ?, CURRENT_TIMESTAMP)
+  `).bind(id, turmaId, autor, texto, new Date().toISOString(), politicaVersao).run();
 
   return json({ ok: true, id, status: 'pendente' }, 201);
 }
@@ -182,7 +194,7 @@ async function listPendingDepoimentos(request, env) {
 
   if (turmaId) {
     const { results = [] } = await env.DB.prepare(`
-      SELECT id, turma_id, autor, texto, created_at
+      SELECT id, turma_id, autor, texto, lgpd_aceito, lgpd_aceito_em, politica_versao, created_at
       FROM depoimentos
       WHERE turma_id = ? AND aprovado = 0
       ORDER BY datetime(created_at) ASC, id ASC
@@ -191,7 +203,7 @@ async function listPendingDepoimentos(request, env) {
   }
 
   const { results = [] } = await env.DB.prepare(`
-    SELECT id, turma_id, autor, texto, created_at
+    SELECT id, turma_id, autor, texto, lgpd_aceito, lgpd_aceito_em, politica_versao, created_at
     FROM depoimentos
     WHERE aprovado = 0
     ORDER BY datetime(created_at) ASC, id ASC
