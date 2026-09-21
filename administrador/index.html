@@ -7435,5 +7435,198 @@ function switchAdminTab(e, tabId) {
 })();
 </script>
 
+
+<style id="fmabc-timeline-final-fix-style">
+  /* A página administrativa é independente e oculta elementos irmãos do overlay legado.
+     O editor da Linha do Tempo também precisa ficar acima dessa regra quando aberto. */
+  body.fmabc-admin-standalone > #modalTimelineEditor.active {
+    display:flex !important;
+    position:fixed !important;
+    inset:0 !important;
+    z-index:12050 !important;
+    align-items:center !important;
+    justify-content:center !important;
+    padding:20px !important;
+    background:rgba(17,24,39,.58) !important;
+  }
+  body.fmabc-admin-standalone > #modalTimelineEditor.active .timeline-modal {
+    display:block !important;
+    visibility:visible !important;
+    opacity:1 !important;
+  }
+  #modalTimelineEditor.active .timeline-modal-close,
+  #modalTimelineEditor.active .timeline-btn,
+  #modalTimelineEditor.active input,
+  #modalTimelineEditor.active select,
+  #modalTimelineEditor.active textarea { pointer-events:auto !important; }
+</style>
+<script id="fmabc-timeline-final-fix">
+(function(){
+  'use strict';
+  const API = 'https://fmabc-acervo-api.armredessociais.workers.dev';
+  const KEY = 'timeline_events';
+  const TOKEN_KEY = 'fmabc_cf_admin_token';
+  const DEFAULTS = [
+    {id:'timeline-1969',ano:'1969',decada:'1960',titulo:'Autorização da Faculdade de Medicina do ABC',descricao:'Autorização da instituição para funcionar como Faculdade de Medicina do ABC.',foto:'',destaque:true,ordem:1},
+    {id:'timeline-1971',ano:'1971',decada:'1970',titulo:'Primeiro prédio do campus',descricao:'Entrega do primeiro prédio do campus universitário, o Prédio Central.',foto:'',destaque:false,ordem:2},
+    {id:'timeline-1975',ano:'1975',decada:'1970',titulo:'Reconhecimento federal',descricao:'Reconhecimento da Faculdade de Medicina do ABC pelo Decreto Federal nº 76.858; início do Programa de Residência Médica e inauguração de laboratórios no Prédio Central.',foto:'',destaque:false,ordem:3},
+    {id:'timeline-1976',ano:'1976',decada:'1970',titulo:'Primeiro Congresso Médico Universitário do ABC',descricao:'Realização da primeira edição do Congresso Médico Universitário do ABC (COMUABC).',foto:'',destaque:false,ordem:4},
+    {id:'timeline-1982',ano:'1982',decada:'1980',titulo:'Credenciamento da Residência Médica',descricao:'Credenciamento dos programas de Residência Médica pela Comissão Nacional de Residência Médica (CNRM/MEC).',foto:'',destaque:false,ordem:5},
+    {id:'timeline-1983',ano:'1983',decada:'1980',titulo:'Transferência para o sistema estadual',descricao:'Transferência da Faculdade de Medicina do ABC do sistema federal para o sistema estadual de ensino.',foto:'',destaque:false,ordem:6},
+    {id:'timeline-1998',ano:'1998',decada:'1990',titulo:'Início da Pós-Graduação stricto sensu',descricao:'Início do Programa de Pós-Graduação stricto sensu, nível Mestrado, em Ciências da Saúde.',foto:'',destaque:false,ordem:7},
+    {id:'timeline-2000',ano:'2000',decada:'2000',titulo:'Implantação do Curso de Farmácia',descricao:'Implantação do Curso de Graduação em Farmácia e inauguração do Anexo 3 (Bloco CEU).',foto:'',destaque:false,ordem:8},
+    {id:'timeline-2010',ano:'2010',decada:'2010',titulo:'Denominação como Centro Universitário FMABC',descricao:'Denominação da instituição de ensino superior como Centro Universitário FMABC.',foto:'',destaque:false,ordem:9},
+    {id:'timeline-2013',ano:'2013',decada:'2010',titulo:'Retorno ao sistema federal',descricao:'A FMABC retoma ao sistema federal de ensino, em atendimento à legislação nacional.',foto:'',destaque:false,ordem:10},
+    {id:'timeline-2018',ano:'2018',decada:'2010',titulo:'Transformação em Centro Universitário',descricao:'A Faculdade de Medicina do ABC é transformada em Centro Universitário, em processo oficializado pelo Ministério da Educação.',foto:'',destaque:true,ordem:11},
+    {id:'timeline-2020',ano:'2020',decada:'2020',titulo:'Nome Centro Universitário FMABC',descricao:'Autorização da alteração do nome da instituição para Centro Universitário FMABC.',foto:'',destaque:false,ordem:12},
+    {id:'timeline-2023',ano:'2023',decada:'2020',titulo:'Centro de Formação de Psicólogos e Centro de Simulação',descricao:'Inauguração do Centro de Formação de Psicólogos — Clínica Escola do Curso de Psicologia — e do Centro de Simulação.',foto:'',destaque:false,ordem:13}
+  ];
+  let eventos=[];
+  let editandoId='';
+  let arrastandoId='';
+  let carregando=false;
+  let inicializado=false;
+
+  function esc(v){return String(v ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  function idNovo(){return (window.crypto&&crypto.randomUUID)?crypto.randomUUID():`timeline-${Date.now()}-${Math.random().toString(36).slice(2,9)}`;}
+  function cloneDefault(){return DEFAULTS.map(x=>({...x}));}
+  function normalize(item,i){if(!item||typeof item!=='object')return null;const titulo=String(item.titulo??'').trim();if(!titulo)return null;return {id:String(item.id||idNovo()),ano:String(item.ano??'').trim().slice(0,30),decada:String(item.decada??'').trim(),titulo:titulo.slice(0,180),descricao:String(item.descricao??'').trim().slice(0,1200),foto:String(item.foto??'').trim().slice(0,2000),destaque:item.destaque===true,ordem:Number.isFinite(Number(item.ordem))?Number(item.ordem):i+1};}
+  function ordenados(){return [...eventos].sort((a,b)=>(Number(a.ordem)||0)-(Number(b.ordem)||0));}
+  function setStatus(msg,ok){const el=document.getElementById('statusTimelineAdmin');if(!el)return;el.textContent=msg;el.style.background=ok===false?'#fff6f6':'#f7fbf8';el.style.borderColor=ok===false?'#f0caca':'#dce5df';el.style.color=ok===false?'#9b2c2c':'#45604e';}
+  function showToastFallback(msg){if(typeof window.showToast==='function')window.showToast(msg);else setStatus(msg,false);}
+  function getToken(){return localStorage.getItem(TOKEN_KEY)||'';}
+  async function api(path,options={}){
+    const headers=new Headers(options.headers||{});
+    if(options.body && !headers.has('Content-Type')) headers.set('Content-Type','application/json');
+    const token=getToken(); if(token)headers.set('Authorization',`Bearer ${token}`);
+    const r=await fetch(`${API}${path}`,{...options,headers,cache:'no-store'});
+    if(!r.ok){let msg=`Cloudflare API HTTP ${r.status}`;try{const e=await r.json();if(e?.error)msg=e.error;}catch{}throw new Error(msg);}
+    return r.json();
+  }
+  async function carregar(){
+    if(carregando)return; carregando=true;
+    try{
+      const data=await api(`/api/config/${encodeURIComponent(KEY)}?v=${Date.now()}`);
+      const arr=Array.isArray(data?.valor)?data.valor:(Array.isArray(data?.valor?.itens)?data.valor.itens:[]);
+      eventos=arr.map(normalize).filter(Boolean).sort((a,b)=>(a.ordem||0)-(b.ordem||0));
+      if(!eventos.length)eventos=cloneDefault();
+      render();
+      setStatus(`Dados carregados. ${eventos.length} acontecimento(s).`,true);
+    }catch(err){
+      console.error('[Linha do Tempo] carregar:',err);
+      eventos=cloneDefault(); render(); setStatus(`Não foi possível carregar os dados do Cloudflare: ${err.message||err}`,false);
+    }finally{carregando=false;}
+  }
+  async function salvar(sucesso='Linha do Tempo salva com sucesso.'){
+    if(!getToken()){showToastFallback('Sessão administrativa expirada. Faça login novamente.');return false;}
+    try{
+      const payload=ordenados().map((x,i)=>({...x,ordem:i+1}));
+      setStatus('Salvando alterações no Cloudflare...',true);
+      await api(`/api/admin/config/${encodeURIComponent(KEY)}`,{method:'PUT',body:JSON.stringify({valor:payload})});
+      eventos=payload; render(); setStatus(`${sucesso} Último salvamento: ${new Date().toLocaleString('pt-BR')}.`,true); return true;
+    }catch(err){console.error('[Linha do Tempo] salvar:',err);setStatus(`Não foi possível salvar: ${err.message||err}`,false);showToastFallback(`Não foi possível salvar a Linha do Tempo: ${err.message||err}`);return false;}
+  }
+  function openEditor(id){
+    editandoId=String(id||''); const ev=editandoId?eventos.find(x=>String(x.id)===editandoId):null;
+    const ids=['timelineEditId','timelineAno','timelineDecada','timelineTitulo','timelineDescricao','timelineFotoUrl','timelineDestaque'];
+    const modal=document.getElementById('modalTimelineEditor'); if(!modal)return;
+    document.getElementById('tituloModalTimeline').textContent=ev?'Editar acontecimento':'Novo acontecimento';
+    document.getElementById('timelineEditId').value=ev?.id||'';
+    document.getElementById('timelineAno').value=ev?.ano||'';
+    document.getElementById('timelineDecada').value=ev?.decada||'';
+    document.getElementById('timelineTitulo').value=ev?.titulo||'';
+    document.getElementById('timelineDescricao').value=ev?.descricao||'';
+    document.getElementById('timelineFotoUrl').value=ev?.foto||'';
+    document.getElementById('timelineDestaque').checked=ev?.destaque===true;
+    document.getElementById('timelineFotoArquivo').value='';
+    document.getElementById('timelinePreviewFoto').src=ev?.foto||'';
+    modal.classList.add('active'); modal.setAttribute('aria-hidden','false');
+    document.body.classList.add('timeline-editor-open');
+    setTimeout(()=>document.getElementById('timelineTitulo')?.focus(),50);
+  }
+  function closeEditor(){const m=document.getElementById('modalTimelineEditor');if(m){m.classList.remove('active');m.setAttribute('aria-hidden','true');}editandoId='';}
+  async function submitEditor(e){e?.preventDefault();
+    const id=String(document.getElementById('timelineEditId').value||'').trim();
+    const ano=String(document.getElementById('timelineAno').value||'').trim();
+    const decada=String(document.getElementById('timelineDecada').value||'').trim();
+    const titulo=String(document.getElementById('timelineTitulo').value||'').trim();
+    const descricao=String(document.getElementById('timelineDescricao').value||'').trim();
+    let foto=String(document.getElementById('timelineFotoUrl').value||'').trim();
+    const destaque=document.getElementById('timelineDestaque').checked;
+    const file=document.getElementById('timelineFotoArquivo').files?.[0];
+    if(!ano||!titulo){showToastFallback('Informe o ano/período e o título do acontecimento.');return false;}
+    try{
+      if(file){
+        if(typeof window.enviarArquivoParaStorage!=='function')throw new Error('O envio de foto do administrador não está disponível nesta sessão.');
+        setStatus('Enviando foto para o Cloudflare...',true); foto=await window.enviarArquivoParaStorage(file,'linha-do-tempo');
+      }
+      const reg={id:id||idNovo(),ano,decada,titulo,descricao,foto,destaque,ordem:0};
+      if(id){const idx=eventos.findIndex(x=>String(x.id)===id);if(idx<0)throw new Error('Acontecimento não encontrado.');reg.ordem=eventos[idx].ordem;eventos[idx]=reg;}
+      else{reg.ordem=eventos.length+1;eventos.push(reg);}
+      const ok=await salvar(id?'Acontecimento atualizado e salvo com sucesso.':'Acontecimento cadastrado e salvo com sucesso.');
+      if(ok)closeEditor(); return ok;
+    }catch(err){console.error('[Linha do Tempo] editor:',err);showToastFallback(`Não foi possível salvar: ${err.message||err}`);return false;}
+  }
+  async function duplicar(id){const ev=eventos.find(x=>String(x.id)===String(id));if(!ev)return;eventos.push({...ev,id:idNovo(),titulo:`${ev.titulo} (cópia)`,destaque:false,ordem:eventos.length+1});await salvar('Acontecimento duplicado e salvo com sucesso.');}
+  async function excluir(id){const ev=eventos.find(x=>String(x.id)===String(id));if(!ev)return;if(!window.confirm(`Excluir o acontecimento “${ev.titulo}”?`))return;eventos=eventos.filter(x=>String(x.id)!==String(id));await salvar('Acontecimento excluído e salvo com sucesso.');}
+  async function mover(id,d){const list=ordenados();const idx=list.findIndex(x=>String(x.id)===String(id));const j=idx+d;if(idx<0||j<0||j>=list.length)return;[list[idx],list[j]]=[list[j],list[idx]];eventos=list.map((x,i)=>({...x,ordem:i+1}));await salvar('Ordem da Linha do Tempo salva com sucesso.');}
+  async function drop(idDestino){const origem=arrastandoId;if(!origem||String(origem)===String(idDestino))return;const list=ordenados();const a=list.findIndex(x=>String(x.id)===String(origem));const b=list.findIndex(x=>String(x.id)===String(idDestino));if(a<0||b<0)return;const [mov]=list.splice(a,1);list.splice(b,0,mov);eventos=list.map((x,i)=>({...x,ordem:i+1}));arrastandoId='';await salvar('Ordem da Linha do Tempo salva com sucesso.');}
+  async function restaurar(){if(!window.confirm('Restaurar os marcos padrão? Os acontecimentos atualmente cadastrados serão substituídos.'))return;eventos=cloneDefault();await salvar('Marcos padrão restaurados e salvos com sucesso.');}
+  function render(){
+    const el=document.getElementById('listaTimelineAdmin'); if(!el)return;
+    const filtro=(document.getElementById('filtroTimelineAdmin')?.value||'').trim().toLowerCase();
+    const dec=(document.getElementById('filtroTimelineDecada')?.value||'').trim();
+    const all=ordenados(); const list=all.filter(e=>(!filtro||`${e.ano} ${e.titulo} ${e.descricao}`.toLowerCase().includes(filtro))&&(!dec||String(e.decada)===String(dec)));
+    if(!list.length){el.innerHTML='<div class="timeline-admin-empty"><strong>Nenhum acontecimento encontrado.</strong><div>Cadastre um novo marco ou ajuste os filtros.</div></div>';return;}
+    el.innerHTML=list.map(ev=>{const idx=all.findIndex(x=>String(x.id)===String(ev.id));const foto=ev.foto?esc(ev.foto):'';return `<article class="timeline-admin-item" draggable="true" data-timeline-row="${esc(ev.id)}">
+      <div class="timeline-admin-drag" title="Arraste para reordenar">↕</div>
+      ${foto?`<img class="timeline-admin-thumb" src="${foto}" alt="${esc(ev.titulo)}">`:'<div class="timeline-admin-thumb" aria-label="Sem foto"></div>'}
+      <div><div class="timeline-admin-year">${esc(ev.ano)}${ev.destaque?' · Destaque':''}</div><div class="timeline-admin-title">${esc(ev.titulo)}</div><div class="timeline-admin-desc">${esc(ev.descricao||'Sem descrição')}</div></div>
+      <div class="timeline-admin-actions">
+        <button type="button" data-timeline-action="up" data-timeline-id="${esc(ev.id)}" ${idx===0?'disabled':''}>↑</button>
+        <button type="button" data-timeline-action="down" data-timeline-id="${esc(ev.id)}" ${idx===all.length-1?'disabled':''}>↓</button>
+        <button type="button" data-timeline-action="edit" data-timeline-id="${esc(ev.id)}">Editar</button>
+        <button type="button" data-timeline-action="duplicate" data-timeline-id="${esc(ev.id)}">Duplicar</button>
+        <button type="button" data-timeline-action="delete" data-timeline-id="${esc(ev.id)}">Excluir</button>
+      </div></article>`;}).join('');
+  }
+  function bind(){
+    if(inicializado)return; inicializado=true;
+    const novo=document.getElementById('btnNovoEventoTimeline');
+    const atualizar=document.getElementById('btnAtualizarTimeline');
+    const restaurarBtn=document.getElementById('btnRestaurarTimeline');
+    const salvarBtn=document.getElementById('btnSalvarTimelineAlteracoes');
+    const lista=document.getElementById('listaTimelineAdmin');
+    const form=document.getElementById('formTimelineAdmin');
+    const fechar=document.getElementById('btnFecharModalTimeline');
+    const cancelar=document.getElementById('btnCancelarModalTimeline');
+    const filtro=document.getElementById('filtroTimelineAdmin');
+    const decada=document.getElementById('filtroTimelineDecada');
+    if(novo)novo.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();openEditor('');});
+    if(atualizar)atualizar.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();carregar();});
+    if(restaurarBtn)restaurarBtn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();restaurar();});
+    if(salvarBtn)salvarBtn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();salvar('Alterações da Linha do Tempo salvas com sucesso.');});
+    if(fechar)fechar.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();closeEditor();});
+    if(cancelar)cancelar.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();closeEditor();});
+    if(form)form.addEventListener('submit',submitEditor);
+    if(filtro)filtro.addEventListener('input',render);
+    if(decada)decada.addEventListener('change',render);
+    if(lista){
+      lista.addEventListener('click',e=>{const b=e.target.closest('[data-timeline-action]');if(!b||b.disabled)return;e.preventDefault();e.stopPropagation();const id=b.dataset.timelineId;const a=b.dataset.timelineAction;if(a==='up')mover(id,-1);else if(a==='down')mover(id,1);else if(a==='edit')openEditor(id);else if(a==='duplicate')duplicar(id);else if(a==='delete')excluir(id);});
+      lista.addEventListener('dragstart',e=>{const row=e.target.closest('[data-timeline-row]');if(!row)return;arrastandoId=row.dataset.timelineRow;if(e.dataTransfer){e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',arrastandoId);}});
+      lista.addEventListener('dragover',e=>{if(e.target.closest('[data-timeline-row]'))e.preventDefault();});
+      lista.addEventListener('drop',e=>{const row=e.target.closest('[data-timeline-row]');if(!row)return;e.preventDefault();drop(row.dataset.timelineRow);});
+    }
+    const modal=document.getElementById('modalTimelineEditor'); if(modal)modal.addEventListener('click',e=>{if(e.target===modal)closeEditor();});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')closeEditor();});
+    const file=document.getElementById('timelineFotoArquivo'); if(file)file.addEventListener('change',()=>{const f=file.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{const img=document.getElementById('timelinePreviewFoto');if(img)img.src=r.result;};r.readAsDataURL(f);});
+    const url=document.getElementById('timelineFotoUrl'); if(url)url.addEventListener('input',()=>{const img=document.getElementById('timelinePreviewFoto');if(img)img.src=url.value.trim();});
+    // Substitui as funções antigas pelos handlers robustos, evitando dependência de onclick inline.
+    Object.assign(window,{abrirModalEventoTimeline:openEditor,editarEventoTimeline:openEditor,fecharModalEventoTimeline:closeEditor,salvarEventoTimeline:submitEditor,excluirEventoTimeline:excluir,duplicarEventoTimeline:duplicar,moverTimeline:mover,carregarTimelineDoBanco:carregar,renderListaTimelineAdmin:render,salvarTimelineNoBanco:salvar,restaurarTimelinePadrao:restaurar});
+    render(); carregar();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind,{once:true});else bind();
+})();
+</script>
 </body>
 </html>
