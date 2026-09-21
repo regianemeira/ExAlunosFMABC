@@ -3221,8 +3221,8 @@
                   <p>Cadastre e organize os principais acontecimentos da história da instituição. Os registros ficam salvos no Cloudflare e podem ser exibidos com foto, texto e destaque.</p>
                 </div>
                 <div class="timeline-admin-toolbar">
-                  <button type="button" class="timeline-btn primary" onclick="abrirModalEventoTimeline()">+ Novo acontecimento</button>
-                  <button type="button" class="timeline-btn" onclick="carregarTimelineDoBanco(true)">Atualizar</button>
+                  <button type="button" class="timeline-btn primary" id="btnNovoEventoTimeline">+ Novo acontecimento</button>
+                  <button type="button" class="timeline-btn" id="btnAtualizarTimeline">Atualizar</button>
                 </div>
               </div>
               <div class="timeline-filter">
@@ -3235,8 +3235,8 @@
               <div class="timeline-status" id="statusTimelineAdmin">Nenhuma alteração pendente.</div>
               <div id="listaTimelineAdmin" class="timeline-admin-list"></div>
               <div style="display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;">
-                <button type="button" class="timeline-btn" onclick="restaurarTimelinePadrao()">Restaurar marcos padrão</button>
-                <button type="button" class="timeline-btn primary" onclick="salvarTimelineNoBanco()">Salvar alterações</button>
+                <button type="button" class="timeline-btn" id="btnRestaurarTimeline">Restaurar marcos padrão</button>
+                <button type="button" class="timeline-btn primary" id="btnSalvarTimelineAlteracoes">Salvar alterações</button>
               </div>
             </div>
           </section>
@@ -3666,10 +3666,10 @@
     <div class="timeline-modal" role="dialog" aria-modal="true" aria-labelledby="tituloModalTimeline">
       <div class="timeline-modal-head">
         <h4 id="tituloModalTimeline">Novo acontecimento</h4>
-        <button type="button" class="timeline-modal-close" onclick="fecharModalEventoTimeline()" aria-label="Fechar">×</button>
+        <button type="button" class="timeline-modal-close" id="btnFecharModalTimeline" aria-label="Fechar">×</button>
       </div>
       <div class="timeline-modal-body">
-        <form id="formTimelineAdmin" onsubmit="salvarEventoTimeline(event)">
+        <form id="formTimelineAdmin">
           <input type="hidden" id="timelineEditId">
           <div class="timeline-form-grid">
             <div class="form-group"><label>Ano / período</label><input type="text" id="timelineAno" class="form-control" maxlength="30" required placeholder="Ex.: 1969 ou 2018–2019"></div>
@@ -3680,7 +3680,7 @@
             <div class="form-group full" style="display:flex;align-items:center;gap:10px;"><input type="checkbox" id="timelineDestaque" style="width:18px;height:18px;"><label for="timelineDestaque" style="margin:0;">Destacar este acontecimento na página pública</label></div>
           </div>
           <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:22px;flex-wrap:wrap;">
-            <button type="button" class="timeline-btn" onclick="fecharModalEventoTimeline()">Cancelar</button>
+            <button type="button" class="timeline-btn" id="btnCancelarModalTimeline">Cancelar</button>
             <button type="submit" class="timeline-btn primary" id="btnSalvarTimelineEvento">Salvar acontecimento</button>
           </div>
         </form>
@@ -6656,11 +6656,11 @@
           <img class="timeline-admin-thumb" src="${escapeHtmlAttr(urlSemCache(foto))}" alt="${escapeHtmlAttr(ev.titulo)}">
           <div><div class="timeline-admin-year">${escapeHtml(ev.ano)}${ev.destaque?' · Destaque':''}</div><div class="timeline-admin-title">${escapeHtml(ev.titulo)}</div><div class="timeline-admin-desc">${escapeHtml(ev.descricao||'Sem descrição')}</div></div>
           <div class="timeline-admin-actions">
-            <button type="button" onclick="moverTimeline('${escapeHtmlAttr(ev.id)}',-1)" ${idx===0?'disabled':''}>↑</button>
-            <button type="button" onclick="moverTimeline('${escapeHtmlAttr(ev.id)}',1)" ${idx===todos.length-1?'disabled':''}>↓</button>
-            <button type="button" onclick="editarEventoTimeline('${escapeHtmlAttr(ev.id)}')">Editar</button>
-            <button type="button" onclick="duplicarEventoTimeline('${escapeHtmlAttr(ev.id)}')">Duplicar</button>
-            <button type="button" onclick="excluirEventoTimeline('${escapeHtmlAttr(ev.id)}')">Excluir</button>
+            <button type="button" data-timeline-action="up" data-timeline-id="${escapeHtmlAttr(ev.id)}" ${idx===0?'disabled':''}>↑</button>
+            <button type="button" data-timeline-action="down" data-timeline-id="${escapeHtmlAttr(ev.id)}" ${idx===todos.length-1?'disabled':''}>↓</button>
+            <button type="button" data-timeline-action="edit" data-timeline-id="${escapeHtmlAttr(ev.id)}">Editar</button>
+            <button type="button" data-timeline-action="duplicate" data-timeline-id="${escapeHtmlAttr(ev.id)}">Duplicar</button>
+            <button type="button" data-timeline-action="delete" data-timeline-id="${escapeHtmlAttr(ev.id)}">Excluir</button>
           </div>
         </article>`;
       }).join('');
@@ -7309,6 +7309,92 @@ function switchAdminTab(e, tabId) {
 
 
   </script>
+
+<script id="timeline-robust-handlers">
+(function(){
+  function bindTimelineHandlers(){
+    const novoBtn=document.getElementById('btnNovoEventoTimeline');
+    const atualizarBtn=document.getElementById('btnAtualizarTimeline');
+    const restaurarBtn=document.getElementById('btnRestaurarTimeline');
+    const salvarBtn=document.getElementById('btnSalvarTimelineAlteracoes');
+    const fecharBtn=document.getElementById('btnFecharModalTimeline');
+    const cancelarBtn=document.getElementById('btnCancelarModalTimeline');
+    const form=document.getElementById('formTimelineAdmin');
+    const lista=document.getElementById('listaTimelineAdmin');
+
+    if(novoBtn && !novoBtn.dataset.bound){
+      novoBtn.dataset.bound='1';
+      novoBtn.addEventListener('click',function(ev){
+        ev.preventDefault();
+        if(typeof window.abrirModalEventoTimeline==='function'){
+          window.abrirModalEventoTimeline('');
+        } else {
+          const modal=document.getElementById('modalTimelineEditor');
+          if(modal){ modal.classList.add('active'); modal.setAttribute('aria-hidden','false'); }
+        }
+      });
+    }
+
+    if(atualizarBtn && !atualizarBtn.dataset.bound){
+      atualizarBtn.dataset.bound='1';
+      atualizarBtn.addEventListener('click',function(ev){ev.preventDefault();if(typeof window.carregarTimelineDoBanco==='function') window.carregarTimelineDoBanco(true);});
+    }
+    if(restaurarBtn && !restaurarBtn.dataset.bound){
+      restaurarBtn.dataset.bound='1';
+      restaurarBtn.addEventListener('click',function(ev){ev.preventDefault();if(typeof window.restaurarTimelinePadrao==='function') window.restaurarTimelinePadrao();});
+    }
+    if(salvarBtn && !salvarBtn.dataset.bound){
+      salvarBtn.dataset.bound='1';
+      salvarBtn.addEventListener('click',function(ev){ev.preventDefault();if(typeof window.salvarTimelineNoBanco==='function') window.salvarTimelineNoBanco(true);});
+    }
+    if(fecharBtn && !fecharBtn.dataset.bound){
+      fecharBtn.dataset.bound='1';
+      fecharBtn.addEventListener('click',function(ev){ev.preventDefault();if(typeof window.fecharModalEventoTimeline==='function')window.fecharModalEventoTimeline();});
+    }
+    if(cancelarBtn && !cancelarBtn.dataset.bound){
+      cancelarBtn.dataset.bound='1';
+      cancelarBtn.addEventListener('click',function(ev){ev.preventDefault();if(typeof window.fecharModalEventoTimeline==='function')window.fecharModalEventoTimeline();});
+    }
+    if(form && !form.dataset.bound){
+      form.dataset.bound='1';
+      form.addEventListener('submit',function(ev){
+        ev.preventDefault();
+        if(typeof window.salvarEventoTimeline==='function') window.salvarEventoTimeline(ev);
+      });
+    }
+    if(lista && !lista.dataset.bound){
+      lista.dataset.bound='1';
+      lista.addEventListener('click',function(ev){
+        const btn=ev.target.closest('[data-timeline-action]');
+        if(!btn || btn.disabled) return;
+        ev.preventDefault();
+        ev.stopPropagation();
+        const id=btn.getAttribute('data-timeline-id') || '';
+        const action=btn.getAttribute('data-timeline-action');
+        const fnMap={
+          up:'moverTimeline',
+          down:'moverTimeline',
+          edit:'editarEventoTimeline',
+          duplicate:'duplicarEventoTimeline',
+          delete:'excluirEventoTimeline'
+        };
+        const fn=fnMap[action];
+        if(typeof window[fn]!=='function'){
+          console.error('Comando de Linha do Tempo indisponível:',fn);
+          if(typeof window.showToast==='function') window.showToast('Não foi possível executar esta ação. Recarregue a página e tente novamente.');
+          return;
+        }
+        if(action==='up') return window.moverTimeline(id,-1);
+        if(action==='down') return window.moverTimeline(id,1);
+        return window[fn](id);
+      });
+    }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bindTimelineHandlers,{once:true});
+  else bindTimelineHandlers();
+  window.addEventListener('load',bindTimelineHandlers,{once:true});
+})();
+</script>
 
 <script id="fmabc-admin-standalone-script">
 (function(){
