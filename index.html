@@ -2624,31 +2624,39 @@
     .admin-footer-area{justify-content:flex-start;margin-top:4px;}
   }
 
-    /* Acabamento único para o carrossel de redes sociais.
-       O arredondamento fica somente no contêiner externo, garantindo que
-       todas as imagens atuais e futuras recebam exatamente o mesmo formato. */
-    :root { --social-banner-radius: 12px; }
-    .banner-redes-img {
-      border-radius: var(--social-banner-radius) !important;
-      overflow: hidden !important;
-      clip-path: none !important;
-      -webkit-mask-image: none !important;
-      mask-image: none !important;
-    }
+    /* PADRÃO ÚNICO DAS FOTOS DO BANNER SOCIAL
+       O mesmo raio é aplicado ao contêiner, slide e imagem.
+       Isso garante que a primeira, a segunda e todas as futuras imagens
+       tenham exatamente o mesmo acabamento, independentemente do slide ativo. */
+    :root { --social-banner-radius: 20px; }
+    .banner-redes-img,
     .banner-social-track,
     .banner-social-slide,
-    .banner-social-slide img,
-    .banner-redes-img img {
-      border-radius: 0 !important;
+    .banner-redes-img img,
+    .banner-social-slide img {
+      border-radius: var(--social-banner-radius) !important;
       overflow: hidden !important;
-      clip-path: none !important;
-      -webkit-mask-image: none !important;
-      mask-image: none !important;
+      clip-path: inset(0 round var(--social-banner-radius)) !important;
+      -webkit-clip-path: inset(0 round var(--social-banner-radius)) !important;
+    }
+    .banner-redes-img {
+      position: relative !important;
+      isolation: isolate !important;
     }
     .banner-social-track,
     .banner-social-slide {
       width: 100%;
       height: 100%;
+    }
+    .banner-social-slide {
+      inset: 0;
+    }
+    .banner-social-slide img,
+    .banner-redes-img img {
+      width: 100% !important;
+      height: 100% !important;
+      display: block !important;
+      object-fit: cover !important;
     }
 </style>
 
