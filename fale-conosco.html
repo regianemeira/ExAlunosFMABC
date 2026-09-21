@@ -30,6 +30,7 @@ body::before{content:"";position:fixed;inset:0;background-image:var(--bg-image);
 .contact-kicker{margin:0 0 8px;text-transform:uppercase;letter-spacing:.12em;font-size:.74rem;font-weight:800;color:var(--verde)}
 .contact-title{margin:0;color:var(--azul);font-size:2rem;line-height:1.15}
 .contact-intro{margin:12px 0 0;color:var(--muted);font-size:.98rem;max-width:760px}
+.contact-sensitive-note{margin:9px 0 0;color:#6b7280;font-size:.78rem;line-height:1.45;max-width:760px}
 .contact-form{padding:30px 34px}
 .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 22px}
 .contact-field.full{grid-column:1/-1}
@@ -60,15 +61,16 @@ body::before{content:"";position:fixed;inset:0;background-image:var(--bg-image);
 </nav>
 <main class="page-container">
   <section class="page-hero">
-    <span class="page-kicker">Portal de Ex-Alunos</span>
-    <h1 class="page-title">Fale Conosco</h1>
-    <p class="page-subtitle">Entre em contato com a FMABC para enviar dúvidas, solicitações ou informações relacionadas à sua trajetória como ex-aluno.</p>
+    <span id="pageHeroKicker" class="page-kicker">Portal de Ex-Alunos</span>
+    <h1 id="pageHeroTitle" class="page-title">Fale Conosco</h1>
+    <p id="pageHeroSubtitle" class="page-subtitle">Entre em contato com a FMABC para enviar dúvidas, solicitações ou informações relacionadas à sua trajetória como ex-aluno.</p>
   </section>
   <section class="contact-wrap" aria-labelledby="tituloContato">
     <div class="contact-header">
-      <p class="contact-kicker">Atendimento</p>
+      <p id="contactKicker" class="contact-kicker">Atendimento</p>
       <h2 id="tituloContato" class="contact-title">Como podemos ajudar?</h2>
-      <p class="contact-intro">Preencha o formulário abaixo. Evite inserir informações sensíveis ou documentos que não sejam necessários para o atendimento.</p>
+      <p id="contactIntro" class="contact-intro">Preencha o formulário abaixo.</p>
+      <p id="contactSensitiveNote" class="contact-sensitive-note">Evite inserir informações sensíveis ou documentos que não sejam necessários para o atendimento.</p>
     </div>
     <form id="formContato" class="contact-form" onsubmit="enviarContato(event)">
       <div class="contact-grid">
@@ -81,12 +83,12 @@ body::before{content:"";position:fixed;inset:0;background-image:var(--bg-image);
         <div class="contact-field full"><label for="contatoMensagem">Mensagem *</label><textarea id="contatoMensagem" name="mensagem" maxlength="4000" required placeholder="Digite sua mensagem..."></textarea><div class="contact-help">Limite de 4.000 caracteres.</div></div>
       </div>
       <div class="contact-honeypot" aria-hidden="true"><label>Deixe este campo vazio<input id="contatoHoneypot" name="website" type="text" tabindex="-1" autocomplete="off"></label></div>
-      <div class="contact-consent"><label class="contact-consent-row"><input id="contatoConsentimento" type="checkbox" required><span>Li a <a href="politica-privacidade.html" target="_blank" rel="noopener noreferrer">Política de Privacidade</a> e concordo, de forma livre, informada e inequívoca, com o tratamento dos dados informados neste formulário para receber e responder à minha solicitação. Versão da política: 1.0.</span></label></div>
+      <div class="contact-consent"><label class="contact-consent-row"><input id="contatoConsentimento" type="checkbox" required><span>Li a <a href="politica-privacidade.html" target="_blank" rel="noopener noreferrer">Política de Privacidade</a> e concordo, de forma livre, informada e inequívoca, com o tratamento dos dados informados neste formulário para receber e responder à minha solicitação. <span id="contactPolicyVersion">Versão da política: 1.0.</span></span></label></div>
       <div class="contact-actions"><div id="contactStatus" class="contact-status" role="status" aria-live="polite"></div><button id="btnEnviarContato" class="contact-submit" type="submit">Enviar mensagem</button></div>
-      <div id="contactProtocol" class="contact-protocol" aria-live="polite">Sua mensagem foi registrada. Protocolo: <strong id="contactProtocolNumber"></strong></div>
+      <div id="contactProtocol" class="contact-protocol" aria-live="polite"><span id="contactProtocolMessage">Sua mensagem foi registrada. Protocolo:</span> <strong id="contactProtocolNumber"></strong></div>
     </form>
   </section>
-  <section style="max-width:900px;margin:22px auto 0;color:#6e7a8d;font-size:.78rem;text-align:center;">Para solicitações relacionadas aos seus direitos como titular de dados pessoais, utilize também o canal de privacidade informado na Política de Privacidade do portal.</section>
+  <section id="contactPrivacyNote" style="max-width:900px;margin:22px auto 0;color:#6e7a8d;font-size:.78rem;text-align:center;">Para solicitações relacionadas aos seus direitos como titular de dados pessoais, utilize também o canal de privacidade informado na Política de Privacidade do portal.</section>
 </main>
 <footer class="footer"><p id="footerAddress">Endereço: Av. Príncipe de Gales, 821 - Vila Príncipe de Gales, Santo André - SP</p><p id="footerEmail">Contato: contato@fmabc.br</p><div class="credit">Desenvolvido por Regiane Meira</div></footer>
 
@@ -99,11 +101,51 @@ async function enviarContato(event){
  if(!form.checkValidity()){form.reportValidity();return;}
  const payload={nome:contatoNome.value.trim(),email:contatoEmail.value.trim(),telefone:contatoTelefone.value.trim(),curso:contatoCurso.value.trim(),turma:contatoTurma.value.trim(),assunto:contatoAssunto.value,mensagem:contatoMensagem.value.trim(),consentimento_lgpd:contatoConsentimento.checked,politica_versao:LGPD_POLITICA_VERSAO,honeypot:contatoHoneypot.value};
  btn.disabled=true;status.textContent='Enviando sua mensagem...';status.className='contact-status';protocolBox.classList.remove('show');
- try{const r=await fetch(`${CONTACT_API_URL}/api/contatos`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const data=await r.json().catch(()=>({}));if(!r.ok)throw new Error(data?.error||`HTTP ${r.status}`);status.textContent='Mensagem enviada com sucesso.';status.className='contact-status success';protocol.textContent=data.protocol||data.id||'Recebida';protocolBox.classList.add('show');form.reset();}
+ try{const r=await fetch(`${CONTACT_API_URL}/api/contatos`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const data=await r.json().catch(()=>({}));if(!r.ok)throw new Error(data?.error||`HTTP ${r.status}`);status.textContent=window.FALE_CONFIG?.successMessage || 'Mensagem enviada com sucesso.';status.className='contact-status success';protocol.textContent=data.protocol||data.id||'Recebida';protocolBox.classList.add('show');form.reset();}
  catch(err){console.error(err);status.textContent=err.message||'Não foi possível enviar sua mensagem agora.';status.className='contact-status error';}
  finally{btn.disabled=false;}
 }
-document.addEventListener('DOMContentLoaded',()=>{carregarMenu();});
+document.addEventListener('DOMContentLoaded',()=>{carregarMenu();carregarConfiguracaoFaleConosco();carregarPlanoDeFundo();carregarRodape();});
+
+
+async function carregarConfiguracaoFaleConosco(){
+ const padrao={
+  badge:'Portal de Ex-Alunos',
+  title:'Fale Conosco',
+  subtitle:'Entre em contato com a FMABC para enviar dúvidas, solicitações ou informações relacionadas à sua trajetória como ex-aluno.',
+  sectionBadge:'Atendimento',
+  sectionTitle:'Como podemos ajudar?',
+  sectionIntro:'Preencha o formulário abaixo. Evite inserir informações sensíveis ou documentos que não sejam necessários para o atendimento.',
+  sensitiveNotice:'Evite inserir informações sensíveis ou documentos que não sejam necessários para o atendimento.',
+  privacyNote:'Para solicitações relacionadas aos seus direitos como titular de dados pessoais, utilize também o canal de privacidade informado na Política de Privacidade do portal.',
+  submitLabel:'Enviar mensagem',
+  successMessage:'Mensagem enviada com sucesso.',
+  protocolMessage:'Sua mensagem foi registrada. Protocolo:',
+  subjects:['Selecione','Atualização cadastral','Acervo histórico','Eventos e reencontros','Documentos e certificados','Informações acadêmicas','Parcerias e projetos','Outro']
+ };
+ try{
+  const r=await fetch(`${CLOUDFLARE_API_URL}/api/config/fale_conosco?v=${Date.now()}`,{cache:'no-store'});
+  if(!r.ok) return aplicarConfiguracaoFaleConosco(padrao);
+  const d=await r.json();
+  aplicarConfiguracaoFaleConosco({...padrao,...(d?.valor||{})});
+ }catch(e){aplicarConfiguracaoFaleConosco(padrao);}
+}
+function aplicarConfiguracaoFaleConosco(v){
+ const config={...v}; window.FALE_CONFIG=config;
+ const set=(id,val)=>{const el=document.getElementById(id);if(el && val!=null)el.textContent=String(val);};
+ set('pageHeroKicker',config.badge); set('pageHeroTitle',config.title); set('pageHeroSubtitle',config.subtitle);
+ set('contactKicker',config.sectionBadge); set('tituloContato',config.sectionTitle); set('contactIntro',config.sectionIntro); set('contactSensitiveNote',config.sensitiveNotice);
+ set('contactPrivacyNote',config.privacyNote); set('btnEnviarContato',config.submitLabel); set('contactProtocolMessage',config.protocolMessage);
+ const version=document.getElementById('contactPolicyVersion'); if(version) version.textContent=`Versão da política: 1.0.`;
+ const select=document.getElementById('contatoAssunto');
+ if(select && Array.isArray(config.subjects)){
+   const assuntos=config.subjects.map(x=>String(x||'').trim()).filter(Boolean);
+   const lista=assuntos.length>=2?assuntos:['Selecione','Outro'];
+   select.innerHTML='';
+   lista.forEach((assunto,index)=>{const opt=document.createElement('option');opt.value=index===0?'':assunto;opt.textContent=assunto;select.appendChild(opt);});
+ }
+}
+
 </script>
 <script id="contact-menu-script">
 
