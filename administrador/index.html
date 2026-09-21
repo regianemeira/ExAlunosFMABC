@@ -6739,6 +6739,25 @@
     document.addEventListener('input',e=>{if(e.target?.id==='timelineFotoUrl'){const v=e.target.value.trim();const img=document.getElementById('timelinePreviewFoto');if(img&&v)img.src=urlSemCache(v);}});
     document.addEventListener('click',e=>{const modal=document.getElementById('modalTimelineEditor');if(modal&&e.target===modal)fecharModalEventoTimeline();});
 
+    // Garante que os comandos da Linha do Tempo estejam disponíveis para os
+    // handlers inline usados pela interface administrativa, mesmo quando esta
+    // página for publicada como /administrador/ no GitHub Pages.
+    Object.assign(window, {
+      abrirModalEventoTimeline,
+      editarEventoTimeline,
+      fecharModalEventoTimeline,
+      salvarEventoTimeline,
+      excluirEventoTimeline,
+      duplicarEventoTimeline,
+      moverTimeline,
+      arrastarTimeline,
+      soltarTimeline,
+      restaurarTimelinePadrao,
+      carregarTimelineDoBanco,
+      renderListaTimelineAdmin,
+      salvarTimelineNoBanco
+    });
+
     // GALERIA DE REITORES
     // =========================================================
     const REITORES_CONFIG_KEY = 'reitores_galeria';
