@@ -2626,6 +2626,21 @@
      display: block !important;
      position: relative !important;
    }
+  /* O editor de cursos fica fora do overlay administrativo no HTML legado.
+     No modo /administrador/ ele precisa permanecer visível quando estiver aberto. */
+  body.fmabc-admin-standalone > #cursoEditModal.open {
+    display: flex !important;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 13000 !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 20px !important;
+    background: rgba(15,23,42,.58) !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
   body.fmabc-admin-standalone > #modalReitorEditor.active {
     display: flex !important;
     position: fixed !important;
@@ -2820,13 +2835,14 @@
   .curso-admin-card{position:relative;padding:18px 20px !important;padding-right:190px !important}
   .curso-admin-card h3{margin:0 0 7px;color:var(--azul-institucional)}
   .curso-admin-card p{margin:0;color:var(--slate-muted);line-height:1.45}
-  .curso-admin-actions{position:absolute;right:18px;top:50%;transform:translateY(-50%);display:flex;gap:8px;align-items:center}
-  .curso-admin-actions button{border-radius:7px;padding:7px 11px;font-size:.78rem;font-weight:800;cursor:pointer;border:1px solid transparent}
+  .curso-admin-card{min-height:74px}
+  .curso-admin-actions{position:absolute;right:18px;top:50%;transform:translateY(-50%);display:flex !important;visibility:visible !important;opacity:1 !important;gap:8px;align-items:center;z-index:20}
+  .curso-admin-actions button{display:inline-flex !important;visibility:visible !important;opacity:1 !important;align-items:center;justify-content:center;border-radius:7px;padding:7px 11px;font-size:.78rem;font-weight:800;cursor:pointer;border:1px solid transparent;white-space:nowrap}
   .curso-admin-actions .editar{background:var(--verde-pastel-medio);color:var(--verde-escuro);border-color:var(--verde-principal)}
   .curso-admin-actions .excluir{background:#fee2e2;color:#dc2626;border-color:#fca5a5}
   .curso-admin-actions button:hover{filter:brightness(.97);transform:translateY(-1px)}
   .curso-edit-modal{position:fixed;inset:0;z-index:12000;background:rgba(15,23,42,.52);display:none;align-items:center;justify-content:center;padding:20px}
-  .curso-edit-modal.open{display:flex}
+  .curso-edit-modal.open{display:flex !important;visibility:visible !important;opacity:1 !important}
   .curso-edit-box{width:min(620px,100%);background:#fff;border-radius:12px;box-shadow:0 24px 70px rgba(15,23,42,.28);overflow:hidden}
   .curso-edit-head{padding:18px 22px;border-bottom:1px solid #e8ece9;display:flex;align-items:center;justify-content:space-between;gap:12px}
   .curso-edit-head h4{margin:0;color:#27304f;font-size:1.15rem}
@@ -6037,6 +6053,14 @@
         showToast('Não foi possível excluir o curso: ' + (error.message || 'erro desconhecido'));
       }
     }
+
+    // Expor as ações do módulo de cursos para o HTML do administrador e para depuração do painel.
+    window.carregarCursosDoBanco = carregarCursosDoBanco;
+    window.renderListaCursosAdmin = renderListaCursosAdmin;
+    window.abrirEdicaoCurso = abrirEdicaoCurso;
+    window.fecharEdicaoCurso = fecharEdicaoCurso;
+    window.salvarEdicaoCurso = salvarEdicaoCurso;
+    window.excluirCursoAdmin = excluirCursoAdmin;
 
     function renderCourseFilters() {
       const container = document.getElementById('courseFilterContainer');
