@@ -817,6 +817,157 @@
     .admin-table th, .admin-table td { padding: 12px; border: 1px solid var(--border-color); text-align: left; }
     .admin-table th { background-color: var(--slate-light); color: var(--azul-institucional); font-weight: bold; }
 
+    /* Gestão de Cursos — tabela de ações e modal de edição */
+    .cursos-admin-table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      margin-top: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      background: #fff;
+    }
+    .cursos-admin-table {
+      margin-top: 0;
+      min-width: 760px;
+      border: 0;
+    }
+    .cursos-admin-table th,
+    .cursos-admin-table td {
+      padding: 12px 16px;
+      vertical-align: middle;
+    }
+    .cursos-admin-table th {
+      background: #f1f4f3;
+    }
+    .cursos-admin-nome {
+      width: 28%;
+      font-weight: 800;
+      color: var(--azul-institucional);
+    }
+    .cursos-admin-descricao {
+      width: 52%;
+      color: #42506f;
+      line-height: 1.45;
+    }
+    .cursos-admin-acoes-col {
+      width: 150px;
+      text-align: center !important;
+    }
+    .cursos-admin-acoes {
+      width: 150px;
+      text-align: center !important;
+      white-space: nowrap;
+    }
+    .cursos-admin-acoes button {
+      min-width: 68px;
+      height: 30px;
+      padding: 5px 10px;
+      margin: 0 2px;
+      border-radius: 6px;
+      font-size: .78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .15s ease;
+    }
+    .curso-acao-editar {
+      color: #246b3e;
+      background: #e7f4ea;
+      border: 1px solid #47a864;
+    }
+    .curso-acao-excluir {
+      color: #dc2626;
+      background: #fee2e2;
+      border: 1px solid #fca5a5;
+    }
+    .cursos-admin-acoes button:hover {
+      filter: brightness(.97);
+      transform: translateY(-1px);
+    }
+    .cursos-admin-acoes button:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .cursos-admin-empty {
+      padding: 18px !important;
+      text-align: center !important;
+      color: var(--slate-muted);
+    }
+    .curso-edit-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 12000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(15,23,42,.52);
+    }
+    .curso-edit-modal.open {
+      display: flex !important;
+    }
+    .curso-edit-box {
+      width: min(620px, 100%);
+      overflow: hidden;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 24px 70px rgba(15,23,42,.28);
+    }
+    .curso-edit-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .curso-edit-head h4 { margin: 0; color: var(--azul-institucional); }
+    .curso-edit-close {
+      border: 0;
+      background: transparent;
+      color: #65728a;
+      font-size: 24px;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .curso-edit-body { padding: 20px 22px; }
+    .curso-edit-body label {
+      display: block;
+      margin-bottom: 7px;
+      color: #42506f;
+      font-weight: 800;
+      font-size: .8rem;
+    }
+    .curso-edit-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 16px 22px;
+      border-top: 1px solid var(--border-color);
+      background: #fafbfa;
+    }
+    .curso-edit-cancel, .curso-edit-save {
+      padding: 9px 15px;
+      border-radius: 6px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .curso-edit-cancel {
+      color: #52607d;
+      border: 1px solid #d8dee8;
+      background: #fff;
+    }
+    .curso-edit-save {
+      color: #fff;
+      border: 1px solid var(--verde-principal);
+      background: var(--verde-principal);
+    }
+    @media (max-width: 768px) {
+      .cursos-admin-table { min-width: 680px; }
+      .curso-edit-actions { justify-content: stretch; }
+      .curso-edit-cancel, .curso-edit-save { flex: 1; }
+    }
+
     .toast-msg { position: fixed; bottom: 24px; right: 24px; background-color: var(--verde-escuro); color: white; padding: 14px 24px; border-radius: 10px; font-weight: bold; font-size: 0.9rem; box-shadow: var(--shadow-lg); display: none; z-index: 3000; animation: fadeIn 0.3s ease; }
 
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -2817,49 +2968,6 @@
   @media(max-width:650px){.gallery-admin-toolbar-row{grid-template-columns:1fr}.gallery-admin-card{grid-template-columns:1fr}.gallery-admin-card-cover{width:100%;height:210px}.gallery-photos-admin-list{grid-template-columns:1fr}.gallery-add-url-row{grid-template-columns:1fr}}
 </style>
 
-
-<style id="fmabc-cursos-admin-style">
-  .card-curso.curso-admin-card{position:relative;padding:16px 190px 16px 18px !important;min-height:74px;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:16px;}
-  .card-curso.curso-admin-card h3{margin:0 0 6px;color:var(--azul-institucional);font-size:1.05rem}
-  .card-curso.curso-admin-card p{margin:0;color:var(--slate-muted);line-height:1.45}
-  .curso-admin-card-main{min-width:0;flex:1}
-  .curso-admin-actions{position:absolute;right:18px;top:50%;transform:translateY(-50%);display:flex !important;visibility:visible !important;opacity:1 !important;gap:8px;align-items:center;z-index:20}
-  .curso-admin-actions button{display:inline-flex !important;visibility:visible !important;opacity:1 !important;align-items:center;justify-content:center;border-radius:7px;padding:8px 12px;font-size:.78rem;font-weight:800;cursor:pointer;border:1px solid transparent;white-space:nowrap}
-  .curso-admin-actions .editar{background:#e6f3ea;color:#246b3e;border-color:#339c5b}
-  .curso-admin-actions .excluir{background:#fee2e2;color:#b42318;border-color:#fca5a5}
-  .curso-admin-actions button:hover{filter:brightness(.97);transform:translateY(-1px)}
-  .curso-edit-modal{position:fixed;inset:0;z-index:15000;background:rgba(15,23,42,.58);display:none;align-items:center;justify-content:center;padding:20px;}
-  .curso-edit-modal.open{display:flex !important;visibility:visible !important;opacity:1 !important;}
-  body.fmabc-admin-standalone > #cursoEditModal.open{display:flex !important;position:fixed !important;inset:0 !important;z-index:15000 !important;align-items:center !important;justify-content:center !important;padding:20px !important;background:rgba(15,23,42,.58) !important;visibility:visible !important;opacity:1 !important;}
-  .curso-edit-box{width:min(640px,100%);background:#fff;border-radius:12px;box-shadow:0 24px 70px rgba(15,23,42,.28);overflow:hidden}
-  .curso-edit-head{padding:18px 22px;border-bottom:1px solid #e8ece9;display:flex;align-items:center;justify-content:space-between;gap:12px}
-  .curso-edit-head h4{margin:0;color:#27304f;font-size:1.15rem}
-  .curso-edit-close{border:0;background:transparent;color:#667085;font-size:24px;cursor:pointer;line-height:1}
-  .curso-edit-body{padding:20px 22px}
-  .curso-edit-body label{display:block;margin:0 0 7px;color:#42506f;font-weight:800;font-size:.8rem}
-  .curso-edit-body input,.curso-edit-body textarea{width:100%;box-sizing:border-box}
-  .curso-edit-actions{padding:16px 22px;border-top:1px solid #e8ece9;display:flex;gap:9px;justify-content:flex-end}
-  .curso-edit-save{border:0;background:#339c5b;color:#fff;border-radius:7px;padding:10px 16px;font-weight:800;cursor:pointer}
-  .curso-edit-cancel{border:1px solid #d8dee8;background:#fff;color:#52607d;border-radius:7px;padding:10px 16px;font-weight:800;cursor:pointer}
-  .curso-edit-save:disabled{opacity:.65;cursor:wait}
-  @media(max-width:720px){
-    .card-curso.curso-admin-card{padding:16px 18px !important;display:block}
-    .curso-admin-actions{position:static;transform:none;margin-top:14px;justify-content:flex-start}
-  }
-</style>
-
-
-<!-- FMABC_CURSO_ACOES_V3 -->
-<style id="fmabc-cursos-acoes-v3">
-#listaCursos .card-curso.curso-admin-card{position:relative!important;display:block!important;width:100%!important;box-sizing:border-box!important;padding:16px 18px!important;margin-top:12px!important;min-height:0!important;overflow:visible!important}
-#listaCursos .curso-admin-card-main{display:block!important;width:100%!important;min-width:0!important}
-#listaCursos .curso-admin-actions{position:static!important;transform:none!important;display:flex!important;visibility:visible!important;opacity:1!important;margin-top:14px!important;padding-top:12px!important;border-top:1px solid var(--border-color,#d9e1dd)!important;gap:8px!important;justify-content:flex-start!important;align-items:center!important;width:100%!important;z-index:30!important}
-#listaCursos .curso-admin-actions button{display:inline-flex!important;visibility:visible!important;opacity:1!important;position:relative!important;z-index:31!important;align-items:center!important;justify-content:center!important;min-width:84px!important;height:36px!important;padding:7px 13px!important;border-radius:7px!important;font-size:.78rem!important;font-weight:800!important;line-height:1!important;cursor:pointer!important;box-sizing:border-box!important}
-#listaCursos .curso-admin-actions .editar{background:#e8f5ec!important;color:#246b3e!important;border:1px solid #339c5b!important}
-#listaCursos .curso-admin-actions .excluir{background:#fff1f2!important;color:#b42318!important;border:1px solid #fca5a5!important}
-#listaCursos .curso-admin-actions button:hover{filter:brightness(.97)!important;transform:translateY(-1px)!important}
-</style>
-
 </head>
 <body>
 
@@ -3522,7 +3630,18 @@
             </form>
 
             <h4 style="margin-top: 24px; color: var(--azul-institucional);">Cursos Cadastrados no Banco</h4>
-            <div id="listaCursos" data-curso-acoes-version="v3" style="margin-top: 12px;"></div>
+            <div class="cursos-admin-table-wrap">
+              <table class="admin-table cursos-admin-table" aria-label="Cursos cadastrados no banco">
+                <thead>
+                  <tr>
+                    <th>Nome do Curso</th>
+                    <th>Descrição</th>
+                    <th class="cursos-admin-acoes-col">Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="listaCursos"></tbody>
+              </table>
+            </div>
           </section>
 
           <!-- TAB TURMAS COM PREVIEW E TRANSIÇÃO SUAVE -->
@@ -5908,20 +6027,7 @@
       turmas: []
     };
 
-    async function carregarCursosDoBanco() {
-      try {
-        const resposta = await fetch(`${CLOUDFLARE_API_URL}/api/cursos`, { cache: 'no-store' });
-        if (!resposta.ok) throw new Error(`Cloudflare API HTTP ${resposta.status}`);
-        const data = await resposta.json();
-        const nomesCursosBanco = Array.isArray(data) ? data.map(c => c?.nome).filter(Boolean) : [];
-        appState.cursos = Array.from(new Set(['Todos', ...nomesCursosBanco]));
-        renderCourseFilters();
-        populateAdminSelects();
-        renderListaCursosAdmin(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error('Erro ao carregar cursos do Cloudflare:', err.message);
-      }
-    }
+    window.__cursosAdmin = [];
 
     function escaparHtmlCurso(valor) {
       return String(valor ?? '')
@@ -5932,74 +6038,100 @@
         .replace(/'/g, '&#039;');
     }
 
-    window.__cursosAdmin = [];
+    async function carregarCursosDoBanco() {
+      try {
+        const resposta = await fetch(`${CLOUDFLARE_API_URL}/api/cursos`, { cache: 'no-store' });
+        if (!resposta.ok) throw new Error(`Cloudflare API HTTP ${resposta.status}`);
+        const data = await resposta.json();
+        const cursos = Array.isArray(data) ? data : [];
+        window.__cursosAdmin = cursos;
+        const nomesCursosBanco = cursos.map(c => c?.nome).filter(Boolean);
+        appState.cursos = Array.from(new Set(['Todos', ...nomesCursosBanco]));
+        renderCourseFilters();
+        populateAdminSelects();
+        renderListaCursosAdmin(cursos);
+      } catch (err) {
+        console.error('Erro ao carregar cursos do Cloudflare:', err.message);
+        const tbody = document.getElementById('listaCursos');
+        if (tbody) {
+          tbody.innerHTML = `<tr><td colspan="3" class="cursos-admin-empty">Não foi possível carregar os cursos.</td></tr>`;
+        }
+      }
+    }
 
     function renderListaCursosAdmin(cursos) {
-      const container = document.getElementById('listaCursos');
-      if (!container) return;
-      container.innerHTML = '';
+      const tbody = document.getElementById('listaCursos');
+      if (!tbody) return;
+      tbody.innerHTML = '';
       window.__cursosAdmin = Array.isArray(cursos) ? cursos : [];
-      if (!Array.isArray(cursos) || cursos.length === 0) {
-        container.innerHTML = '<div style="padding:16px;color:var(--slate-muted);background:#fff;border:1px solid var(--border-color);border-radius:8px;">Nenhum curso cadastrado.</div>';
+
+      if (!window.__cursosAdmin.length) {
+        tbody.innerHTML = '<tr><td colspan="3" class="cursos-admin-empty">Nenhum curso cadastrado.</td></tr>';
         return;
       }
-      cursos.forEach(curso => {
-        const id = curso?.id;
-        const nome = escaparHtmlCurso(curso?.nome || 'Curso sem nome');
-        const descricao = escaparHtmlCurso(curso?.descricao || 'Sem descrição informada.');
-        const safeId = escaparHtmlCurso(id);
-        const card = document.createElement('div');
-        card.className = 'card-curso curso-admin-card';
-        card.innerHTML = `
-          <div class="curso-admin-card-main">
-            <h3>${nome}</h3>
-            <p>${descricao}</p>
-          </div>
-          <div class="curso-admin-actions" aria-label="Ações do curso">
-            <button type="button" class="editar" data-curso-id="${safeId}" onclick="editarCursoPorId('${safeId}')">Editar</button>
-            <button type="button" class="excluir" data-curso-id="${safeId}" onclick="excluirCursoPorId('${safeId}')">Excluir</button>
-          </div>
-        `;
-        card.querySelector('.editar')?.addEventListener('click', (event) => event.stopPropagation());
-        card.querySelector('.excluir')?.addEventListener('click', (event) => event.stopPropagation());
-        container.appendChild(card);
+
+      window.__cursosAdmin.forEach(curso => {
+        const tr = document.createElement('tr');
+
+        const tdNome = document.createElement('td');
+        tdNome.className = 'cursos-admin-nome';
+        tdNome.textContent = curso?.nome || 'Curso sem nome';
+
+        const tdDescricao = document.createElement('td');
+        tdDescricao.className = 'cursos-admin-descricao';
+        tdDescricao.textContent = curso?.descricao || 'Sem descrição informada.';
+
+        const tdAcoes = document.createElement('td');
+        tdAcoes.className = 'cursos-admin-acoes';
+
+        const btnEditar = document.createElement('button');
+        btnEditar.type = 'button';
+        btnEditar.className = 'curso-acao-editar';
+        btnEditar.textContent = 'Editar';
+        btnEditar.title = `Editar ${curso?.nome || 'curso'}`;
+        btnEditar.addEventListener('click', () => editarCursoAdmin(curso?.id));
+
+        const btnExcluir = document.createElement('button');
+        btnExcluir.type = 'button';
+        btnExcluir.className = 'curso-acao-excluir';
+        btnExcluir.textContent = 'Excluir';
+        btnExcluir.title = `Excluir ${curso?.nome || 'curso'}`;
+        btnExcluir.addEventListener('click', () => excluirCursoAdmin(curso?.id));
+
+        tdAcoes.append(btnEditar, btnExcluir);
+        tr.append(tdNome, tdDescricao, tdAcoes);
+        tbody.appendChild(tr);
       });
     }
 
     function localizarCursoAdminPorId(id) {
-      return (window.__cursosAdmin || []).find(item => String(item?.id) === String(id));
+      return (window.__cursosAdmin || []).find(curso => String(curso?.id) === String(id));
     }
 
-    function editarCursoPorId(id) {
-      const curso = localizarCursoAdminPorId(id);
-      if (!curso) { showToast('Curso não encontrado para edição.'); return; }
-      abrirEdicaoCurso(curso);
-    }
-
-    function excluirCursoPorId(id) {
-      return excluirCursoAdmin(id);
-    }
-
-    function abrirEdicaoCurso(curso) {
-      if (!curso || !curso.id) {
-        showToast('Não foi possível identificar o curso para edição.');
-        return;
-      }
+    function abrirModalEdicaoCurso(curso) {
       const modal = document.getElementById('cursoEditModal');
       const id = document.getElementById('cursoEditId');
       const nome = document.getElementById('cursoEditNome');
       const descricao = document.getElementById('cursoEditDescricao');
       if (!modal || !id || !nome || !descricao) {
-        showToast('O editor de curso não está disponível nesta versão do painel.');
+        showToast('Não foi possível abrir a edição do curso.');
         return;
       }
-      registrarAtividadeAdmin?.();
-      id.value = String(curso.id);
-      nome.value = String(curso.nome || '');
-      descricao.value = String(curso.descricao || '');
+      id.value = String(curso?.id || '');
+      nome.value = curso?.nome || '';
+      descricao.value = curso?.descricao || '';
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
       setTimeout(() => nome.focus(), 30);
+    }
+
+    function editarCursoAdmin(id) {
+      const curso = localizarCursoAdminPorId(id);
+      if (!curso) {
+        showToast('Curso não encontrado.');
+        return;
+      }
+      abrirModalEdicaoCurso(curso);
     }
 
     function fecharEdicaoCurso() {
@@ -6010,16 +6142,14 @@
     }
 
     async function salvarEdicaoCurso(event) {
-      if (event) event.preventDefault();
+      event.preventDefault();
       const id = String(document.getElementById('cursoEditId')?.value || '').trim();
       const nome = String(document.getElementById('cursoEditNome')?.value || '').trim();
       const descricao = String(document.getElementById('cursoEditDescricao')?.value || '').trim();
       const btn = document.getElementById('btnSalvarEdicaoCurso');
 
-      if (!id || !nome) {
-        showToast('Informe o nome do curso.');
-        return;
-      }
+      if (!id) { showToast('Curso não identificado.'); return; }
+      if (!nome) { showToast('Informe o nome do curso.'); return; }
       if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
         showToast('Sessão administrativa expirada. Faça login novamente.');
         return;
@@ -6031,9 +6161,9 @@
           method: 'PUT',
           body: JSON.stringify({ nome, descricao })
         });
-        showToast('Curso atualizado com sucesso!');
-        fecharEdicaoCurso();
         await carregarCursosDoBanco();
+        fecharEdicaoCurso();
+        showToast('Curso atualizado com sucesso.');
       } catch (error) {
         console.error('Erro ao editar curso:', error);
         showToast('Não foi possível editar o curso: ' + (error?.message || 'erro desconhecido'));
@@ -6043,34 +6173,36 @@
     }
 
     async function excluirCursoAdmin(id) {
-      if (!id) {
-        showToast('Não foi possível identificar o curso.');
+      const curso = localizarCursoAdminPorId(id);
+      if (!curso) {
+        showToast('Curso não encontrado.');
         return;
       }
       if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
         showToast('Sessão administrativa expirada. Faça login novamente.');
         return;
       }
-      const curso = (window.__cursosAdmin || []).find(item => String(item?.id) === String(id));
-      const nome = curso?.nome || 'este curso';
-      if (!confirm(`Tem certeza que deseja excluir o curso "${nome}"? Esta ação não poderá ser desfeita.`)) return;
+
+      const confirmado = confirm(`Tem certeza que deseja excluir o curso "${curso.nome || 'Sem nome'}"?\n\nEsta ação não poderá ser desfeita.`);
+      if (!confirmado) return;
+
       try {
         await cloudflareAdminFetch(`/api/admin/cursos/${encodeURIComponent(id)}`, { method: 'DELETE' });
-        showToast('Curso excluído com sucesso!');
         await carregarCursosDoBanco();
+        showToast('Curso excluído com sucesso.');
       } catch (error) {
         console.error('Erro ao excluir curso:', error);
         showToast('Não foi possível excluir o curso: ' + (error?.message || 'erro desconhecido'));
       }
     }
 
+    window.carregarCursosDoBanco = carregarCursosDoBanco;
     window.renderListaCursosAdmin = renderListaCursosAdmin;
-    window.abrirEdicaoCurso = abrirEdicaoCurso;
+    window.editarCursoAdmin = editarCursoAdmin;
+    window.excluirCursoAdmin = excluirCursoAdmin;
+    window.abrirModalEdicaoCurso = abrirModalEdicaoCurso;
     window.fecharEdicaoCurso = fecharEdicaoCurso;
     window.salvarEdicaoCurso = salvarEdicaoCurso;
-    window.excluirCursoAdmin = excluirCursoAdmin;
-    window.editarCursoPorId = editarCursoPorId;
-    window.excluirCursoPorId = excluirCursoPorId;
 
     function renderCourseFilters() {
       const container = document.getElementById('courseFilterContainer');
@@ -8400,13 +8532,13 @@ function switchAdminTab(e, tabId) {
       <form id="cursoEditForm" onsubmit="salvarEdicaoCurso(event)">
         <div class="curso-edit-body">
           <input type="hidden" id="cursoEditId">
-          <div style="margin-bottom:14px;">
+          <div class="form-group">
             <label for="cursoEditNome">Nome do Curso</label>
-            <input type="text" id="cursoEditNome" class="form-control" required maxlength="180" placeholder="Nome do curso">
+            <input type="text" id="cursoEditNome" class="form-control" maxlength="180" required>
           </div>
-          <div>
+          <div class="form-group">
             <label for="cursoEditDescricao">Descrição do Curso</label>
-            <textarea id="cursoEditDescricao" class="form-control" rows="6" maxlength="1000" placeholder="Breve resumo da história do curso..."></textarea>
+            <textarea id="cursoEditDescricao" class="form-control" rows="6" maxlength="1000"></textarea>
           </div>
         </div>
         <div class="curso-edit-actions">
@@ -8416,15 +8548,6 @@ function switchAdminTab(e, tabId) {
       </form>
     </div>
   </div>
-  <script>
-    document.addEventListener('keydown', function(event){
-      if(event.key === 'Escape') window.fecharEdicaoCurso?.();
-    });
-    document.addEventListener('click', function(event){
-      const modal = document.getElementById('cursoEditModal');
-      if(modal && event.target === modal) window.fecharEdicaoCurso?.();
-    });
-  </script>
 
 </body>
 </html>
