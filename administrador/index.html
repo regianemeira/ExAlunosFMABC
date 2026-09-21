@@ -5289,6 +5289,20 @@
       renderEditorMenu();
     }
 
+    function valorConfigEquivalente(a, b) {
+      try { return JSON.stringify(a) === JSON.stringify(b); } catch { return false; }
+    }
+
+    async function verificarConfigNoCloudflare(id, esperado) {
+      const resposta = await fetch(`${CLOUDFLARE_API_URL}/api/config/${encodeURIComponent(id)}?verify=${Date.now()}`, { cache: 'no-store' });
+      if (!resposta.ok) throw new Error(`Não foi possível confirmar o salvamento (HTTP ${resposta.status}).`);
+      const data = await resposta.json();
+      if (!valorConfigEquivalente(data?.valor, esperado)) {
+        throw new Error('O servidor respondeu, mas a alteração não foi encontrada no Cloudflare.');
+      }
+      return data;
+    }
+
     async function salvarMenuNoBanco() {
       registrarAtividadeAdmin();
       if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
@@ -5297,18 +5311,30 @@
       }
 
       menuSiteItens = normalizarMenuItens(menuSiteItens);
+      const payload = { itens: menuSiteItens.map(item => ({
+        id: String(item.id || ''),
+        pageId: item.pageId ? String(item.pageId) : undefined,
+        label: String(item.label || '').trim().slice(0, 80),
+        url: normalizarUrlMenu(item.url).slice(0, 500),
+        target: item.target === '_blank' ? '_blank' : '_self',
+        visible: item.visible !== false
+      }))};
+
       try {
+        showToast('Salvando menu...', 1800);
         await cloudflareAdminFetch('/api/admin/config/site_menu', {
           method: 'PUT',
-          body: JSON.stringify({ valor: { itens: menuSiteItens } })
+          body: JSON.stringify({ valor: payload })
         });
+        await verificarConfigNoCloudflare('site_menu', payload);
+        menuSiteItens = normalizarMenuItens(payload);
         renderMenuPublico();
         renderEditorMenu();
-        showToast('Menu salvo no Cloudflare.');
+        showToast('Menu salvo com sucesso no Cloudflare.');
         return true;
       } catch (error) {
-        console.error('Erro ao salvar menu:', error);
-        showToast('Não foi possível salvar o menu: ' + (error.message || 'erro desconhecido'));
+        console.error('Erro ao salvar/verificar menu:', error);
+        showToast('Não foi possível salvar o menu: ' + (error?.message || 'erro desconhecido'), 5000);
         return false;
       }
     }
@@ -5531,8 +5557,6 @@
       registrarAtividadeAdmin();if(!localStorage.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return false;}
       try{
         atualizarOrdemPaginasAPartirDaLista(obterOrdemPaginas());
-        // Remove qualquer registro antigo do sistema que tenha sido gravado
-        // indevidamente como página personalizada.
         const customsLimpos=paginasCustomizadas
           .map((p,i)=>({...normalizarPaginaCustom(p,i),ordem:p.ordem}))
           .filter(Boolean)
@@ -5541,10 +5565,21 @@
 
         menuSiteItens=normalizarMenuItens(menuSiteItens);
         const payload=[...PAGINAS_SISTEMA.map(p=>({...p})),...paginasCustomizadas];
+        const menuPayload={itens:menuSiteItens.map(item=>({
+          id:String(item.id||''),pageId:item.pageId?String(item.pageId):undefined,
+          label:String(item.label||'').trim().slice(0,80),url:normalizarUrlMenu(item.url).slice(0,500),
+          target:item.target==='_blank'?'_blank':'_self',visible:item.visible!==false
+        }))};
+
+        showToast('Salvando página e menu...', 1800);
         await cloudflareAdminFetch('/api/admin/config/portal_pages',{method:'PUT',body:JSON.stringify({valor:{pages:payload}})});
-        await cloudflareAdminFetch('/api/admin/config/site_menu',{method:'PUT',body:JSON.stringify({valor:{itens:menuSiteItens}})});
-        renderListaPaginasCMS();renderMenuPublico();showToast('Páginas salvas e menu sincronizado com o Cloudflare.');return true;
-      }catch(error){console.error(error);showToast('Não foi possível salvar as páginas: '+(error.message||'erro desconhecido'));return false;}
+        await verificarConfigNoCloudflare('portal_pages',{pages:payload});
+        await cloudflareAdminFetch('/api/admin/config/site_menu',{method:'PUT',body:JSON.stringify({valor:menuPayload})});
+        await verificarConfigNoCloudflare('site_menu',menuPayload);
+        menuSiteItens=normalizarMenuItens(menuPayload);
+        renderListaPaginasCMS();renderMenuPublico();renderEditorMenu();
+        showToast('Página e menu salvos com sucesso no Cloudflare.');return true;
+      }catch(error){console.error('Erro ao salvar/verificar páginas:',error);showToast('Não foi possível salvar as páginas: '+(error?.message||'erro desconhecido'),5000);return false;}
     }
 
     function iniciarArrastePagina(event,id){paginaArrastandoId=String(id);event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/plain',String(id));event.currentTarget.style.opacity='.55';}
