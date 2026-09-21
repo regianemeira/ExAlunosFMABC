@@ -2815,6 +2815,29 @@
   .gallery-editor-actions{display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap;padding:16px 22px;background:#f8faf9;border-top:1px solid #e3e8e5}
   @media(max-width:980px){.gallery-admin-grid{grid-template-columns:1fr}.gallery-form-grid{grid-template-columns:1fr}.gallery-form-grid .full{grid-column:auto}.gallery-cover-admin-row{grid-template-columns:1fr}.gallery-cover-preview-wrap{width:100%;height:220px}}
   @media(max-width:650px){.gallery-admin-toolbar-row{grid-template-columns:1fr}.gallery-admin-card{grid-template-columns:1fr}.gallery-admin-card-cover{width:100%;height:210px}.gallery-photos-admin-list{grid-template-columns:1fr}.gallery-add-url-row{grid-template-columns:1fr}}
+
+  /* Gestão de Cursos — ações de edição e exclusão */
+  .curso-admin-card{position:relative;padding:18px 20px !important;padding-right:190px !important}
+  .curso-admin-card h3{margin:0 0 7px;color:var(--azul-institucional)}
+  .curso-admin-card p{margin:0;color:var(--slate-muted);line-height:1.45}
+  .curso-admin-actions{position:absolute;right:18px;top:50%;transform:translateY(-50%);display:flex;gap:8px;align-items:center}
+  .curso-admin-actions button{border-radius:7px;padding:7px 11px;font-size:.78rem;font-weight:800;cursor:pointer;border:1px solid transparent}
+  .curso-admin-actions .editar{background:var(--verde-pastel-medio);color:var(--verde-escuro);border-color:var(--verde-principal)}
+  .curso-admin-actions .excluir{background:#fee2e2;color:#dc2626;border-color:#fca5a5}
+  .curso-admin-actions button:hover{filter:brightness(.97);transform:translateY(-1px)}
+  .curso-edit-modal{position:fixed;inset:0;z-index:12000;background:rgba(15,23,42,.52);display:none;align-items:center;justify-content:center;padding:20px}
+  .curso-edit-modal.open{display:flex}
+  .curso-edit-box{width:min(620px,100%);background:#fff;border-radius:12px;box-shadow:0 24px 70px rgba(15,23,42,.28);overflow:hidden}
+  .curso-edit-head{padding:18px 22px;border-bottom:1px solid #e8ece9;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .curso-edit-head h4{margin:0;color:#27304f;font-size:1.15rem}
+  .curso-edit-close{border:0;background:transparent;color:#667085;font-size:24px;cursor:pointer;line-height:1}
+  .curso-edit-body{padding:20px 22px}
+  .curso-edit-body label{display:block;margin:0 0 7px;color:#42506f;font-weight:800;font-size:.8rem}
+  .curso-edit-body input,.curso-edit-body textarea{width:100%;box-sizing:border-box}
+  .curso-edit-actions{padding:16px 22px;border-top:1px solid #e8ece9;display:flex;gap:9px;justify-content:flex-end}
+  .curso-edit-save{border:0;background:var(--verde-principal);color:#fff;border-radius:7px;padding:10px 16px;font-weight:800;cursor:pointer}
+  .curso-edit-cancel{border:1px solid #d8dee8;background:#fff;color:#52607d;border-radius:7px;padding:10px 16px;font-weight:800;cursor:pointer}
+  @media(max-width:720px){.curso-admin-card{padding-right:20px !important}.curso-admin-actions{position:static;transform:none;margin-top:13px;justify-content:flex-start}}
 </style>
 
 </head>
@@ -5870,6 +5893,7 @@
         const resposta = await fetch(`${CLOUDFLARE_API_URL}/api/cursos`, { cache: 'no-store' });
         if (!resposta.ok) throw new Error(`Cloudflare API HTTP ${resposta.status}`);
         const data = await resposta.json();
+        window.__cursosAdmin = Array.isArray(data) ? data : [];
         const nomesCursosBanco = Array.isArray(data) ? data.map(c => c?.nome).filter(Boolean) : [];
         appState.cursos = Array.from(new Set(['Todos', ...nomesCursosBanco]));
         renderCourseFilters();
@@ -5880,19 +5904,138 @@
       }
     }
 
+    function escaparHtmlCurso(valor) {
+      return String(valor ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
     function renderListaCursosAdmin(cursos) {
       const container = document.getElementById('listaCursos');
       if (!container) return;
       container.innerHTML = '';
 
+      if (!Array.isArray(cursos) || cursos.length === 0) {
+        container.innerHTML = '<div style="padding:16px;color:var(--slate-muted);background:#fff;border:1px solid var(--border-color);border-radius:8px;">Nenhum curso cadastrado.</div>';
+        return;
+      }
+
       cursos.forEach(curso => {
-        container.innerHTML += `
-          <div class="card-curso">
-            <h3>${curso.nome}</h3>
-            <p>${curso.descricao || 'Sem descrição informada.'}</p>
+        const id = curso?.id;
+        const nome = escaparHtmlCurso(curso?.nome || 'Curso sem nome');
+        const descricao = escaparHtmlCurso(curso?.descricao || 'Sem descrição informada.');
+        const card = document.createElement('div');
+        card.className = 'card-curso curso-admin-card';
+        card.innerHTML = `
+          <div>
+            <h3>${nome}</h3>
+            <p>${descricao}</p>
+          </div>
+          <div class="curso-admin-actions">
+            <button type="button" class="editar" data-curso-id="${escaparHtmlCurso(id)}">Editar</button>
+            <button type="button" class="excluir" data-curso-id="${escaparHtmlCurso(id)}">Excluir</button>
           </div>
         `;
+        const btnEditar = card.querySelector('.editar');
+        const btnExcluir = card.querySelector('.excluir');
+        btnEditar?.addEventListener('click', () => abrirEdicaoCurso(curso));
+        btnExcluir?.addEventListener('click', () => excluirCursoAdmin(curso?.id));
+        container.appendChild(card);
       });
+    }
+
+    function abrirEdicaoCurso(curso) {
+      if (!curso?.id) {
+        showToast('Não foi possível identificar o curso para edição.');
+        return;
+      }
+      registrarAtividadeAdmin();
+      document.getElementById('cursoEditId').value = String(curso.id);
+      document.getElementById('cursoEditNome').value = curso.nome || '';
+      document.getElementById('cursoEditDescricao').value = curso.descricao || '';
+      const modal = document.getElementById('cursoEditModal');
+      if (!modal) return;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      setTimeout(() => document.getElementById('cursoEditNome')?.focus(), 30);
+    }
+
+    function fecharEdicaoCurso() {
+      const modal = document.getElementById('cursoEditModal');
+      if (!modal) return;
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') fecharEdicaoCurso();
+    });
+
+    async function salvarEdicaoCurso(event) {
+      event.preventDefault();
+      const id = String(document.getElementById('cursoEditId')?.value || '').trim();
+      const nome = String(document.getElementById('cursoEditNome')?.value || '').trim();
+      const descricao = String(document.getElementById('cursoEditDescricao')?.value || '').trim();
+      const btn = document.getElementById('btnSalvarEdicaoCurso');
+
+      if (!id || !nome) {
+        showToast('Informe o nome do curso.');
+        return;
+      }
+      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
+        showToast('Sessão administrativa expirada. Faça login novamente.');
+        return;
+      }
+
+      try {
+        if (btn) { btn.disabled = true; btn.textContent = 'Salvando...'; }
+        const resposta = await cloudflareAdminFetch(`/api/admin/cursos/${encodeURIComponent(id)}`, {
+          method: 'PUT',
+          body: JSON.stringify({ nome, descricao })
+        });
+        if (resposta === undefined) throw new Error('A API não retornou resposta para a atualização.');
+
+        // Recarrega a lista diretamente da API para confirmar e refletir o registro persistido.
+        await carregarCursosDoBanco();
+        const atualizado = (window.__cursosAdmin || []).find(item => String(item?.id) === id);
+        if (!atualizado || String(atualizado?.nome || '') !== nome) {
+          throw new Error('A alteração não foi confirmada no banco.');
+        }
+
+        showToast('Curso atualizado com sucesso!');
+        fecharEdicaoCurso();
+      } catch (error) {
+        console.error('Erro ao editar curso no Cloudflare:', error);
+        showToast('Não foi possível editar o curso: ' + (error.message || 'erro desconhecido'));
+      } finally {
+        if (btn) { btn.disabled = false; btn.textContent = 'Salvar alterações'; }
+      }
+    }
+
+    async function excluirCursoAdmin(id) {
+      if (!id) {
+        showToast('Não foi possível identificar o curso.');
+        return;
+      }
+      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
+        showToast('Sessão administrativa expirada. Faça login novamente.');
+        return;
+      }
+      const curso = (window.__cursosAdmin || []).find(item => String(item?.id) === String(id));
+      const nome = curso?.nome || 'este curso';
+      if (!confirm(`Tem certeza que deseja excluir o curso "${nome}"? Esta ação não poderá ser desfeita.`)) return;
+
+      try {
+        await cloudflareAdminFetch(`/api/admin/cursos/${encodeURIComponent(id)}`, { method: 'DELETE' });
+        showToast('Curso excluído com sucesso!');
+        await carregarCursosDoBanco();
+      } catch (error) {
+        console.error('Erro ao excluir curso no Cloudflare:', error);
+        showToast('Não foi possível excluir o curso: ' + (error.message || 'erro desconhecido'));
+      }
     }
 
     function renderCourseFilters() {
@@ -8213,5 +8356,32 @@ function switchAdminTab(e, tabId) {
 })();
 </script>
 
+
+  <!-- Modal de edição de curso -->
+  <div id="cursoEditModal" class="curso-edit-modal" aria-hidden="true">
+    <div class="curso-edit-box" role="dialog" aria-modal="true" aria-labelledby="cursoEditTitle">
+      <div class="curso-edit-head">
+        <h4 id="cursoEditTitle">Editar curso</h4>
+        <button type="button" class="curso-edit-close" onclick="fecharEdicaoCurso()" aria-label="Fechar">×</button>
+      </div>
+      <form id="cursoEditForm" onsubmit="salvarEdicaoCurso(event)">
+        <div class="curso-edit-body">
+          <input type="hidden" id="cursoEditId">
+          <div style="margin-bottom:14px;">
+            <label for="cursoEditNome">Nome do Curso</label>
+            <input type="text" id="cursoEditNome" class="form-control" required maxlength="180" placeholder="Nome do curso">
+          </div>
+          <div>
+            <label for="cursoEditDescricao">Descrição do Curso</label>
+            <textarea id="cursoEditDescricao" class="form-control" rows="6" maxlength="1000" placeholder="Breve resumo da história do curso..."></textarea>
+          </div>
+        </div>
+        <div class="curso-edit-actions">
+          <button type="button" class="curso-edit-cancel" onclick="fecharEdicaoCurso()">Cancelar</button>
+          <button type="submit" class="curso-edit-save" id="btnSalvarEdicaoCurso">Salvar alterações</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </body>
 </html>
