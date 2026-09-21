@@ -2607,6 +2607,21 @@
   body.fmabc-admin-standalone > *:not(#adminModalOverlay) {
     display: none !important;
   }
+  /* O editor de reitores fica fora do overlay administrativo no HTML legado.
+     Quando ativo, ele precisa permanecer visível na página independente. */
+  body.fmabc-admin-standalone > #modalReitorEditor.active {
+    display: flex !important;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 12000 !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 20px !important;
+    background: rgba(17,24,39,.58) !important;
+  }
+  body.fmabc-admin-standalone > #modalReitorEditor.active .reitores-modal {
+    display: block !important;
+  }
   body.fmabc-admin-standalone #adminModalOverlay {
     display: block !important;
     position: static !important;
