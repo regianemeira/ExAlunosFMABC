@@ -164,7 +164,7 @@
     .hero-title { font-size: 2.5rem; font-weight: bold; letter-spacing: -0.5px; margin-bottom: 12px; line-height: 1.2; }
     .hero-subtitle { font-size: 1.05rem; color: var(--verde-pastel-suave); max-width: 720px; font-weight: normal; margin-bottom: 28px; }
 
-    .search-filter-wrapper { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; justify-content: flex-start; position: relative; z-index: 2; }
+    .search-filter-wrapper { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; justify-content: space-between; position: relative; z-index: 2; }
     .search-box { position: relative; flex: 1; min-width: 280px; max-width: 480px; }
     .search-box input {
       width: 100%; padding: 14px 20px 14px 48px; border: 1px solid rgba(255, 255, 255, 0.25);
@@ -817,6 +817,157 @@
     .admin-table th, .admin-table td { padding: 12px; border: 1px solid var(--border-color); text-align: left; }
     .admin-table th { background-color: var(--slate-light); color: var(--azul-institucional); font-weight: bold; }
 
+    /* Gestão de Cursos — tabela de ações e modal de edição */
+    .cursos-admin-table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      margin-top: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      background: #fff;
+    }
+    .cursos-admin-table {
+      margin-top: 0;
+      min-width: 760px;
+      border: 0;
+    }
+    .cursos-admin-table th,
+    .cursos-admin-table td {
+      padding: 12px 16px;
+      vertical-align: middle;
+    }
+    .cursos-admin-table th {
+      background: #f1f4f3;
+    }
+    .cursos-admin-nome {
+      width: 28%;
+      font-weight: 800;
+      color: var(--azul-institucional);
+    }
+    .cursos-admin-descricao {
+      width: 52%;
+      color: #42506f;
+      line-height: 1.45;
+    }
+    .cursos-admin-acoes-col {
+      width: 150px;
+      text-align: center !important;
+    }
+    .cursos-admin-acoes {
+      width: 150px;
+      text-align: center !important;
+      white-space: nowrap;
+    }
+    .cursos-admin-acoes button {
+      min-width: 68px;
+      height: 30px;
+      padding: 5px 10px;
+      margin: 0 2px;
+      border-radius: 6px;
+      font-size: .78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .15s ease;
+    }
+    .curso-acao-editar {
+      color: #246b3e;
+      background: #e7f4ea;
+      border: 1px solid #47a864;
+    }
+    .curso-acao-excluir {
+      color: #dc2626;
+      background: #fee2e2;
+      border: 1px solid #fca5a5;
+    }
+    .cursos-admin-acoes button:hover {
+      filter: brightness(.97);
+      transform: translateY(-1px);
+    }
+    .cursos-admin-acoes button:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .cursos-admin-empty {
+      padding: 18px !important;
+      text-align: center !important;
+      color: var(--slate-muted);
+    }
+    .curso-edit-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 12000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(15,23,42,.52);
+    }
+    .curso-edit-modal.open {
+      display: flex !important;
+    }
+    .curso-edit-box {
+      width: min(620px, 100%);
+      overflow: hidden;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 24px 70px rgba(15,23,42,.28);
+    }
+    .curso-edit-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .curso-edit-head h4 { margin: 0; color: var(--azul-institucional); }
+    .curso-edit-close {
+      border: 0;
+      background: transparent;
+      color: #65728a;
+      font-size: 24px;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .curso-edit-body { padding: 20px 22px; }
+    .curso-edit-body label {
+      display: block;
+      margin-bottom: 7px;
+      color: #42506f;
+      font-weight: 800;
+      font-size: .8rem;
+    }
+    .curso-edit-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 16px 22px;
+      border-top: 1px solid var(--border-color);
+      background: #fafbfa;
+    }
+    .curso-edit-cancel, .curso-edit-save {
+      padding: 9px 15px;
+      border-radius: 6px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .curso-edit-cancel {
+      color: #52607d;
+      border: 1px solid #d8dee8;
+      background: #fff;
+    }
+    .curso-edit-save {
+      color: #fff;
+      border: 1px solid var(--verde-principal);
+      background: var(--verde-principal);
+    }
+    @media (max-width: 768px) {
+      .cursos-admin-table { min-width: 680px; }
+      .curso-edit-actions { justify-content: stretch; }
+      .curso-edit-cancel, .curso-edit-save { flex: 1; }
+    }
+
     .toast-msg { position: fixed; bottom: 24px; right: 24px; background-color: var(--verde-escuro); color: white; padding: 14px 24px; border-radius: 10px; font-weight: bold; font-size: 0.9rem; box-shadow: var(--shadow-lg); display: none; z-index: 3000; animation: fadeIn 0.3s ease; }
 
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -862,8 +1013,7 @@
       position: relative;
       display: flex;
       align-items: center;
-      justify-content: flex-start;
-      column-gap: clamp(28px, 4vw, 64px);
+      justify-content: space-between;
       padding: 40px 60px;
       box-shadow: var(--shadow-lg);
       overflow: hidden;
@@ -876,85 +1026,59 @@
       background-image: radial-gradient(circle at 10% 50%, rgba(255,255,255,0.06) 0%, transparent 40%);
       pointer-events: none;
     }
-    /* Todas as imagens do banner social usam o mesmo acabamento, inclusive as
-       imagens adicionadas futuramente pelo administrador. */
-    :root {
-      --social-banner-radius: 12px;
-    }
-
     .banner-redes-img {
-      width: 47%;
-      height: 350px;
+      width: 45%;
+      height: 350px; /* Define o tamanho fixo da área da imagem */
       position: relative;
       z-index: 2;
-      flex: 0 0 47%;
-      border-radius: var(--social-banner-radius) !important;
-      overflow: hidden !important;
-      clip-path: inset(0 round var(--social-banner-radius));
-    }
-
-    .banner-redes-img img,
-    .banner-social-track,
-    .banner-social-slide,
-    .banner-social-slide img {
-      border-radius: var(--social-banner-radius) !important;
-      overflow: hidden !important;
     }
 
     .banner-redes-img img {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      display: block;
-      clip-path: inset(0 round var(--social-banner-radius));
+      height: 100%; /* Força a imagem a preencher o quadro fixo */
+      object-fit: cover; /* Adapta a imagem sem distorcer, preenchendo todo o espaço */
+      border-radius: 12px;
     }
+
 
     .banner-social-track {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      min-height: 320px;
-      overflow: hidden !important;
-      clip-path: inset(0 round var(--social-banner-radius));
+      position:relative;
+      width:100%;
+      height:100%;
+      min-height:320px;
+      overflow:hidden;
+      border-radius:12px;
     }
-
     .banner-social-slide {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 1.5s ease-in-out;
-      clip-path: inset(0 round var(--social-banner-radius));
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      opacity:0;
+      visibility:hidden;
+      transition:opacity 1.5s ease-in-out;
     }
-
     .banner-social-slide.active {
-      opacity: 1;
-      visibility: visible;
-      z-index: 1;
+      opacity:1;
+      visibility:visible;
+      z-index:1;
     }
-
     .banner-social-slide img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      display: block;
-      clip-path: inset(0 round var(--social-banner-radius));
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      border-radius:12px;
     }
 
     .banner-redes-content {
       position: relative;
       z-index: 2;
       color: #FFFFFF;
-      width: min(46%, 620px);
-      max-width: 620px;
+      max-width: 50%;
       display: flex;
       flex-direction: column;
       gap: 16px;
-      margin-left: -8px;
     }
 
     .banner-redes-content h2 {
@@ -1014,8 +1138,6 @@
       }
       .banner-redes-content {
         max-width: 100%;
-        width: 100%;
-        margin-left: 0;
         align-items: center;
       }
     }
@@ -1171,16 +1293,13 @@
       width: 47%;
       height: clamp(260px, 20vw, 390px);
       min-height: 260px;
-      flex-basis: 47%;
-      border-radius: 18px;
     }
 
     .banner-social-track { min-height: 100%; }
 
     .banner-redes-content {
-      width: 45%;
+      width: 43%;
       max-width: 620px;
-      margin-left: -10px;
     }
 
     .banner-redes-content h2 {
@@ -2623,81 +2742,234 @@
     .footer-main-info{flex-direction:column;align-items:flex-start;}
     .admin-footer-area{justify-content:flex-start;margin-top:4px;}
   }
-
-    /* PADRÃO ÚNICO DAS FOTOS DO BANNER SOCIAL
-       O mesmo raio é aplicado ao contêiner, slide e imagem.
-       Isso garante que a primeira, a segunda e todas as futuras imagens
-       tenham exatamente o mesmo acabamento, independentemente do slide ativo. */
-    :root { --social-banner-radius: 20px; }
-    .banner-redes-img,
-    .banner-social-track,
-    .banner-social-slide,
-    .banner-redes-img img,
-    .banner-social-slide img {
-      border-radius: var(--social-banner-radius) !important;
-      overflow: hidden !important;
-      clip-path: inset(0 round var(--social-banner-radius)) !important;
-      -webkit-clip-path: inset(0 round var(--social-banner-radius)) !important;
-    }
-    .banner-redes-img {
-      position: relative !important;
-      isolation: isolate !important;
-    }
-    .banner-social-track,
-    .banner-social-slide {
-      width: 100%;
-      height: 100%;
-    }
-    .banner-social-slide {
-      inset: 0;
-    }
-    .banner-social-slide img,
-    .banner-redes-img img {
-      width: 100% !important;
-      height: 100% !important;
-      display: block !important;
-      object-fit: cover !important;
-    }
 </style>
 
 
-<style id="fmabc-contatos-admin-style">
-  .contatos-admin-toolbar{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
-  .contatos-admin-filter{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-  .contatos-admin-filter select{min-width:190px}
-  .contatos-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0 0 18px}
-  .contatos-summary-card{background:#fff;border:1px solid var(--border-color);border-radius:10px;padding:13px 15px;box-shadow:var(--shadow-sm)}
-  .contatos-summary-card small{display:block;color:#7b8498;font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em}
-  .contatos-summary-card strong{display:block;color:var(--azul-institucional);font-size:1.35rem;margin-top:3px}
-  .contatos-table-wrap{overflow:auto;border:1px solid var(--border-color);border-radius:10px;background:#fff}
-  .contatos-table{width:100%;border-collapse:collapse;min-width:920px}
-  .contatos-table th{background:#f4f7f9;color:#72809a;text-transform:uppercase;letter-spacing:.05em;font-size:.69rem;text-align:left;padding:12px 13px;border-bottom:1px solid var(--border-color);white-space:nowrap}
-  .contatos-table td{padding:13px;border-bottom:1px solid #e9edf0;color:#4e5d79;font-size:.8rem;vertical-align:middle}
-  .contatos-table tbody tr:hover td{background:#fbfcfd}
-  .contatos-protocolo{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.73rem;color:#596781;white-space:nowrap}
-  .contato-assunto{font-weight:800;color:#3e4d6f}
-  .contato-nome{font-weight:800;color:#334368}
-  .contato-msg-preview{max-width:360px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#69758c}
-  .contato-status-select{min-width:145px;border:1px solid #d7dee7;border-radius:6px;padding:7px 8px;color:#4f5c76;background:#fff;font-size:.75rem;font-weight:700}
-  .contato-view-btn{border:1px solid #d5dce5;background:#fff;color:#3f8f5a;border-radius:6px;padding:7px 10px;font-weight:800;font-size:.74rem;cursor:pointer}
-  .contato-view-btn:hover{border-color:#339c5b;background:#f1f8f3}
-  .contato-detail-modal{position:fixed;inset:0;background:rgba(35,39,56,.62);display:none;align-items:center;justify-content:center;padding:20px;z-index:7000}
-  .contato-detail-modal.active{display:flex}
-  .contato-detail-card{width:min(820px,100%);max-height:88vh;overflow:auto;background:#fff;border-radius:14px;border:1px solid var(--border-color);box-shadow:var(--shadow-lg)}
-  .contato-detail-head{display:flex;justify-content:space-between;gap:16px;padding:18px 20px;border-bottom:1px solid var(--border-color);align-items:flex-start}
-  .contato-detail-head h4{margin:0;color:var(--azul-institucional);font-size:1.1rem}
-  .contato-detail-close{border:0;background:transparent;font-size:1.4rem;color:#66728b;cursor:pointer}
-  .contato-detail-body{padding:20px}
-  .contato-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px}
-  .contato-detail-item small{display:block;color:#8a95a8;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
-  .contato-detail-item strong,.contato-detail-item span{color:#465471;font-size:.84rem}
-  .contato-detail-message{margin-top:18px;padding:14px;border:1px solid #e1e6ec;background:#f8fafc;border-radius:8px;white-space:pre-wrap;line-height:1.6;color:#465471;font-size:.86rem}
-  @media(max-width:900px){.contatos-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.contato-detail-grid{grid-template-columns:1fr}}
-  @media(max-width:600px){.contatos-summary{grid-template-columns:1fr}.contatos-admin-toolbar{align-items:stretch;flex-direction:column}}
+<style id="fmabc-admin-standalone-style">
+  /* Área administrativa independente: sem overlay/modal visual. */
+  html, body { min-height: 100%; }
+  html { background: #f5f7fb; }
+  body.fmabc-admin-standalone {
+    margin: 0 !important;
+    background: #f5f7fb !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+  }
+  body.fmabc-admin-standalone > *:not(#adminModalOverlay) {
+    display: none !important;
+  }
+  /* O editor de reitores fica fora do overlay administrativo no HTML legado.
+     Quando ativo, ele precisa permanecer visível na página independente. */
+
+   /* O editor da Linha do Tempo também fica fora do overlay administrativo no HTML legado.
+      No modo /administrador/ ele precisa permanecer visível quando estiver ativo. */
+   body.fmabc-admin-standalone > #modalTimelineEditor.active {
+     display: flex !important;
+     position: fixed !important;
+     inset: 0 !important;
+     z-index: 12000 !important;
+     align-items: center !important;
+     justify-content: center !important;
+     padding: 20px !important;
+     background: rgba(17,24,39,.58) !important;
+   }
+   body.fmabc-admin-standalone > #modalTimelineEditor.active .timeline-modal {
+     display: block !important;
+     position: relative !important;
+   }
+  body.fmabc-admin-standalone > #modalReitorEditor.active {
+    display: flex !important;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 12000 !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 20px !important;
+    background: rgba(17,24,39,.58) !important;
+  }
+  body.fmabc-admin-standalone > #modalReitorEditor.active .reitores-modal {
+    display: block !important;
+  }
+  body.fmabc-admin-standalone #adminModalOverlay {
+    display: block !important;
+    position: static !important;
+    inset: auto !important;
+    z-index: auto !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+  body.fmabc-admin-standalone #adminModalOverlay .admin-panel-container {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 100vh !important;
+    height: auto !important;
+    border-radius: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    position: static !important;
+  }
+  body.fmabc-admin-standalone #adminModalOverlay .admin-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 50 !important;
+    box-shadow: 0 2px 10px rgba(31,41,55,.08) !important;
+  }
+  body.fmabc-admin-standalone #adminModalOverlay .admin-body {
+    min-height: calc(100vh - 70px) !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  body.fmabc-admin-standalone #adminModalOverlay .admin-content {
+    overflow: visible !important;
+  }
+  body.fmabc-admin-standalone #adminModalOverlay .login-box {
+    margin: 48px auto !important;
+  }
+  body.fmabc-admin-standalone .btn-close-admin {
+    display: inline-flex !important;
+  }
+  body.fmabc-admin-standalone #adminModalOverlay.admin-route-logged-out .btn-close-admin {
+    display: none !important;
+  }
+  @media (max-width: 700px) {
+    body.fmabc-admin-standalone #adminModalOverlay .admin-header {
+      position: static !important;
+    }
+    body.fmabc-admin-standalone #adminModalOverlay .admin-body {
+      display: flex !important;
+      flex-direction: column !important;
+    }
+  }
+</style>
+
+
+<style id="fmabc-reitores-admin-style">
+  .reitores-admin-wrap{display:flex;flex-direction:column;gap:20px}
+  .reitores-admin-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+  .reitores-admin-head h3{margin:0;color:#27304f;font-size:1.45rem}
+  .reitores-admin-head p{margin:6px 0 0;color:#64708a;max-width:820px}
+  .reitores-admin-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .reitores-admin-primary{border:0;border-radius:10px;background:#339c5b;color:#fff;padding:11px 16px;font-weight:800;cursor:pointer;transition:.2s}
+  .reitores-admin-primary:hover{background:#277f48;transform:translateY(-1px)}
+  .reitores-admin-secondary{border:1px solid #d8dfdb;border-radius:10px;background:#fff;color:#33415f;padding:10px 14px;font-weight:700;cursor:pointer}
+  .reitores-admin-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .reitor-admin-card{background:#fff;border:1px solid #e0e5e2;border-radius:16px;overflow:hidden;box-shadow:0 8px 25px rgba(35,39,56,.06);display:grid;grid-template-columns:150px 1fr;min-height:190px}
+  .reitor-admin-photo{width:150px;height:190px;object-fit:cover;background:#eef2ef}
+  .reitor-admin-info{padding:18px;display:flex;flex-direction:column;gap:8px}
+  .reitor-admin-name{font-size:1.02rem;font-weight:800;color:#27304f;margin:0}
+  .reitor-admin-period{font-weight:800;color:#339c5b;font-size:.9rem}
+  .reitor-admin-status{display:inline-flex;align-items:center;width:max-content;gap:6px;padding:5px 9px;border-radius:999px;background:#ecf7f0;color:#247b46;font-weight:800;font-size:.73rem}
+  .reitor-admin-actions{display:flex;gap:8px;margin-top:auto;flex-wrap:wrap}
+  .reitor-admin-actions button{border:1px solid #d9dfdc;background:#fff;color:#33415f;border-radius:9px;padding:8px 11px;font-weight:700;cursor:pointer}
+  .reitor-admin-actions button:hover{border-color:#339c5b;color:#277f48}
+  .reitores-empty{padding:34px;border:1px dashed #ccd6d0;border-radius:14px;background:#fafcfb;text-align:center;color:#6b7588}
+  .reitores-empty strong{display:block;color:#33415f;margin-bottom:5px}
+  .reitores-order-note{font-size:.83rem;color:#64708a}
+  .reitores-modal-overlay{position:fixed;inset:0;background:rgba(17,24,39,.58);display:none;align-items:center;justify-content:center;padding:20px;z-index:12000}
+  .reitores-modal-overlay.active{display:flex}
+  .reitores-modal{width:min(720px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:18px;box-shadow:0 25px 70px rgba(0,0,0,.22)}
+  .reitores-modal-head{padding:20px 22px;border-bottom:1px solid #e8ece9;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .reitores-modal-head h4{margin:0;color:#27304f;font-size:1.18rem}
+  .reitores-modal-close{border:0;background:transparent;color:#6b7588;font-size:24px;cursor:pointer;line-height:1}
+  .reitores-modal-body{padding:22px}
+  .reitores-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .reitores-form-grid .full{grid-column:1/-1}
+  .reitor-photo-preview{width:130px;height:160px;object-fit:cover;border-radius:12px;border:1px solid #dde4df;background:#f5f8f6;display:block}
+  .reitores-upload-row{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+  .reitores-help{font-size:.82rem;color:#6b7588;max-width:480px}
+  @media(max-width:760px){.reitores-admin-grid{grid-template-columns:1fr}.reitor-admin-card{grid-template-columns:110px 1fr}.reitor-admin-photo{width:110px;height:170px}.reitores-form-grid{grid-template-columns:1fr}.reitores-form-grid .full{grid-column:auto}}
+</style>
+
+<style id="fmabc-linha-tempo-admin-style">
+  .timeline-admin-wrap{display:flex;flex-direction:column;gap:18px}
+  .timeline-admin-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
+  .timeline-admin-head h3{margin:0;color:#27304f;font-size:1.45rem}
+  .timeline-admin-head p{margin:6px 0 0;color:#64708a;max-width:840px}
+  .timeline-admin-toolbar{display:flex;gap:9px;flex-wrap:wrap}
+  .timeline-btn{border:1px solid #d8dfdb;border-radius:10px;background:#fff;color:#33415f;padding:10px 14px;font-weight:800;cursor:pointer;transition:.2s}
+  .timeline-btn:hover{border-color:#339c5b;color:#277f48;transform:translateY(-1px)}
+  .timeline-btn.primary{border:0;background:#339c5b;color:#fff}.timeline-btn.primary:hover{background:#277f48}
+  .timeline-status{padding:11px 14px;border:1px solid #dce5df;border-radius:10px;background:#f7fbf8;color:#45604e;font-size:.88rem}
+  .timeline-filter{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .timeline-filter input{flex:1;min-width:240px}.timeline-filter select{width:180px}
+  .timeline-admin-list{display:flex;flex-direction:column;gap:10px}
+  .timeline-admin-item{display:grid;grid-template-columns:42px 86px 1fr auto;gap:14px;align-items:center;background:#fff;border:1px solid #e0e5e2;border-radius:14px;padding:12px;box-shadow:0 6px 18px rgba(35,39,56,.05)}
+  .timeline-admin-drag{cursor:grab;color:#8190a5;font-size:20px;text-align:center}.timeline-admin-drag:active{cursor:grabbing}
+  .timeline-admin-thumb{width:86px;height:58px;object-fit:cover;border-radius:9px;background:#eef2ef;border:1px solid #e2e8e4}
+  .timeline-admin-year{font-size:.82rem;font-weight:900;color:#339c5b;text-transform:uppercase;letter-spacing:.04em}
+  .timeline-admin-title{font-size:1rem;font-weight:800;color:#27304f;margin:2px 0 3px}
+  .timeline-admin-desc{font-size:.84rem;color:#667085;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .timeline-admin-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.timeline-admin-actions button{border:1px solid #d9dfdc;background:#fff;color:#33415f;border-radius:8px;padding:7px 9px;font-weight:700;cursor:pointer}.timeline-admin-actions button:hover{border-color:#339c5b;color:#277f48}
+  .timeline-admin-empty{padding:28px;border:1px dashed #cfd9d3;border-radius:12px;text-align:center;background:#fafcfb;color:#6b7588}
+  .timeline-modal-overlay{position:fixed;inset:0;background:rgba(17,24,39,.58);display:none;align-items:center;justify-content:center;padding:20px;z-index:12000}
+  .timeline-modal-overlay.active{display:flex}
+  .timeline-modal{width:min(760px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:18px;box-shadow:0 25px 70px rgba(0,0,0,.22)}
+  .timeline-modal-head{padding:18px 22px;border-bottom:1px solid #e8ece9;display:flex;align-items:center;justify-content:space-between;gap:12px}.timeline-modal-head h4{margin:0;color:#27304f;font-size:1.18rem}.timeline-modal-close{border:0;background:transparent;color:#6b7588;font-size:24px;cursor:pointer}
+  .timeline-modal-body{padding:22px}.timeline-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.timeline-form-grid .full{grid-column:1/-1}.timeline-preview{width:220px;height:130px;object-fit:cover;border-radius:12px;border:1px solid #dde4df;background:#f5f8f6;display:block}
+  .timeline-help{font-size:.82rem;color:#6b7588;max-width:480px}
+  @media(max-width:760px){.timeline-admin-item{grid-template-columns:30px 70px 1fr}.timeline-admin-actions{grid-column:2/-1;justify-content:flex-start}.timeline-admin-thumb{width:70px;height:52px}.timeline-form-grid{grid-template-columns:1fr}.timeline-form-grid .full{grid-column:auto}}
+</style>
+
+<style id="fmabc-gallery-admin-style">
+  .gallery-admin-wrap{display:flex;flex-direction:column;gap:18px}
+  .gallery-admin-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+  .gallery-admin-head h3{margin:0;color:#27304f;font-size:1.45rem}
+  .gallery-admin-head p{margin:6px 0 0;color:#64708a;max-width:840px}
+  .gallery-admin-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .gallery-admin-primary{border:0;border-radius:10px;background:#339c5b;color:#fff;padding:11px 16px;font-weight:800;cursor:pointer;transition:.2s}
+  .gallery-admin-primary:hover{background:#277f48;transform:translateY(-1px)}
+  .gallery-admin-secondary{border:1px solid #d8dfdb;border-radius:10px;background:#fff;color:#33415f;padding:10px 14px;font-weight:700;cursor:pointer}
+  .gallery-admin-secondary:hover{border-color:#b9c8bf;background:#f8faf9}
+  .gallery-admin-notice{padding:14px 16px;background:#f3f8f4;border:1px solid #d5e6d9;border-radius:12px;color:#52627a;font-size:.83rem;line-height:1.55}
+  .gallery-admin-toolbar-row{display:grid;grid-template-columns:1fr 220px;gap:10px}
+  .gallery-admin-status{font-size:.76rem;color:#748199}
+  .gallery-admin-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .gallery-admin-card{background:#fff;border:1px solid #e0e5e2;border-radius:16px;overflow:hidden;box-shadow:0 8px 25px rgba(35,39,56,.06);display:grid;grid-template-columns:190px 1fr;min-height:190px}
+  .gallery-admin-card-cover{width:190px;height:190px;object-fit:cover;background:#eef2ef}
+  .gallery-admin-card-body{padding:16px;display:flex;flex-direction:column;min-width:0}
+  .gallery-admin-card-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+  .gallery-admin-card-title{margin:0;color:#293452;font-size:1rem;line-height:1.35}
+  .gallery-admin-card-date{margin-top:5px;color:#6c7890;font-size:.78rem}
+  .gallery-admin-card-desc{margin:10px 0 0;color:#64708a;font-size:.8rem;line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .gallery-admin-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .gallery-admin-pill{font-size:.68rem;font-weight:800;padding:5px 8px;border-radius:999px;background:#edf5ef;color:#2f7d4b;border:1px solid #d7eadc}
+  .gallery-admin-pill.draft{background:#f3f4f6;color:#6b7280;border-color:#e5e7eb}
+  .gallery-admin-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:14px}
+  .gallery-admin-actions button{border:1px solid #d8dfdb;background:#fff;color:#52607d;border-radius:8px;padding:7px 9px;font-size:.72rem;font-weight:800;cursor:pointer}
+  .gallery-admin-actions button:hover{background:#f6f8f7}
+  .gallery-admin-actions button.danger{color:#a33b4d;border-color:#ebcbd2}
+  .gallery-editor-shell{display:none;background:#fff;border:1px solid #dfe6e2;border-radius:16px;overflow:hidden;box-shadow:0 10px 30px rgba(35,39,56,.07)}
+  .gallery-editor-shell.active{display:block}
+  .gallery-editor-head{padding:20px 22px;border-bottom:1px solid #e3e8e5;display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+  .gallery-editor-head h4{margin:0;color:#2d3759;font-size:1.25rem}
+  .gallery-editor-head p{margin:5px 0 0;color:#7a8598;font-size:.76rem}
+  .gallery-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 24px;padding:22px}.gallery-form-grid .full{grid-column:1/-1}
+  .gallery-cover-admin-row{display:grid;grid-template-columns:240px 1fr;gap:16px;align-items:start}
+  .gallery-cover-preview-wrap{width:240px;height:170px;border:1px solid #dfe6e2;border-radius:12px;overflow:hidden;background:#f6f8f7;display:flex;align-items:center;justify-content:center}
+  .gallery-cover-preview{width:100%;height:100%;object-fit:cover;display:block}
+  .gallery-cover-fields{display:flex;flex-direction:column;gap:9px}.gallery-cover-fields small,.gallery-upload-box small{color:#7b879a;font-size:.72rem;line-height:1.45}
+  .gallery-use-first-photo{align-self:flex-start}
+  .gallery-upload-box{border:1px dashed #cbd7d0;background:#fbfcfb;padding:14px;border-radius:12px;display:flex;flex-direction:column;gap:10px}
+  .gallery-add-url-row{display:grid;grid-template-columns:1fr auto;gap:8px}
+  .gallery-photos-admin-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+  .gallery-photo-admin-item{display:grid;grid-template-columns:92px 1fr auto;gap:10px;align-items:center;border:1px solid #e1e6e3;border-radius:12px;padding:8px;background:#fff}
+  .gallery-photo-admin-thumb{width:92px;height:72px;object-fit:cover;border-radius:8px;background:#eef2ef}
+  .gallery-photo-admin-main{min-width:0}.gallery-photo-admin-main strong{display:block;color:#35415e;font-size:.76rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.gallery-photo-admin-main span{display:block;color:#8a95a8;font-size:.65rem;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .gallery-photo-admin-actions{display:flex;flex-direction:column;gap:4px}.gallery-photo-admin-actions button{width:34px;height:28px;border:1px solid #d9e0dc;background:#fff;border-radius:7px;color:#56647d;cursor:pointer;font-weight:800}.gallery-photo-admin-actions button:hover{background:#f5f7f6}.gallery-photo-admin-actions button.danger{color:#a33b4d}
+  .gallery-editor-actions{display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap;padding:16px 22px;background:#f8faf9;border-top:1px solid #e3e8e5}
+  @media(max-width:980px){.gallery-admin-grid{grid-template-columns:1fr}.gallery-form-grid{grid-template-columns:1fr}.gallery-form-grid .full{grid-column:auto}.gallery-cover-admin-row{grid-template-columns:1fr}.gallery-cover-preview-wrap{width:100%;height:220px}}
+  @media(max-width:650px){.gallery-admin-toolbar-row{grid-template-columns:1fr}.gallery-admin-card{grid-template-columns:1fr}.gallery-admin-card-cover{width:100%;height:210px}.gallery-photos-admin-list{grid-template-columns:1fr}.gallery-add-url-row{grid-template-columns:1fr}}
 </style>
 
 </head>
-<body>
+<body class="fmabc-admin-standalone">
 
   <nav class="top-nav" aria-label="Navegação principal">
     <a href="index.html" class="brand-logo">
@@ -2722,6 +2994,7 @@
 
       <div class="hero-controls">
         <div class="hero-dots" id="heroDots" aria-label="Selecionar imagem"></div>
+        <div class="hero-autoplay"><span class="hero-live-dot"></span><span id="heroAutoplayText">Troca automática • 5 turmas por vez</span></div>
       </div>
     </section>
 
@@ -2738,7 +3011,12 @@
     <section class="carrossel-turmas-wrapper" id="turmas-acervo" aria-label="Galeria de turmas formadas">
       <div class="carrossel-header">
         <div class="carrossel-heading">
+          <span class="carrossel-kicker">Acervo em destaque</span>
           <h2>Turmas que fazem parte da nossa história</h2>
+        </div>
+        <div class="carrossel-status" id="carrosselStatus">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span id="carrosselStatusTexto">Troca automática</span>
         </div>
       </div>
 
@@ -2802,6 +3080,14 @@
       <div>
         <p id="footerAddress">Endereço: Carregando...</p>
         <p id="footerEmail">Contato: Carregando...</p>
+      </div>
+      <div class="admin-footer-area">
+        <div class="admin-nav-actions" id="adminNavActions">
+          <a class="btn-admin-access" href="administrador/" aria-label="Abrir área administrativa">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-5.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28-7.79-7 8.94V12H5V6.3l7-3.11v8.8Z"/></svg>
+            Área Administrativa
+          </a>
+        </div>
       </div>
     </div>
     <div class="developer-credit">Desenvolvido por Regiane Meira</div>
@@ -2898,8 +3184,8 @@
       <div class="admin-header">
         <h3>FMABC | Painel de Gestão de Conteúdo</h3>
         <div>
-          <button class="btn-close-admin" onclick="fazerLogoutAdmin()" style="margin-right: 8px; background: rgba(220, 38, 38, 0.25); border-color: rgba(239, 68, 68, 0.4);">Sair</button>
-          <button class="btn-close-admin" onclick="fecharAdminModal()">Voltar à Página Inicial ✕</button>
+          <button id="adminLogoutBtn" class="btn-close-admin" onclick="fazerLogoutAdmin()" style="margin-right: 8px; background: rgba(220, 38, 38, 0.25); border-color: rgba(239, 68, 68, 0.4);">Sair</button>
+          <button id="adminBackPortalBtn" class="btn-close-admin" onclick="fecharAdminModal()">Voltar à Página Inicial ✕</button>
         </div>
       </div>
 
@@ -2908,7 +3194,9 @@
           <button class="admin-nav-item active" onclick="switchAdminTab(event, 'tabHome')">Página Inicial</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabMenus')">Gestão de Menus</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabPaginas')">Gestão de Páginas</button>
-          <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabContatos')">Mensagens de Contato</button>
+          <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabGaleriaFotos')">Galeria de Fotos</button>
+          <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabReitores')">Galeria de Reitores</button>
+          <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabLinhaTempo')">Linha do Tempo</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabPlanoDeFundo')">Plano de Fundo</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabCursos')">Inclusão de Cursos</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabTurmas')">Gestão de Turmas</button>
@@ -3145,8 +3433,154 @@
             </div>
           </section>
 
-          <!-- ABA DE PLANO DE FUNDO COM PREVIEW E TRANSIÇÃO SUAVE -->
-          <section id="tabPlanoDeFundo" class="admin-tab-pane">
+          
+          <section id="tabLinhaTempo" class="admin-tab-pane">
+            <div class="timeline-admin-wrap">
+              <div class="timeline-admin-head">
+                <div>
+                  <h3>Linha do Tempo</h3>
+                  <p>Cadastre e organize os principais acontecimentos da história da instituição. Os registros ficam salvos no Cloudflare e podem ser exibidos com foto, texto e destaque.</p>
+                </div>
+                <div class="timeline-admin-toolbar">
+                  <button type="button" class="timeline-btn primary" id="btnNovoEventoTimeline">+ Novo acontecimento</button>
+                  <button type="button" class="timeline-btn" id="btnAtualizarTimeline">Atualizar</button>
+                </div>
+              </div>
+              <div class="timeline-filter">
+                <input id="filtroTimelineAdmin" class="form-control" type="search" placeholder="Pesquisar acontecimento" autocomplete="off">
+                <select id="filtroTimelineDecada" class="form-control">
+                  <option value="">Todas as décadas</option>
+                  <option value="1960">1960</option><option value="1970">1970</option><option value="1980">1980</option><option value="1990">1990</option><option value="2000">2000</option><option value="2010">2010</option><option value="2020">2020</option>
+                </select>
+              </div>
+              <div class="timeline-status" id="statusTimelineAdmin">Nenhuma alteração pendente.</div>
+              <div id="listaTimelineAdmin" class="timeline-admin-list"></div>
+              <div style="display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;">
+                <button type="button" class="timeline-btn" id="btnRestaurarTimeline">Restaurar marcos padrão</button>
+                <button type="button" class="timeline-btn primary" id="btnSalvarTimelineAlteracoes">Salvar alterações</button>
+              </div>
+            </div>
+          </section>
+
+<!-- ABA DE PLANO DE FUNDO COM PREVIEW E TRANSIÇÃO SUAVE -->
+          
+          <section id="tabGaleriaFotos" class="admin-tab-pane">
+            <div class="gallery-admin-wrap">
+              <div class="gallery-admin-head">
+                <div>
+                  <h3>Galeria de Fotos</h3>
+                  <p>Crie álbuns de fotos para a nova página institucional. As imagens são armazenadas no Cloudflare R2 e os álbuns no Cloudflare.</p>
+                </div>
+                <div class="gallery-admin-toolbar">
+                  <button type="button" class="gallery-admin-primary" onclick="abrirNovoAlbumGaleria()">+ Novo álbum</button>
+                  <button type="button" class="gallery-admin-secondary" onclick="carregarGaleriaFotosDoBanco(true)">Atualizar</button>
+                </div>
+              </div>
+
+              <div class="gallery-admin-notice">
+                <strong>Como funciona:</strong> cadastre o álbum, informe título e data, escolha uma capa, adicione as fotos e publique quando estiver pronto. A ordem definida aqui é a mesma exibida na página pública.
+              </div>
+
+              <div class="gallery-admin-toolbar-row">
+                <input id="filtroGaleriaFotosAdmin" class="form-control" type="search" placeholder="Pesquisar álbum" oninput="renderListaAlbunsGaleriaAdmin()" autocomplete="off">
+                <select id="filtroGaleriaStatusAdmin" class="form-control" onchange="renderListaAlbunsGaleriaAdmin()">
+                  <option value="">Todos os status</option>
+                  <option value="publicado">Publicados</option>
+                  <option value="rascunho">Rascunhos</option>
+                </select>
+              </div>
+
+              <div class="gallery-admin-status" id="statusGaleriaFotosAdmin">Carregando álbuns...</div>
+              <div id="listaAlbunsGaleriaAdmin" class="gallery-admin-grid"></div>
+
+              <div id="editorAlbumGaleria" class="gallery-editor-shell" aria-hidden="true">
+                <div class="gallery-editor-head">
+                  <div>
+                    <h4 id="tituloEditorAlbumGaleria">Novo álbum</h4>
+                    <p id="subtituloEditorAlbumGaleria">Cadastre as informações do álbum e depois adicione as fotos.</p>
+                  </div>
+                  <button type="button" class="gallery-admin-secondary" onclick="fecharEditorAlbumGaleria()">Fechar</button>
+                </div>
+
+                <form id="formAlbumGaleria" onsubmit="salvarAlbumGaleria(event)">
+                  <input type="hidden" id="albumGaleriaEditId" value="">
+                  <div class="gallery-form-grid">
+                    <div class="form-group">
+                      <label>Título do álbum</label>
+                      <input type="text" id="albumGaleriaTitulo" class="form-control" maxlength="160" required placeholder="Ex.: Colação de Grau Medicina 2026">
+                    </div>
+                    <div class="form-group">
+                      <label>Data do evento</label>
+                      <input type="date" id="albumGaleriaData" class="form-control">
+                    </div>
+                    <div class="form-group full">
+                      <label>Descrição</label>
+                      <textarea id="albumGaleriaDescricao" class="form-control" rows="4" maxlength="800" placeholder="Breve descrição do álbum."></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label>Categoria</label>
+                      <input type="text" id="albumGaleriaCategoria" class="form-control" maxlength="80" placeholder="Ex.: Eventos institucionais">
+                    </div>
+                    <div class="form-group">
+                      <label>Visibilidade</label>
+                      <select id="albumGaleriaPublicado" class="form-control">
+                        <option value="true">Publicado</option>
+                        <option value="false">Rascunho</option>
+                      </select>
+                    </div>
+                    <div class="form-group full">
+                      <label>Capa do álbum</label>
+                      <div class="gallery-cover-admin-row">
+                        <div class="gallery-cover-preview-wrap"><img id="albumGaleriaCapaPreview" class="gallery-cover-preview" alt="Pré-visualização da capa"></div>
+                        <div class="gallery-cover-fields">
+                          <input type="file" id="albumGaleriaCapaArquivo" class="form-control" accept="image/*">
+                          <input type="text" id="albumGaleriaCapaUrl" class="form-control" maxlength="1000" placeholder="ou informe a URL da capa">
+                          <small>Você também pode usar uma das fotos do álbum como capa.</small>
+                          <button type="button" class="gallery-admin-secondary gallery-use-first-photo" onclick="usarPrimeiraFotoComoCapaGaleria()">Usar primeira foto</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group full">
+                      <label>Fotos do álbum</label>
+                      <div class="gallery-upload-box">
+                        <input type="file" id="albumGaleriaFotosArquivos" class="form-control" accept="image/*" multiple>
+                        <div class="gallery-add-url-row">
+                          <input type="text" id="albumGaleriaFotoUrl" class="form-control" maxlength="1000" placeholder="Adicionar uma foto por URL">
+                          <button type="button" class="gallery-admin-secondary" onclick="adicionarFotoUrlGaleria()">Adicionar URL</button>
+                        </div>
+                        <small>É possível selecionar várias imagens de uma vez. Cada arquivo será otimizado antes do envio ao Cloudflare R2.</small>
+                      </div>
+                      <div id="listaFotosAlbumGaleria" class="gallery-photos-admin-list"></div>
+                    </div>
+                  </div>
+                  <div class="gallery-editor-actions">
+                    <button type="button" class="gallery-admin-secondary" onclick="fecharEditorAlbumGaleria()">Cancelar</button>
+                    <button type="submit" class="gallery-admin-primary" id="btnSalvarAlbumGaleria">Salvar álbum</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </section>
+
+          <section id="tabReitores" class="admin-tab-pane">
+            <div class="reitores-admin-wrap">
+              <div class="reitores-admin-head">
+                <div>
+                  <h3>Galeria de Reitores</h3>
+                  <p>Cadastre e organize os reitores que farão parte da galeria pública. A foto é armazenada no Cloudflare R2 e os dados ficam salvos no Cloudflare D1.</p>
+                </div>
+                <div class="reitores-admin-toolbar">
+                  <button type="button" class="reitores-admin-primary" onclick="abrirModalReitor()">+ Novo reitor</button>
+                  <button type="button" class="reitores-admin-secondary" onclick="carregarReitoresDoBanco(true)">Atualizar</button>
+                </div>
+              </div>
+              <div class="menu-admin-status" id="statusReitoresAdmin">Nenhuma alteração pendente.</div>
+              <div id="listaReitoresAdmin" class="reitores-admin-grid"></div>
+              <div class="reitores-order-note">A ordem exibida aqui é a mesma ordem usada na galeria pública. Use as setas para posicionar cada reitor.</div>
+            </div>
+          </section>
+
+<section id="tabPlanoDeFundo" class="admin-tab-pane">
             <h3 class="admin-section-title">Alterar Imagem de Fundo da Página</h3>
             <form onsubmit="salvarPlanoDeFundo(event)">
               <div class="upload-container">
@@ -3196,71 +3630,21 @@
             </form>
 
             <h4 style="margin-top: 24px; color: var(--azul-institucional);">Cursos Cadastrados no Banco</h4>
-            <div id="listaCursos" style="margin-top: 12px;"></div>
+            <div class="cursos-admin-table-wrap">
+              <table class="admin-table cursos-admin-table" aria-label="Cursos cadastrados no banco">
+                <thead>
+                  <tr>
+                    <th>Nome do Curso</th>
+                    <th>Descrição</th>
+                    <th class="cursos-admin-acoes-col">Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="listaCursos"></tbody>
+              </table>
+            </div>
           </section>
 
           <!-- TAB TURMAS COM PREVIEW E TRANSIÇÃO SUAVE -->
-          <section id="tabContatos" class="admin-tab-pane">
-            <h3 class="admin-section-title">Mensagens de Contato</h3>
-            <div class="contatos-admin-toolbar">
-              <div>
-                <p style="margin:0;color:var(--slate-muted);font-size:.84rem;">Mensagens enviadas pelos ex-alunos através do formulário <strong>Fale Conosco</strong>.</p>
-              </div>
-              <div class="contatos-admin-filter">
-                <select id="filtroStatusContatos" class="form-control" onchange="carregarContatosAdmin()">
-                  <option value="">Todos os status</option>
-                  <option value="novo">Novos</option>
-                  <option value="em_atendimento">Em atendimento</option>
-                  <option value="respondido">Respondidos</option>
-                  <option value="arquivado">Arquivados</option>
-                </select>
-                <button type="button" class="btn-save" onclick="carregarContatosAdmin()">Atualizar</button>
-              </div>
-            </div>
-            <div class="contatos-summary">
-              <div class="contatos-summary-card"><small>Novos</small><strong id="contatosResumoNovos">0</strong></div>
-              <div class="contatos-summary-card"><small>Em atendimento</small><strong id="contatosResumoAtendimento">0</strong></div>
-              <div class="contatos-summary-card"><small>Respondidos</small><strong id="contatosResumoRespondidos">0</strong></div>
-              <div class="contatos-summary-card"><small>Total</small><strong id="contatosResumoTotal">0</strong></div>
-            </div>
-            <div class="contatos-table-wrap">
-              <table class="contatos-table">
-                <thead><tr>
-                  <th>Protocolo</th>
-                  <th>Data</th>
-                  <th>Ex-aluno</th>
-                  <th>Assunto</th>
-                  <th>Mensagem</th>
-                  <th>Status</th>
-                  <th>Ação</th>
-                </tr></thead>
-                <tbody id="tabelaContatosAdminBody">
-                  <tr><td colspan="7" style="text-align:center;padding:28px;color:#8a95a8;">Carregando mensagens...</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <div id="contatoDetailModal" class="contato-detail-modal" aria-hidden="true" onclick="fecharDetalheContato(event)">
-              <div class="contato-detail-card" role="dialog" aria-modal="true" aria-labelledby="contatoDetailTitle" onclick="event.stopPropagation()">
-                <div class="contato-detail-head">
-                  <div><h4 id="contatoDetailTitle">Mensagem de contato</h4><span id="contatoDetailProtocol" class="contatos-protocolo"></span></div>
-                  <button type="button" class="contato-detail-close" onclick="fecharDetalheContato()" aria-label="Fechar">×</button>
-                </div>
-                <div class="contato-detail-body">
-                  <div class="contato-detail-grid">
-                    <div class="contato-detail-item"><small>Nome</small><strong id="contatoDetailNome"></strong></div>
-                    <div class="contato-detail-item"><small>E-mail</small><span id="contatoDetailEmail"></span></div>
-                    <div class="contato-detail-item"><small>Telefone</small><span id="contatoDetailTelefone"></span></div>
-                    <div class="contato-detail-item"><small>Curso / Turma</small><span id="contatoDetailCursoTurma"></span></div>
-                    <div class="contato-detail-item"><small>Assunto</small><span id="contatoDetailAssunto"></span></div>
-                    <div class="contato-detail-item"><small>Data</small><span id="contatoDetailData"></span></div>
-                  </div>
-                  <div class="contato-detail-message" id="contatoDetailMensagem"></div>
-                  <div style="margin-top:14px;color:#7b8498;font-size:.72rem;">Consentimento LGPD registrado: <strong id="contatoDetailConsentimento"></strong> · Política <span id="contatoDetailPolitica"></span></div>
-                </div>
-              </div>
-            </div>
-          </section>
-
           <section id="tabTurmas" class="admin-tab-pane">
             <h3 class="admin-section-title">Inclusão e Edição de Turmas (Cloudflare)</h3>
 
@@ -3362,6 +3746,7 @@
             <div class="form-group" style="background: var(--slate-light); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; margin-bottom: 20px;">
               <label style="font-weight: bold; color: var(--azul-institucional); font-size: 0.95rem;">
                 Depoimentos Pendentes de Aprovação (<span id="countDepoimentosPendentes">0</span>)
+                <button type="button" onclick="carregarDepoimentosPendentes(turmaEdicaoSelecionadaId)" style="float:right; border:1px solid var(--border-color); background:#fff; color:var(--azul-institucional); border-radius:6px; padding:4px 9px; font-size:.72rem; font-weight:bold; cursor:pointer;">Atualizar</button>
               </label>
               <div id="previewDepoimentosPendentesContainer" style="display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto; margin-top: 10px;">
                 <p style="font-size: 0.82rem; color: var(--slate-muted); margin: 0;">Selecione uma turma para buscar os depoimentos pendentes.</p>
@@ -3554,6 +3939,81 @@
 
 
         </main>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="reitores-modal-overlay" id="modalReitorEditor" aria-hidden="true">
+    <div class="reitores-modal" role="dialog" aria-modal="true" aria-labelledby="tituloModalReitor">
+      <div class="reitores-modal-head">
+        <h4 id="tituloModalReitor">Novo reitor</h4>
+        <button type="button" class="reitores-modal-close" onclick="fecharModalReitor()" aria-label="Fechar">×</button>
+      </div>
+      <div class="reitores-modal-body">
+        <form id="formReitorAdmin" onsubmit="salvarReitorAdmin(event)">
+          <input type="hidden" id="reitorEditId">
+          <div class="reitores-form-grid">
+            <div class="form-group full">
+              <label>Nome completo</label>
+              <input type="text" id="reitorNome" class="form-control" maxlength="180" required placeholder="Ex.: Professor Doutor Nome Completo">
+            </div>
+            <div class="form-group">
+              <label>Ano de início da gestão</label>
+              <input type="number" id="reitorInicio" class="form-control" min="1900" max="2100" required placeholder="1970">
+            </div>
+            <div class="form-group">
+              <label>Ano de término da gestão</label>
+              <input type="number" id="reitorFim" class="form-control" min="1900" max="2100" placeholder="1974">
+            </div>
+            <div class="form-group full">
+              <label>Foto</label>
+              <div class="reitores-upload-row">
+                <img id="reitorPreviewFoto" class="reitor-photo-preview" alt="Pré-visualização da foto">
+                <div>
+                  <input type="file" id="reitorFotoArquivo" accept="image/*" class="form-control">
+                  <p class="reitores-help">Envie uma foto oficial ou de arquivo. A imagem será otimizada e armazenada no R2.</p>
+                  <input type="text" id="reitorFotoUrl" class="form-control" placeholder="ou informe a URL da foto" maxlength="1000">
+                </div>
+              </div>
+            </div>
+            <div class="form-group full" style="display:flex;align-items:center;gap:10px;">
+              <input type="checkbox" id="reitorAtual" style="width:18px;height:18px;">
+              <label for="reitorAtual" style="margin:0;">Marcar como gestão atual</label>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:22px;flex-wrap:wrap;">
+            <button type="button" class="reitores-admin-secondary" onclick="fecharModalReitor()">Cancelar</button>
+            <button type="submit" class="reitores-admin-primary" id="btnSalvarReitor">Salvar reitor</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="timeline-modal-overlay" id="modalTimelineEditor" aria-hidden="true">
+    <div class="timeline-modal" role="dialog" aria-modal="true" aria-labelledby="tituloModalTimeline">
+      <div class="timeline-modal-head">
+        <h4 id="tituloModalTimeline">Novo acontecimento</h4>
+        <button type="button" class="timeline-modal-close" id="btnFecharModalTimeline" aria-label="Fechar">×</button>
+      </div>
+      <div class="timeline-modal-body">
+        <form id="formTimelineAdmin">
+          <input type="hidden" id="timelineEditId">
+          <div class="timeline-form-grid">
+            <div class="form-group"><label>Ano / período</label><input type="text" id="timelineAno" class="form-control" maxlength="30" required placeholder="Ex.: 1969 ou 2018–2019"></div>
+            <div class="form-group"><label>Década</label><select id="timelineDecada" class="form-control"><option value="1960">1960</option><option value="1970">1970</option><option value="1980">1980</option><option value="1990">1990</option><option value="2000">2000</option><option value="2010">2010</option><option value="2020">2020</option><option value="">Outra</option></select></div>
+            <div class="form-group full"><label>Título</label><input type="text" id="timelineTitulo" class="form-control" maxlength="180" required placeholder="Título do acontecimento"></div>
+            <div class="form-group full"><label>Descrição</label><textarea id="timelineDescricao" class="form-control" rows="5" maxlength="1200" placeholder="Descreva o acontecimento histórico."></textarea></div>
+            <div class="form-group full"><label>Foto</label><div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;"><img id="timelinePreviewFoto" class="timeline-preview" alt="Pré-visualização"><div style="flex:1;min-width:250px;"><input type="file" id="timelineFotoArquivo" class="form-control" accept="image/*"><p class="timeline-help">A imagem será otimizada e armazenada no Cloudflare R2.</p><input type="text" id="timelineFotoUrl" class="form-control" placeholder="ou informe a URL da foto" maxlength="1000" style="margin-top:8px;"></div></div></div>
+            <div class="form-group full" style="display:flex;align-items:center;gap:10px;"><input type="checkbox" id="timelineDestaque" style="width:18px;height:18px;"><label for="timelineDestaque" style="margin:0;">Destacar este acontecimento na página pública</label></div>
+          </div>
+          <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:22px;flex-wrap:wrap;">
+            <button type="button" class="timeline-btn" id="btnCancelarModalTimeline">Cancelar</button>
+            <button type="submit" class="timeline-btn primary" id="btnSalvarTimelineEvento">Salvar acontecimento</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -4593,6 +5053,8 @@
       setupEventListeners();
       await carregarOrdemTurmasDoBanco();
       await carregarPaginasDoBanco();
+      await carregarReitoresDoBanco(false);
+      await carregarGaleriaFotosDoBanco(false);
 
       // Primeira carga: busca os dados em paralelo, sem bloquear o Hero visível.
       await sincronizarDadosPublicosEconomicamente(true);
@@ -4857,6 +5319,7 @@
       { id: 'linha-do-tempo', pageId: 'linha-do-tempo', label: 'Linha do tempo', url: 'linha-do-tempo.html', target: '_self', visible: true },
       { id: 'depoimentos-ex-alunos', pageId: 'depoimentos-ex-alunos', label: 'Depoimentos de ex-alunos', url: 'depoimentos-ex-alunos.html', target: '_self', visible: true },
       { id: 'galeria-diretores-reitores', pageId: 'galeria-diretores-reitores', label: 'Fotos e galeria de diretores e reitores', url: 'galeria-diretores-reitores.html', target: '_self', visible: true },
+      { id: 'galeria-fotos', pageId: 'galeria-fotos', label: 'Galeria de Fotos', url: 'galeria-fotos.html', target: '_self', visible: true },
       { id: 'professores-emeritos', pageId: 'professores-emeritos', label: 'Professores eméritos', url: 'professores-emeritos.html', target: '_self', visible: true }
     ];
 
@@ -4926,6 +5389,7 @@
         '#linha-do-tempo': 'linha-do-tempo.html',
         '#depoimentos-ex-alunos': 'depoimentos-ex-alunos.html',
         '#galeria-diretores-reitores': 'galeria-diretores-reitores.html',
+        '#galeria-fotos': 'galeria-fotos.html',
         '#professores-emeritos': 'professores-emeritos.html'
       };
       return itens.map(item => ({ ...item, url: mapa[item.url] || item.url }));
@@ -5154,8 +5618,28 @@
         console.warn('Não foi possível carregar o menu do Cloudflare; usando menu padrão.', error);
         menuSiteItens = MENU_PADRAO.map(item => ({ ...item }));
       }
+      // Garante que a nova Galeria de Fotos continue disponível no menu
+      // mesmo em bases antigas que ainda não possuam este item salvo.
+      const paginaGaleria = Array.isArray(PAGINAS_SISTEMA) ? PAGINAS_SISTEMA.find(p => String(p.id) === 'galeria-fotos') : null;
+      if (paginaGaleria && paginaGaleria.menu !== false && !encontrarMenuDaPagina(paginaGaleria)) {
+        garantirMenuDaPagina(paginaGaleria);
+      }
       renderMenuPublico();
       renderEditorMenu();
+    }
+
+    function valorConfigEquivalente(a, b) {
+      try { return JSON.stringify(a) === JSON.stringify(b); } catch { return false; }
+    }
+
+    async function verificarConfigNoCloudflare(id, esperado) {
+      const resposta = await fetch(`${CLOUDFLARE_API_URL}/api/config/${encodeURIComponent(id)}?verify=${Date.now()}`, { cache: 'no-store' });
+      if (!resposta.ok) throw new Error(`Não foi possível confirmar o salvamento (HTTP ${resposta.status}).`);
+      const data = await resposta.json();
+      if (!valorConfigEquivalente(data?.valor, esperado)) {
+        throw new Error('O servidor respondeu, mas a alteração não foi encontrada no Cloudflare.');
+      }
+      return data;
     }
 
     async function salvarMenuNoBanco() {
@@ -5166,18 +5650,30 @@
       }
 
       menuSiteItens = normalizarMenuItens(menuSiteItens);
+      const payload = { itens: menuSiteItens.map(item => ({
+        id: String(item.id || ''),
+        pageId: item.pageId ? String(item.pageId) : undefined,
+        label: String(item.label || '').trim().slice(0, 80),
+        url: normalizarUrlMenu(item.url).slice(0, 500),
+        target: item.target === '_blank' ? '_blank' : '_self',
+        visible: item.visible !== false
+      }))};
+
       try {
+        showToast('Salvando menu...', 1800);
         await cloudflareAdminFetch('/api/admin/config/site_menu', {
           method: 'PUT',
-          body: JSON.stringify({ valor: { itens: menuSiteItens } })
+          body: JSON.stringify({ valor: payload })
         });
+        await verificarConfigNoCloudflare('site_menu', payload);
+        menuSiteItens = normalizarMenuItens(payload);
         renderMenuPublico();
         renderEditorMenu();
-        showToast('Menu salvo no Cloudflare.');
+        showToast('Menu salvo com sucesso no Cloudflare.');
         return true;
       } catch (error) {
-        console.error('Erro ao salvar menu:', error);
-        showToast('Não foi possível salvar o menu: ' + (error.message || 'erro desconhecido'));
+        console.error('Erro ao salvar/verificar menu:', error);
+        showToast('Não foi possível salvar o menu: ' + (error?.message || 'erro desconhecido'), 5000);
         return false;
       }
     }
@@ -5275,7 +5771,8 @@
       { id:'linha-do-tempo', tipo:'sistema', titulo:'Linha do tempo', url:'linha-do-tempo.html', resumo:'Principais marcos da história da FMABC, organizados cronologicamente.', conteudo:'<p>Área exclusiva para a linha do tempo institucional.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'memoria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:2, podeExcluir:false },
       { id:'depoimentos-ex-alunos', tipo:'sistema', titulo:'Depoimentos de ex-alunos', url:'depoimentos-ex-alunos.html', resumo:'Memórias, experiências e mensagens de quem fez parte da história da FMABC.', conteudo:'<p>Envie seu depoimento para integrar o acervo histórico da sua turma. O conteúdo será encaminhado para análise antes da publicação.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'memoria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:3, podeExcluir:false },
       { id:'galeria-diretores-reitores', tipo:'sistema', titulo:'Fotos e galeria de diretores e reitores', url:'galeria-diretores-reitores.html', resumo:'Registro visual das gestões e dos personagens que marcaram a trajetória institucional.', conteudo:'<p>Área exclusiva para fotos e galeria de diretores e reitores.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'galeria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:4, podeExcluir:false },
-      { id:'professores-emeritos', tipo:'sistema', titulo:'Professores eméritos', url:'professores-emeritos.html', resumo:'Memória e reconhecimento dos professores eméritos da instituição.', conteudo:'<p>Área exclusiva para o acervo dos professores eméritos.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'memoria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:5, podeExcluir:false }
+      { id:'galeria-fotos', tipo:'sistema', titulo:'Galeria de Fotos', url:'galeria-fotos.html', resumo:'Álbuns fotográficos institucionais com registros de eventos, cerimônias e momentos históricos.', conteudo:'<p>Galeria institucional de fotos, organizada em álbuns.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'Galeria de Fotos FMABC', modelo:'galeria-fotos', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'fotografia', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:5, podeExcluir:false },
+      { id:'professores-emeritos', tipo:'sistema', titulo:'Professores eméritos', url:'professores-emeritos.html', resumo:'Memória e reconhecimento dos professores eméritos da instituição.', conteudo:'<p>Área exclusiva para o acervo dos professores eméritos.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'memoria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:6, podeExcluir:false }
     ];
     let paginasCustomizadas=[];
     let paginaArrastandoId='';
@@ -5400,8 +5897,6 @@
       registrarAtividadeAdmin();if(!localStorage.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return false;}
       try{
         atualizarOrdemPaginasAPartirDaLista(obterOrdemPaginas());
-        // Remove qualquer registro antigo do sistema que tenha sido gravado
-        // indevidamente como página personalizada.
         const customsLimpos=paginasCustomizadas
           .map((p,i)=>({...normalizarPaginaCustom(p,i),ordem:p.ordem}))
           .filter(Boolean)
@@ -5410,10 +5905,21 @@
 
         menuSiteItens=normalizarMenuItens(menuSiteItens);
         const payload=[...PAGINAS_SISTEMA.map(p=>({...p})),...paginasCustomizadas];
+        const menuPayload={itens:menuSiteItens.map(item=>({
+          id:String(item.id||''),pageId:item.pageId?String(item.pageId):undefined,
+          label:String(item.label||'').trim().slice(0,80),url:normalizarUrlMenu(item.url).slice(0,500),
+          target:item.target==='_blank'?'_blank':'_self',visible:item.visible!==false
+        }))};
+
+        showToast('Salvando página e menu...', 1800);
         await cloudflareAdminFetch('/api/admin/config/portal_pages',{method:'PUT',body:JSON.stringify({valor:{pages:payload}})});
-        await cloudflareAdminFetch('/api/admin/config/site_menu',{method:'PUT',body:JSON.stringify({valor:{itens:menuSiteItens}})});
-        renderListaPaginasCMS();renderMenuPublico();showToast('Páginas salvas e menu sincronizado com o Cloudflare.');return true;
-      }catch(error){console.error(error);showToast('Não foi possível salvar as páginas: '+(error.message||'erro desconhecido'));return false;}
+        await verificarConfigNoCloudflare('portal_pages',{pages:payload});
+        await cloudflareAdminFetch('/api/admin/config/site_menu',{method:'PUT',body:JSON.stringify({valor:menuPayload})});
+        await verificarConfigNoCloudflare('site_menu',menuPayload);
+        menuSiteItens=normalizarMenuItens(menuPayload);
+        renderListaPaginasCMS();renderMenuPublico();renderEditorMenu();
+        showToast('Página e menu salvos com sucesso no Cloudflare.');return true;
+      }catch(error){console.error('Erro ao salvar/verificar páginas:',error);showToast('Não foi possível salvar as páginas: '+(error?.message||'erro desconhecido'),5000);return false;}
     }
 
     function iniciarArrastePagina(event,id){paginaArrastandoId=String(id);event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/plain',String(id));event.currentTarget.style.opacity='.55';}
@@ -5442,7 +5948,7 @@
     }
     function editarPaginaPortal(id){
       const page=paginaPorId(id);if(!page)return;
-      paginaEditandoId=String(id);document.getElementById('paginaEditandoId').value=paginaEditandoId;document.getElementById('tituloEditorPagina').textContent='Alterar página';document.getElementById('subtituloEditorPagina').textContent=page.tipo==='sistema'?'Página institucional: título, conteúdo, banner, SEO e opções de publicação podem ser administrados aqui.':'Edite todos os campos disponíveis para esta página.';document.getElementById('btnSalvarPaginaPortal').textContent='Salvar alterações';
+      paginaEditandoId=String(id);document.getElementById('paginaEditandoId').value=paginaEditandoId;document.getElementById('tituloEditorPagina').textContent='Alterar página';document.getElementById('subtituloEditorPagina').textContent=page.tipo==='sistema' ? (page.id==='galeria-fotos' ? 'Página institucional: título, SEO e opções de publicação são administrados aqui; álbuns e fotos são gerenciados na aba “Galeria de Fotos”.' : 'Página institucional: título, conteúdo, banner, SEO e opções de publicação podem ser administrados aqui.') : 'Edite todos os campos disponíveis para esta página.';document.getElementById('btnSalvarPaginaPortal').textContent='Salvar alterações';
       const set=(id,val)=>{const el=document.getElementById(id);if(el)el.value=val??'';};
       set('inputPaginaTitulo',page.titulo);set('inputPaginaSlug',page.slug||'');set('inputPaginaTituloPublico',page.titulo||'');set('inputPaginaResumo',page.resumo||'');set('inputPaginaModelo',page.modelo||'institucional');set('inputPaginaPopup',page.popup||'');set('inputPaginaCategoria',page.categoria||'');set('inputPaginaSubcategoria',page.subcategoria||'');set('inputPaginaVisivel',page.visivel===false?'false':'true');set('inputPaginaDestaque',page.destaque?'true':'false');set('inputPaginaBusca',page.mostrarBusca===false?'false':'true');set('inputPaginaSeoTitulo',page.seoTitulo||'');set('inputPaginaSeoDescricao',page.seoDescricao||'');set('inputPaginaSeoKeywords',page.seoKeywords||'');set('inputPaginaMae',page.paginaMae||'');set('inputPaginaImagemUrl',page.imagem||'');set('inputPaginaBannerAlt',page.bannerAlt||'');document.getElementById('inputPaginaMenu').checked=page.menu!==false;
       definirEditorConteudo('inputPaginaConteudo',page.conteudo||'');definirEditorConteudo('inputPaginaConteudoSecundario',page.conteudoSecundario||'');definirEditorConteudo('inputPaginaInformacoesAdicionais',page.informacoesAdicionais||'');atualizarPreviewImagemPagina(page.imagem||'');preencherSelectPaginaMae(page.paginaMae||'');
@@ -5521,57 +6027,205 @@
       turmas: []
     };
 
+    window.__cursosAdmin = [];
+
+    function escaparHtmlCurso(valor) {
+      return String(valor ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
     async function carregarCursosDoBanco() {
       try {
         const resposta = await fetch(`${CLOUDFLARE_API_URL}/api/cursos`, { cache: 'no-store' });
         if (!resposta.ok) throw new Error(`Cloudflare API HTTP ${resposta.status}`);
         const data = await resposta.json();
-        const nomesCursosBanco = Array.isArray(data) ? data.map(c => c?.nome).filter(Boolean) : [];
+        const cursos = Array.isArray(data) ? data : [];
+        window.__cursosAdmin = cursos;
+        const nomesCursosBanco = cursos.map(c => c?.nome).filter(Boolean);
         appState.cursos = Array.from(new Set(['Todos', ...nomesCursosBanco]));
         renderCourseFilters();
         populateAdminSelects();
-        renderListaCursosAdmin(Array.isArray(data) ? data : []);
+        renderListaCursosAdmin(cursos);
       } catch (err) {
         console.error('Erro ao carregar cursos do Cloudflare:', err.message);
+        const tbody = document.getElementById('listaCursos');
+        if (tbody) {
+          tbody.innerHTML = `<tr><td colspan="3" class="cursos-admin-empty">Não foi possível carregar os cursos.</td></tr>`;
+        }
       }
     }
 
     function renderListaCursosAdmin(cursos) {
-      const container = document.getElementById('listaCursos');
-      if (!container) return;
-      container.innerHTML = '';
+      const tbody = document.getElementById('listaCursos');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      window.__cursosAdmin = Array.isArray(cursos) ? cursos : [];
 
-      cursos.forEach(curso => {
-        container.innerHTML += `
-          <div class="card-curso">
-            <h3>${curso.nome}</h3>
-            <p>${curso.descricao || 'Sem descrição informada.'}</p>
-          </div>
-        `;
+      if (!window.__cursosAdmin.length) {
+        tbody.innerHTML = '<tr><td colspan="3" class="cursos-admin-empty">Nenhum curso cadastrado.</td></tr>';
+        return;
+      }
+
+      window.__cursosAdmin.forEach(curso => {
+        const tr = document.createElement('tr');
+
+        const tdNome = document.createElement('td');
+        tdNome.className = 'cursos-admin-nome';
+        tdNome.textContent = curso?.nome || 'Curso sem nome';
+
+        const tdDescricao = document.createElement('td');
+        tdDescricao.className = 'cursos-admin-descricao';
+        tdDescricao.textContent = curso?.descricao || 'Sem descrição informada.';
+
+        const tdAcoes = document.createElement('td');
+        tdAcoes.className = 'cursos-admin-acoes';
+
+        const btnEditar = document.createElement('button');
+        btnEditar.type = 'button';
+        btnEditar.className = 'curso-acao-editar';
+        btnEditar.textContent = 'Editar';
+        btnEditar.title = `Editar ${curso?.nome || 'curso'}`;
+        btnEditar.addEventListener('click', () => editarCursoAdmin(curso?.id));
+
+        const btnExcluir = document.createElement('button');
+        btnExcluir.type = 'button';
+        btnExcluir.className = 'curso-acao-excluir';
+        btnExcluir.textContent = 'Excluir';
+        btnExcluir.title = `Excluir ${curso?.nome || 'curso'}`;
+        btnExcluir.addEventListener('click', () => excluirCursoAdmin(curso?.id));
+
+        tdAcoes.append(btnEditar, btnExcluir);
+        tr.append(tdNome, tdDescricao, tdAcoes);
+        tbody.appendChild(tr);
       });
     }
+
+    function localizarCursoAdminPorId(id) {
+      return (window.__cursosAdmin || []).find(curso => String(curso?.id) === String(id));
+    }
+
+    function abrirModalEdicaoCurso(curso) {
+      const modal = document.getElementById('cursoEditModal');
+      const id = document.getElementById('cursoEditId');
+      const nome = document.getElementById('cursoEditNome');
+      const descricao = document.getElementById('cursoEditDescricao');
+      if (!modal || !id || !nome || !descricao) {
+        showToast('Não foi possível abrir a edição do curso.');
+        return;
+      }
+      id.value = String(curso?.id || '');
+      nome.value = curso?.nome || '';
+      descricao.value = curso?.descricao || '';
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      setTimeout(() => nome.focus(), 30);
+    }
+
+    function editarCursoAdmin(id) {
+      const curso = localizarCursoAdminPorId(id);
+      if (!curso) {
+        showToast('Curso não encontrado.');
+        return;
+      }
+      abrirModalEdicaoCurso(curso);
+    }
+
+    function fecharEdicaoCurso() {
+      const modal = document.getElementById('cursoEditModal');
+      if (!modal) return;
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    async function salvarEdicaoCurso(event) {
+      event.preventDefault();
+      const id = String(document.getElementById('cursoEditId')?.value || '').trim();
+      const nome = String(document.getElementById('cursoEditNome')?.value || '').trim();
+      const descricao = String(document.getElementById('cursoEditDescricao')?.value || '').trim();
+      const btn = document.getElementById('btnSalvarEdicaoCurso');
+
+      if (!id) { showToast('Curso não identificado.'); return; }
+      if (!nome) { showToast('Informe o nome do curso.'); return; }
+      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
+        showToast('Sessão administrativa expirada. Faça login novamente.');
+        return;
+      }
+
+      try {
+        if (btn) { btn.disabled = true; btn.textContent = 'Salvando...'; }
+        await cloudflareAdminFetch(`/api/admin/cursos/${encodeURIComponent(id)}`, {
+          method: 'PUT',
+          body: JSON.stringify({ nome, descricao })
+        });
+        await carregarCursosDoBanco();
+        fecharEdicaoCurso();
+        showToast('Curso atualizado com sucesso.');
+      } catch (error) {
+        console.error('Erro ao editar curso:', error);
+        showToast('Não foi possível editar o curso: ' + (error?.message || 'erro desconhecido'));
+      } finally {
+        if (btn) { btn.disabled = false; btn.textContent = 'Salvar alterações'; }
+      }
+    }
+
+    async function excluirCursoAdmin(id) {
+      const curso = localizarCursoAdminPorId(id);
+      if (!curso) {
+        showToast('Curso não encontrado.');
+        return;
+      }
+      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
+        showToast('Sessão administrativa expirada. Faça login novamente.');
+        return;
+      }
+
+      const confirmado = confirm(`Tem certeza que deseja excluir o curso "${curso.nome || 'Sem nome'}"?\n\nEsta ação não poderá ser desfeita.`);
+      if (!confirmado) return;
+
+      try {
+        await cloudflareAdminFetch(`/api/admin/cursos/${encodeURIComponent(id)}`, { method: 'DELETE' });
+        await carregarCursosDoBanco();
+        showToast('Curso excluído com sucesso.');
+      } catch (error) {
+        console.error('Erro ao excluir curso:', error);
+        showToast('Não foi possível excluir o curso: ' + (error?.message || 'erro desconhecido'));
+      }
+    }
+
+    window.carregarCursosDoBanco = carregarCursosDoBanco;
+    window.renderListaCursosAdmin = renderListaCursosAdmin;
+    window.editarCursoAdmin = editarCursoAdmin;
+    window.excluirCursoAdmin = excluirCursoAdmin;
+    window.abrirModalEdicaoCurso = abrirModalEdicaoCurso;
+    window.fecharEdicaoCurso = fecharEdicaoCurso;
+    window.salvarEdicaoCurso = salvarEdicaoCurso;
 
     function renderCourseFilters() {
       const container = document.getElementById('courseFilterContainer');
       if (!container) return;
 
-      // Exibir somente o botão geral ao lado da busca.
-      // Os demais filtros de curso/turma ficam ocultos na página inicial.
       container.innerHTML = '';
 
-      const btn = document.createElement('button');
-      btn.className = `filter-pill ${appState.cursoAtivo === 'Todos' ? 'active' : ''}`;
-      btn.textContent = 'Pesquisar Turma';
-      btn.type = 'button';
-      btn.onclick = () => {
-        appState.cursoAtivo = 'Todos';
-        appState.paginaAtual = 1;
-        appState.carrosselPausado = false;
-        renderCourseFilters();
-        renderCards();
-      };
-
-      container.appendChild(btn);
+      appState.cursos.forEach(curso => {
+        const nomeCurso = typeof curso === 'object' ? curso.nome : curso;
+        const btn = document.createElement('button');
+        
+        btn.className = `filter-pill ${appState.cursoAtivo === nomeCurso ? 'active' : ''}`;
+        btn.textContent = nomeCurso === 'Todos' ? 'Todas as Turmas' : nomeCurso;
+        btn.onclick = () => {
+          appState.cursoAtivo = nomeCurso;
+          appState.paginaAtual = 1;
+          appState.carrosselPausado = false;
+          renderCourseFilters();
+          renderCards();
+        };
+        
+        container.appendChild(btn);
+      });
     }
 
     let turmasOrdenacaoConfig = { modo: 'alfabetica', ordem: [] };
@@ -5999,7 +6653,7 @@
           <div class="card-img-bg" style="background-image: url('${urlSemCache(turma.img || 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80')}');"></div>
           <div class="card-img-overlay"></div>
           <div class="card-img-header">
-            <span class="card-badge">${turma.curso}</span>
+            <span class="card-badge">${turma.curso} FMABC</span>
           </div>
           <div class="card-title-row">
             <h2>${turma.titulo || turma.nome}</h2>
@@ -6158,14 +6812,14 @@
       if (totalItens === 0) {
         btnAnt.disabled = true;
         btnProx.disabled = true;
-        textoInfo.textContent = 'Nenhuma página';
+        textoInfo.textContent = '0 turmas encontradas';
         if (statusTexto) statusTexto.textContent = 'Nenhuma turma';
         return;
       }
 
       btnAnt.disabled = false;
       btnProx.disabled = false;
-      textoInfo.textContent = `Página ${appState.paginaAtual} de ${totalPaginas}`;
+      textoInfo.textContent = `Página ${appState.paginaAtual} de ${totalPaginas} • ${totalItens} turmas • 5 por vez`;
 
       if (statusTexto) {
         statusTexto.textContent = totalPaginas > 1
@@ -6442,126 +7096,338 @@
       document.getElementById('adminModalOverlay').classList.remove('active');
     }
 
-
+    
+    // =========================================================
 
     // =========================================================
-    // MENSAGENS DE CONTATO — EX-ALUNOS
+    // LINHA DO TEMPO INSTITUCIONAL
     // =========================================================
-    let contatosAdminCache = [];
+    const TIMELINE_CONFIG_KEY = 'timeline_events';
+    const TIMELINE_PADRAO = [
+      {id:'timeline-1969',ano:'1969',decada:'1960',titulo:'Autorização da Faculdade de Medicina do ABC',descricao:'Autorização da instituição para funcionar como Faculdade de Medicina do ABC.',foto:'',destaque:true,ordem:1},
+      {id:'timeline-1971',ano:'1971',decada:'1970',titulo:'Primeiro prédio do campus',descricao:'Entrega do primeiro prédio do campus universitário, o Prédio Central.',foto:'',destaque:false,ordem:2},
+      {id:'timeline-1975',ano:'1975',decada:'1970',titulo:'Reconhecimento federal',descricao:'Reconhecimento da Faculdade de Medicina do ABC pelo Decreto Federal nº 76.858; início do Programa de Residência Médica e inauguração de laboratórios no Prédio Central.',foto:'',destaque:false,ordem:3},
+      {id:'timeline-1976',ano:'1976',decada:'1970',titulo:'Primeiro Congresso Médico Universitário do ABC',descricao:'Realização da primeira edição do Congresso Médico Universitário do ABC (COMUABC).',foto:'',destaque:false,ordem:4},
+      {id:'timeline-1982',ano:'1982',decada:'1980',titulo:'Credenciamento da Residência Médica',descricao:'Credenciamento dos programas de Residência Médica pela Comissão Nacional de Residência Médica (CNRM/MEC).',foto:'',destaque:false,ordem:5},
+      {id:'timeline-1983',ano:'1983',decada:'1980',titulo:'Transferência para o sistema estadual',descricao:'Transferência da Faculdade de Medicina do ABC do sistema federal para o sistema estadual de ensino.',foto:'',destaque:false,ordem:6},
+      {id:'timeline-1998',ano:'1998',decada:'1990',titulo:'Início da Pós-Graduação stricto sensu',descricao:'Início do Programa de Pós-Graduação stricto sensu, nível Mestrado, em Ciências da Saúde.',foto:'',destaque:false,ordem:7},
+      {id:'timeline-2000',ano:'2000',decada:'2000',titulo:'Implantação do Curso de Farmácia',descricao:'Implantação do Curso de Graduação em Farmácia e inauguração do Anexo 3 (Bloco CEU).',foto:'',destaque:false,ordem:8},
+      {id:'timeline-2010',ano:'2010',decada:'2010',titulo:'Denominação como Centro Universitário FMABC',descricao:'Denominação da instituição de ensino superior como Centro Universitário FMABC.',foto:'',destaque:false,ordem:9},
+      {id:'timeline-2013',ano:'2013',decada:'2010',titulo:'Retorno ao sistema federal',descricao:'A FMABC retoma ao sistema federal de ensino, em atendimento à legislação nacional.',foto:'',destaque:false,ordem:10},
+      {id:'timeline-2018',ano:'2018',decada:'2010',titulo:'Transformação em Centro Universitário',descricao:'A Faculdade de Medicina do ABC é transformada em Centro Universitário, em processo oficializado pelo Ministério da Educação.',foto:'',destaque:true,ordem:11},
+      {id:'timeline-2020',ano:'2020',decada:'2020',titulo:'Nome Centro Universitário FMABC',descricao:'Autorização da alteração do nome da instituição para Centro Universitário FMABC.',foto:'',destaque:false,ordem:12},
+      {id:'timeline-2023',ano:'2023',decada:'2020',titulo:'Centro de Formação de Psicólogos e Centro de Simulação',descricao:'Inauguração do Centro de Formação de Psicólogos — Clínica Escola do Curso de Psicologia — e do Centro de Simulação.',foto:'',destaque:false,ordem:13}
+    ];
+    let timelineEventos = TIMELINE_PADRAO.map(x=>({...x}));
+    let timelineEditandoId = '';
 
-    function escapeContatoHtml(value) {
-      return String(value ?? '').replace(/[&<>'"]/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' }[char]));
+    function gerarIdTimeline(){return `timeline-${Date.now()}-${Math.random().toString(36).slice(2,8)}`;}
+    function normalizarEventoTimeline(item,index){
+      if(!item || typeof item!=='object') return null;
+      return {
+        id:String(item.id||gerarIdTimeline()),ano:String(item.ano||'').trim().slice(0,30),decada:String(item.decada||'').trim(),titulo:String(item.titulo||'').trim().slice(0,180),descricao:String(item.descricao||'').trim().slice(0,1200),foto:String(item.foto||'').trim(),destaque:item.destaque===true,ordem:Number(item.ordem||index+1)
+      };
     }
-
-    function formatarDataContato(value) {
-      if (!value) return '-';
-      const d = new Date(String(value).replace(' ', 'T') + (String(value).includes('Z') ? '' : 'Z'));
-      return Number.isNaN(d.getTime()) ? String(value) : d.toLocaleString('pt-BR', { dateStyle:'short', timeStyle:'short' });
+    function renderListaTimelineAdmin(){
+      const el=document.getElementById('listaTimelineAdmin'); if(!el)return;
+      const filtro=(document.getElementById('filtroTimelineAdmin')?.value||'').trim().toLowerCase();
+      const decada=document.getElementById('filtroTimelineDecada')?.value||'';
+      const todos=[...timelineEventos].sort((a,b)=>Number(a.ordem||0)-Number(b.ordem||0));
+      const lista=todos.filter(e=>!filtro || `${e.ano} ${e.titulo} ${e.descricao}`.toLowerCase().includes(filtro)).filter(e=>!decada||String(e.decada)===String(decada));
+      if(!lista.length){el.innerHTML='<div class="timeline-admin-empty"><strong>Nenhum acontecimento encontrado.</strong><div>Cadastre um novo marco ou ajuste os filtros.</div></div>';return;}
+      el.innerHTML=lista.map((ev)=>{
+        const foto=ev.foto||'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="120"><rect width="100%" height="100%" fill="#eef2ef"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#738095" font-family="Arial" font-size="14">Sem foto</text></svg>');
+        const idx=todos.findIndex(x=>String(x.id)===String(ev.id));
+        return `<article class="timeline-admin-item" draggable="true" ondragstart="arrastarTimeline(event,'${escapeHtmlAttr(ev.id)}')" ondragover="event.preventDefault()" ondrop="soltarTimeline(event,'${escapeHtmlAttr(ev.id)}')">
+          <div class="timeline-admin-drag" title="Arraste para reordenar">↕</div>
+          <img class="timeline-admin-thumb" src="${escapeHtmlAttr(urlSemCache(foto))}" alt="${escapeHtmlAttr(ev.titulo)}">
+          <div><div class="timeline-admin-year">${escapeHtml(ev.ano)}${ev.destaque?' · Destaque':''}</div><div class="timeline-admin-title">${escapeHtml(ev.titulo)}</div><div class="timeline-admin-desc">${escapeHtml(ev.descricao||'Sem descrição')}</div></div>
+          <div class="timeline-admin-actions">
+            <button type="button" data-timeline-action="up" data-timeline-id="${escapeHtmlAttr(ev.id)}" ${idx===0?'disabled':''}>↑</button>
+            <button type="button" data-timeline-action="down" data-timeline-id="${escapeHtmlAttr(ev.id)}" ${idx===todos.length-1?'disabled':''}>↓</button>
+            <button type="button" data-timeline-action="edit" data-timeline-id="${escapeHtmlAttr(ev.id)}">Editar</button>
+            <button type="button" data-timeline-action="duplicate" data-timeline-id="${escapeHtmlAttr(ev.id)}">Duplicar</button>
+            <button type="button" data-timeline-action="delete" data-timeline-id="${escapeHtmlAttr(ev.id)}">Excluir</button>
+          </div>
+        </article>`;
+      }).join('');
     }
-
-    function labelStatusContato(status) {
-      return ({novo:'Novo', em_atendimento:'Em atendimento', respondido:'Respondido', arquivado:'Arquivado'})[status] || status || 'Novo';
-    }
-
-    function atualizarResumoContatos(lista) {
-      const safe = Array.isArray(lista) ? lista : [];
-      const conta = status => safe.filter(c => c.status === status).length;
-      document.getElementById('contatosResumoNovos').textContent = conta('novo');
-      document.getElementById('contatosResumoAtendimento').textContent = conta('em_atendimento');
-      document.getElementById('contatosResumoRespondidos').textContent = conta('respondido');
-      document.getElementById('contatosResumoTotal').textContent = safe.length;
-    }
-
-    function renderListaContatosAdmin(lista) {
-      const tbody = document.getElementById('tabelaContatosAdminBody');
-      if (!tbody) return;
-      contatosAdminCache = Array.isArray(lista) ? lista : [];
-      atualizarResumoContatos(contatosAdminCache);
-      if (!contatosAdminCache.length) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px;color:#8a95a8;">Nenhuma mensagem encontrada.</td></tr>';
-        return;
+    async function carregarTimelineDoBanco(notify=false){
+      try{
+        const r=await fetch(`${CLOUDFLARE_API_URL}/api/config/${encodeURIComponent(TIMELINE_CONFIG_KEY)}?v=${Date.now()}`,{cache:'no-store'});
+        if(!r.ok) throw new Error(`Cloudflare API HTTP ${r.status}`);
+        const data=await r.json();
+        const arr=Array.isArray(data?.valor)?data.valor:(Array.isArray(data?.valor?.itens)?data.valor.itens:[]);
+        timelineEventos=arr.map(normalizarEventoTimeline).filter(Boolean).sort((a,b)=>Number(a.ordem||0)-Number(b.ordem||0));
+        if(!timelineEventos.length) timelineEventos=TIMELINE_PADRAO.map(x=>({...x}));
+      }catch(error){
+        console.error('Erro ao carregar a linha do tempo:',error);
+        timelineEventos=TIMELINE_PADRAO.map(x=>({...x}));
+        if(notify) showToast('Não foi possível carregar a Linha do Tempo.');
       }
-      tbody.innerHTML = '';
-      contatosAdminCache.forEach(contato => {
-        const tr = document.createElement('tr');
-        const nome = escapeContatoHtml(contato.nome || '-');
-        const assunto = escapeContatoHtml(contato.assunto || '-');
-        const preview = escapeContatoHtml(contato.mensagem || '');
-        const protocolo = escapeContatoHtml(contato.protocolo || contato.id || '-');
-        tr.innerHTML = `
-          <td><span class="contatos-protocolo">${protocolo}</span></td>
-          <td>${escapeContatoHtml(formatarDataContato(contato.created_at))}</td>
-          <td><span class="contato-nome">${nome}</span><br><span style="font-size:.72rem;color:#7c879a;">${escapeContatoHtml(contato.email || '')}</span></td>
-          <td><span class="contato-assunto">${assunto}</span></td>
-          <td><div class="contato-msg-preview" title="${preview}">${preview || '-'}</div></td>
-          <td>
-            <select class="contato-status-select" onchange='alterarStatusContato(${JSON.stringify(String(contato.id))}, this.value)'>
-              ${['novo','em_atendimento','respondido','arquivado'].map(s => `<option value="${s}" ${contato.status===s?'selected':''}>${labelStatusContato(s)}</option>`).join('')}
-            </select>
-          </td>
-          <td><button type="button" class="contato-view-btn" onclick='abrirDetalheContato(${JSON.stringify(String(contato.id))})'>Ver mensagem</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
+      renderListaTimelineAdmin();
+    }
+    async function salvarTimelineNoBanco(notify=true){
+      registrarAtividadeAdmin();
+      if(!localStorage.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return false;}
+      try{
+        const payload=timelineEventos.map((e,i)=>({...e,ordem:i+1}));
+        await cloudflareAdminFetch(`/api/admin/config/${encodeURIComponent(TIMELINE_CONFIG_KEY)}`,{method:'PUT',body:JSON.stringify({valor:payload})});
+        timelineEventos=payload;renderListaTimelineAdmin();
+        if(notify)showToast('Linha do Tempo salva com sucesso no Cloudflare.');
+        return true;
+      }catch(error){console.error(error);showToast('Não foi possível salvar a Linha do Tempo: '+(error.message||'erro desconhecido'));return false;}
+    }
+    function abrirModalEventoTimeline(id=''){
+      timelineEditandoId=String(id||'');
+      const ev=id?timelineEventos.find(x=>String(x.id)===String(id)):null;
+      document.getElementById('tituloModalTimeline').textContent=ev?'Editar acontecimento':'Novo acontecimento';
+      document.getElementById('timelineEditId').value=ev?.id||'';
+      document.getElementById('timelineAno').value=ev?.ano||'';
+      document.getElementById('timelineDecada').value=ev?.decada||'';
+      document.getElementById('timelineTitulo').value=ev?.titulo||'';
+      document.getElementById('timelineDescricao').value=ev?.descricao||'';
+      document.getElementById('timelineFotoUrl').value=ev?.foto||'';
+      document.getElementById('timelinePreviewFoto').src=ev?.foto?urlSemCache(ev.foto):'';
+      document.getElementById('timelineDestaque').checked=ev?.destaque===true;
+      document.getElementById('timelineFotoArquivo').value='';
+      const modal=document.getElementById('modalTimelineEditor'); modal?.classList.add('active'); modal?.setAttribute('aria-hidden','false');
+      setTimeout(()=>document.getElementById('timelineTitulo')?.focus(),50);
+    }
+    function editarEventoTimeline(id){abrirModalEventoTimeline(id);}
+    function fecharModalEventoTimeline(){const modal=document.getElementById('modalTimelineEditor');if(modal){modal.classList.remove('active');modal.setAttribute('aria-hidden','true');}}
+    async function salvarEventoTimeline(e){
+      e.preventDefault();registrarAtividadeAdmin();
+      const id=String(document.getElementById('timelineEditId').value||'').trim();
+      const ano=document.getElementById('timelineAno').value.trim();
+      const decada=document.getElementById('timelineDecada').value.trim();
+      const titulo=document.getElementById('timelineTitulo').value.trim();
+      const descricao=document.getElementById('timelineDescricao').value.trim();
+      const arquivo=document.getElementById('timelineFotoArquivo').files?.[0];
+      let foto=document.getElementById('timelineFotoUrl').value.trim();
+      if(!ano||!titulo){showToast('Informe o ano/período e o título do acontecimento.');return;}
+      try{
+        if(arquivo){showToast('Enviando foto do acontecimento para o Cloudflare...');foto=await enviarArquivoParaStorage(arquivo,'linha-do-tempo');}
+        const registro={id:id||gerarIdTimeline(),ano,decada,titulo,descricao,foto,destaque:document.getElementById('timelineDestaque').checked,ordem:0};
+        if(id){const idx=timelineEventos.findIndex(x=>String(x.id)===id);if(idx>=0){registro.ordem=timelineEventos[idx].ordem;timelineEventos[idx]=registro;}}
+        else{registro.ordem=timelineEventos.length+1;timelineEventos.push(registro);}
+        const ok=await salvarTimelineNoBanco(false);
+        if(ok){fecharModalEventoTimeline();showToast(id?'Acontecimento atualizado com sucesso.':'Acontecimento cadastrado com sucesso.');}
+      }catch(error){console.error(error);showToast('Não foi possível salvar o acontecimento: '+(error.message||'erro desconhecido'));}
+    }
+    async function excluirEventoTimeline(id){const ev=timelineEventos.find(x=>String(x.id)===String(id));if(!ev)return;if(!confirm(`Excluir o acontecimento “${ev.titulo}”?`))return;timelineEventos=timelineEventos.filter(x=>String(x.id)!==String(id));await salvarTimelineNoBanco(true);}
+    async function duplicarEventoTimeline(id){const ev=timelineEventos.find(x=>String(x.id)===String(id));if(!ev)return;timelineEventos.push({...ev,id:gerarIdTimeline(),titulo:`${ev.titulo} (cópia)`,destaque:false,ordem:timelineEventos.length+1});await salvarTimelineNoBanco(true);}
+    async function moverTimeline(id,direcao){const lista=[...timelineEventos].sort((a,b)=>Number(a.ordem||0)-Number(b.ordem||0));const idx=lista.findIndex(x=>String(x.id)===String(id));const novo=idx+direcao;if(idx<0||novo<0||novo>=lista.length)return;[lista[idx],lista[novo]]=[lista[novo],lista[idx]];timelineEventos=lista.map((x,i)=>({...x,ordem:i+1}));await salvarTimelineNoBanco(true);}
+    let timelineArrastandoId='';
+    function arrastarTimeline(e,id){timelineArrastandoId=String(id);e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',String(id));}
+    async function soltarTimeline(e,idDestino){e.preventDefault();const origem=timelineArrastandoId||e.dataTransfer.getData('text/plain');if(!origem||String(origem)===String(idDestino))return;const lista=[...timelineEventos].sort((a,b)=>Number(a.ordem||0)-Number(b.ordem||0));const io=lista.findIndex(x=>String(x.id)===String(origem));const id=lista.findIndex(x=>String(x.id)===String(idDestino));if(io<0||id<0)return;const [mov]=lista.splice(io,1);lista.splice(id,0,mov);timelineEventos=lista.map((x,i)=>({...x,ordem:i+1}));await salvarTimelineNoBanco(true);}
+    async function restaurarTimelinePadrao(){if(!confirm('Restaurar os marcos padrão da Linha do Tempo? Os acontecimentos cadastrados manualmente serão substituídos.'))return;timelineEventos=TIMELINE_PADRAO.map(x=>({...x}));renderListaTimelineAdmin();await salvarTimelineNoBanco(true);}
+    document.addEventListener('change',e=>{if(e.target?.id==='timelineFotoArquivo'){const file=e.target.files?.[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{const img=document.getElementById('timelinePreviewFoto');if(img)img.src=reader.result;};reader.readAsDataURL(file);}});
+    document.addEventListener('input',e=>{if(e.target?.id==='timelineFotoUrl'){const v=e.target.value.trim();const img=document.getElementById('timelinePreviewFoto');if(img&&v)img.src=urlSemCache(v);}});
+    document.addEventListener('click',e=>{const modal=document.getElementById('modalTimelineEditor');if(modal&&e.target===modal)fecharModalEventoTimeline();});
+
+    // Garante que os comandos da Linha do Tempo estejam disponíveis para os
+    // handlers inline usados pela interface administrativa, mesmo quando esta
+    // página for publicada como /administrador/ no GitHub Pages.
+    Object.assign(window, {
+      abrirModalEventoTimeline,
+      editarEventoTimeline,
+      fecharModalEventoTimeline,
+      salvarEventoTimeline,
+      excluirEventoTimeline,
+      duplicarEventoTimeline,
+      moverTimeline,
+      arrastarTimeline,
+      soltarTimeline,
+      restaurarTimelinePadrao,
+      carregarTimelineDoBanco,
+      renderListaTimelineAdmin,
+      salvarTimelineNoBanco
+    });
+
+    // GALERIA DE REITORES
+    // =========================================================
+    const REITORES_CONFIG_KEY = 'reitores_galeria';
+    let reitoresGaleria = [];
+    let reitorAtualEditando = null;
+
+    function gerarIdReitor() {
+      return `reitor-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
     }
 
-    async function carregarContatosAdmin() {
+    function normalizarReitor(item, index) {
+      if (!item || typeof item !== 'object') return null;
+      const nome = String(item.nome || '').trim();
+      if (!nome) return null;
+      const inicio = Number(item.inicio);
+      const fim = Number(item.fim);
+      return {
+        id: String(item.id || gerarIdReitor()),
+        nome: nome.slice(0, 180),
+        inicio: Number.isFinite(inicio) ? inicio : '',
+        fim: Number.isFinite(fim) ? fim : '',
+        foto: String(item.foto || '').trim(),
+        atual: item.atual === true,
+        ordem: Number.isFinite(Number(item.ordem)) ? Number(item.ordem) : index + 1
+      };
+    }
+
+    function renderListaReitoresAdmin() {
+      const el = document.getElementById('listaReitoresAdmin');
+      const status = document.getElementById('statusReitoresAdmin');
+      if (!el) return;
+      const lista = [...reitoresGaleria].sort((a,b) => Number(a.ordem||0)-Number(b.ordem||0));
+      if (!lista.length) {
+        el.innerHTML = '<div class="reitores-empty" style="grid-column:1/-1"><strong>Nenhum reitor cadastrado</strong>Cadastre o primeiro reitor para começar a galeria.</div>';
+      } else {
+        el.innerHTML = lista.map((r, idx) => {
+          const periodo = r.inicio ? `${r.inicio} – ${r.fim || 'Atual'}` : 'Período não informado';
+          const foto = r.foto || 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="300" height="400"><rect width="100%" height="100%" fill="#eef2ef"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#7a8598" font-family="Arial" font-size="22">Sem foto</text></svg>');
+          return `<article class="reitor-admin-card">
+            <img class="reitor-admin-photo" src="${escapeHtmlAttr(urlSemCache(foto))}" alt="${escapeHtmlAttr(r.nome)}">
+            <div class="reitor-admin-info">
+              <h4 class="reitor-admin-name">${escapeHtml(r.nome)}</h4>
+              <div class="reitor-admin-period">${escapeHtml(periodo)}</div>
+              ${r.atual ? '<span class="reitor-admin-status">● Gestão atual</span>' : ''}
+              <div class="reitor-admin-actions">
+                <button type="button" onclick="moverReitorAdmin('${r.id}',-1)" ${idx===0?'disabled':''}>↑ Subir</button>
+                <button type="button" onclick="moverReitorAdmin('${r.id}',1)" ${idx===lista.length-1?'disabled':''}>↓ Descer</button>
+                <button type="button" onclick="editarReitorAdmin('${r.id}')">Editar</button>
+                <button type="button" onclick="duplicarReitorAdmin('${r.id}')">Duplicar</button>
+                <button type="button" onclick="excluirReitorAdmin('${r.id}')">Excluir</button>
+              </div>
+            </div>
+          </article>`;
+        }).join('');
+      }
+      if (status) status.textContent = `${lista.length} ${lista.length === 1 ? 'reitor cadastrado' : 'reitores cadastrados'}. Último estado sincronizado com o Cloudflare.`;
+    }
+
+    function escapeHtmlAttr(value){return String(value??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+    function escapeHtml(value){return String(value??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+
+    async function carregarReitoresDoBanco(notify=false) {
       try {
-        const filtro = document.getElementById('filtroStatusContatos')?.value || '';
-        const endpoint = filtro ? `/api/admin/contatos?status=${encodeURIComponent(filtro)}` : '/api/admin/contatos';
-        const lista = await cloudflareAdminFetch(endpoint, { method:'GET' });
-        renderListaContatosAdmin(Array.isArray(lista) ? lista : []);
-      } catch (err) {
-        console.error('Erro ao carregar mensagens de contato:', err);
-        const tbody = document.getElementById('tabelaContatosAdminBody');
-        if (tbody) tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:28px;color:#b42318;">Não foi possível carregar as mensagens: ${escapeContatoHtml(err.message || 'erro desconhecido')}</td></tr>`;
+        const r = await fetch(`${CLOUDFLARE_API_URL}/api/config/${encodeURIComponent(REITORES_CONFIG_KEY)}?v=${Date.now()}`, {cache:'no-store'});
+        if (!r.ok) throw new Error(`Cloudflare API HTTP ${r.status}`);
+        const data = await r.json();
+        const arr = Array.isArray(data?.valor) ? data.valor : (Array.isArray(data?.valor?.itens) ? data.valor.itens : []);
+        reitoresGaleria = arr.map(normalizarReitor).filter(Boolean).sort((a,b)=>Number(a.ordem||0)-Number(b.ordem||0));
+      } catch (error) {
+        console.error('Erro ao carregar a galeria de reitores:', error);
+        reitoresGaleria = [];
+        if (notify) showToast('Não foi possível carregar a Galeria de Reitores.');
       }
+      renderListaReitoresAdmin();
     }
 
-    async function alterarStatusContato(id, status) {
+    async function salvarReitoresNoBanco(notify=true) {
+      registrarAtividadeAdmin();
+      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
+        showToast('Sessão administrativa expirada. Faça login novamente.');
+        return false;
+      }
       try {
-        await cloudflareAdminFetch(`/api/admin/contatos/${encodeURIComponent(id)}/status`, {
-          method:'PUT',
-          body: JSON.stringify({ status })
-        });
-        const item = contatosAdminCache.find(c => String(c.id) === String(id));
-        if (item) item.status = status;
-        atualizarResumoContatos(contatosAdminCache);
-        showToast(`Mensagem marcada como ${labelStatusContato(status)}.`);
-      } catch (err) {
-        console.error('Erro ao atualizar status do contato:', err);
-        showToast('Não foi possível atualizar o status: ' + (err.message || 'erro desconhecido'));
-        await carregarContatosAdmin();
+        const payload = [...reitoresGaleria].map((r,i)=>({...r,ordem:i+1}));
+        await cloudflareAdminFetch(`/api/admin/config/${encodeURIComponent(REITORES_CONFIG_KEY)}`,{method:'PUT',body:JSON.stringify({valor:payload})});
+        reitoresGaleria = payload;
+        renderListaReitoresAdmin();
+        if (notify) showToast('Galeria de Reitores salva com sucesso no Cloudflare.');
+        return true;
+      } catch(error) {
+        console.error('Erro ao salvar a Galeria de Reitores:',error);
+        showToast('Não foi possível salvar a Galeria de Reitores: ' + (error.message || 'erro desconhecido'));
+        return false;
       }
     }
 
-    function abrirDetalheContato(id) {
-      const contato = contatosAdminCache.find(c => String(c.id) === String(id));
-      if (!contato) return;
-      document.getElementById('contatoDetailTitle').textContent = contato.assunto || 'Mensagem de contato';
-      document.getElementById('contatoDetailProtocol').textContent = contato.protocolo || contato.id || '';
-      document.getElementById('contatoDetailNome').textContent = contato.nome || '-';
-      document.getElementById('contatoDetailEmail').textContent = contato.email || '-';
-      document.getElementById('contatoDetailTelefone').textContent = contato.telefone || '-';
-      document.getElementById('contatoDetailCursoTurma').textContent = [contato.curso, contato.turma].filter(Boolean).join(' / ') || '-';
-      document.getElementById('contatoDetailAssunto').textContent = contato.assunto || '-';
-      document.getElementById('contatoDetailData').textContent = formatarDataContato(contato.created_at);
-      document.getElementById('contatoDetailMensagem').textContent = contato.mensagem || '';
-      document.getElementById('contatoDetailConsentimento').textContent = contato.consentimento_lgpd ? 'Sim' : 'Não';
-      document.getElementById('contatoDetailPolitica').textContent = contato.politica_versao || '-';
-      const modal = document.getElementById('contatoDetailModal');
-      modal?.classList.add('active');
-      modal?.setAttribute('aria-hidden','false');
+    function abrirModalReitor(reitor=null) {
+      reitorAtualEditando = reitor ? {...reitor} : null;
+      const modal=document.getElementById('modalReitorEditor');
+      if(!modal)return;
+      document.getElementById('tituloModalReitor').textContent=reitor?'Editar reitor':'Novo reitor';
+      document.getElementById('reitorEditId').value=reitor?.id||'';
+      document.getElementById('reitorNome').value=reitor?.nome||'';
+      document.getElementById('reitorInicio').value=reitor?.inicio||'';
+      document.getElementById('reitorFim').value=reitor?.fim||'';
+      document.getElementById('reitorFotoUrl').value=reitor?.foto||'';
+      document.getElementById('reitorAtual').checked=reitor?.atual===true;
+      document.getElementById('reitorPreviewFoto').src=reitor?.foto?urlSemCache(reitor.foto):'';
+      document.getElementById('reitorFotoArquivo').value='';
+      modal.classList.add('active');modal.setAttribute('aria-hidden','false');
+      setTimeout(()=>document.getElementById('reitorNome')?.focus(),50);
+    }
+    function fecharModalReitor(){const modal=document.getElementById('modalReitorEditor');if(modal){modal.classList.remove('active');modal.setAttribute('aria-hidden','true');}}
+    function editarReitorAdmin(id){const r=reitoresGaleria.find(x=>String(x.id)===String(id));if(r)abrirModalReitor(r);}
+
+    async function salvarReitorAdmin(e) {
+      e.preventDefault();
+      registrarAtividadeAdmin();
+      const id=String(document.getElementById('reitorEditId').value||'').trim();
+      const nome=document.getElementById('reitorNome').value.trim();
+      const inicio=Number(document.getElementById('reitorInicio').value);
+      const fimValor=String(document.getElementById('reitorFim').value||'').trim();
+      const fim=fimValor?Number(fimValor):'';
+      const atual=document.getElementById('reitorAtual').checked;
+      let foto=document.getElementById('reitorFotoUrl').value.trim();
+      const arquivo=document.getElementById('reitorFotoArquivo').files?.[0];
+      if(!nome){showToast('Informe o nome do reitor.');return;}
+      if(!Number.isFinite(inicio)){showToast('Informe o ano de início da gestão.');return;}
+      if(fim!=='' && (!Number.isFinite(fim) || fim<inicio)){showToast('O ano de término deve ser igual ou posterior ao início.');return;}
+      try {
+        if(arquivo){showToast('Enviando foto do reitor para o Cloudflare...');foto=await enviarArquivoParaStorage(arquivo,'reitores');}
+        if(!foto){showToast('Adicione uma foto ou informe a URL da foto.');return;}
+        if(atual) reitoresGaleria.forEach(r=>r.atual=false);
+        const registro={id:id||gerarIdReitor(),nome,inicio,fim,foto,atual,ordem:0};
+        if(id){
+          const idx=reitoresGaleria.findIndex(r=>String(r.id)===id);
+          if(idx>=0){registro.ordem=reitoresGaleria[idx].ordem;reitoresGaleria[idx]=registro;}
+        }else{
+          registro.ordem=reitoresGaleria.length+1;reitoresGaleria.push(registro);
+        }
+        const ok=await salvarReitoresNoBanco(false);
+        if(ok){fecharModalReitor();showToast(id?'Reitor atualizado com sucesso.':'Reitor cadastrado com sucesso.');}
+      }catch(error){console.error(error);showToast('Não foi possível salvar o reitor: '+(error.message||'erro desconhecido'));}
     }
 
-    function fecharDetalheContato(event) {
-      if (event && event.target?.id !== 'contatoDetailModal') return;
-      const modal = document.getElementById('contatoDetailModal');
-      modal?.classList.remove('active');
-      modal?.setAttribute('aria-hidden','true');
+    async function excluirReitorAdmin(id){
+      const r=reitoresGaleria.find(x=>String(x.id)===String(id));
+      if(!r)return;
+      if(!confirm(`Excluir ${r.nome} da Galeria de Reitores?`))return;
+      reitoresGaleria=reitoresGaleria.filter(x=>String(x.id)!==String(id));
+      await salvarReitoresNoBanco(true);
     }
 
-    function switchAdminTab(e, tabId) {
+    async function duplicarReitorAdmin(id){
+      const r=reitoresGaleria.find(x=>String(x.id)===String(id));
+      if(!r)return;
+      reitoresGaleria.push({...r,id:gerarIdReitor(),nome:`${r.nome} (cópia)`,atual:false,ordem:reitoresGaleria.length+1});
+      await salvarReitoresNoBanco(true);
+    }
+
+    async function moverReitorAdmin(id,direcao){
+      const lista=[...reitoresGaleria].sort((a,b)=>Number(a.ordem||0)-Number(b.ordem||0));
+      const idx=lista.findIndex(x=>String(x.id)===String(id));
+      const novo=idx+direcao;
+      if(idx<0||novo<0||novo>=lista.length)return;
+      [lista[idx],lista[novo]]=[lista[novo],lista[idx]];
+      reitoresGaleria=lista.map((r,i)=>({...r,ordem:i+1}));
+      await salvarReitoresNoBanco(true);
+    }
+
+    document.addEventListener('change', e => {
+      if(e.target?.id==='reitorFotoArquivo'){
+        const file=e.target.files?.[0]; if(!file)return;
+        const reader=new FileReader();reader.onload=()=>{const img=document.getElementById('reitorPreviewFoto');if(img)img.src=reader.result;};reader.readAsDataURL(file);
+      }
+    });
+    document.addEventListener('input', e=>{
+      if(e.target?.id==='reitorFotoUrl'){const v=e.target.value.trim();const img=document.getElementById('reitorPreviewFoto');if(img && v)img.src=urlSemCache(v);}
+    });
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')fecharModalReitor();});
+    document.addEventListener('click',e=>{const modal=document.getElementById('modalReitorEditor');if(modal&&e.target===modal)fecharModalReitor();});
+
+function switchAdminTab(e, tabId) {
       registrarAtividadeAdmin();
       document.querySelectorAll('.admin-nav-item').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.admin-tab-pane').forEach(p => p.classList.remove('active'));
@@ -6574,12 +7440,30 @@
       if (tabId === 'tabPaginas') {
         renderListaPaginasCMS();
       }
-      if (tabId === 'tabContatos') {
-        carregarContatosAdmin();
+      if (tabId === 'tabGaleriaFotos') {
+        carregarGaleriaFotosDoBanco(false);
+      }
+      if (tabId === 'tabReitores') {
+        carregarReitoresDoBanco(false);
+      }
+      if (tabId === 'tabLinhaTempo') {
+        if (typeof window.carregarTimelineDoBanco === 'function') {
+          window.carregarTimelineDoBanco(false);
+        } else {
+          carregarTimelineDoBanco(false);
+        }
       }
       if (tabId === 'tabTurmas') {
         renderEditorOrdemTurmas();
         renderListaTurmasAdmin();
+      }
+      if (tabId === 'tabModalEdicao') {
+        populateAdminSelects();
+        if (turmaEdicaoSelecionadaId) {
+          carregarDepoimentosPendentes(turmaEdicaoSelecionadaId);
+        } else {
+          renderPreviewDepoimentosPendentes([]);
+        }
       }
       if (tabId === 'tabBannerSocial') {
         renderListaHeroImagensAdmin();
@@ -6831,17 +7715,32 @@
     }
 
     async function carregarDepoimentosPendentes(turmaIdSelecionada) {
-      if (!turmaIdSelecionada) {
+      const id = String(turmaIdSelecionada || '').trim();
+      if (!id) {
         renderPreviewDepoimentosPendentes([]);
         return;
       }
+
+      const container = document.getElementById('previewDepoimentosPendentesContainer');
+      if (container) {
+        container.innerHTML = '<p style="font-size: 0.82rem; color: var(--slate-muted); margin: 0;">Consultando depoimentos pendentes...</p>';
+      }
+
       try {
-        const pendentes = await cloudflareAdminFetch(`/api/admin/depoimentos?turma_id=${encodeURIComponent(turmaIdSelecionada)}`, { method: 'GET' });
-        renderPreviewDepoimentosPendentes(Array.isArray(pendentes) ? pendentes : []);
+        // Busca diretamente no D1 através do endpoint administrativo.
+        // O backend aceita filtro por turma e retorna somente os registros ainda não aprovados.
+        const pendentes = await cloudflareAdminFetch(
+          `/api/admin/depoimentos?turma_id=${encodeURIComponent(id)}`,
+          { method: 'GET', cache: 'no-store' }
+        );
+
+        const lista = Array.isArray(pendentes) ? pendentes : [];
+        renderPreviewDepoimentosPendentes(lista.filter(item => String(item.turma_id || '') === id));
       } catch (err) {
         console.error('Erro ao carregar depoimentos pendentes:', err);
         renderPreviewDepoimentosPendentes([]);
-        showToast('Não foi possível carregar os depoimentos pendentes: ' + (err.message || 'erro desconhecido'));
+        const mensagem = err?.message || 'erro desconhecido';
+        showToast('Não foi possível carregar os depoimentos pendentes: ' + mensagem);
       }
     }
 
@@ -6904,5 +7803,751 @@
 
 
   </script>
+
+
+<script id="fmabc-timeline-controller">
+(function(){
+  'use strict';
+
+  const API_BASE = 'https://fmabc-acervo-api.armredessociais.workers.dev';
+  const TOKEN_KEY = 'fmabc_cf_admin_token';
+  const DEFAULT_EVENTS = [
+    {id:'timeline-1969',ano:'1969',decada:'1960',titulo:'Autorização da Faculdade de Medicina do ABC',descricao:'Autorização da instituição para funcionar como Faculdade de Medicina do ABC.',foto:'',destaque:true},
+    {id:'timeline-1971',ano:'1971',decada:'1970',titulo:'Primeiro prédio do campus',descricao:'Entrega do primeiro prédio do campus universitário, o Prédio Central.',foto:'',destaque:false},
+    {id:'timeline-1975',ano:'1975',decada:'1970',titulo:'Reconhecimento federal',descricao:'Reconhecimento da Faculdade de Medicina do ABC pelo Decreto Federal nº 76.858; início do Programa de Residência Médica e inauguração de laboratórios no Prédio Central.',foto:'',destaque:false},
+    {id:'timeline-1976',ano:'1976',decada:'1970',titulo:'Primeiro Congresso Médico Universitário do ABC',descricao:'Realização da primeira edição do Congresso Médico Universitário do ABC (COMUABC).',foto:'',destaque:false},
+    {id:'timeline-1982',ano:'1982',decada:'1980',titulo:'Credenciamento da Residência Médica',descricao:'Credenciamento dos programas de Residência Médica pela Comissão Nacional de Residência Médica (CNRM/MEC).',foto:'',destaque:false},
+    {id:'timeline-1983',ano:'1983',decada:'1980',titulo:'Transferência para o sistema estadual',descricao:'Transferência da Faculdade de Medicina do ABC do sistema federal para o sistema estadual de ensino.',foto:'',destaque:false},
+    {id:'timeline-1998',ano:'1998',decada:'1990',titulo:'Início da Pós-Graduação stricto sensu',descricao:'Início do Programa de Pós-Graduação stricto sensu, nível Mestrado, em Ciências da Saúde.',foto:'',destaque:false},
+    {id:'timeline-2000',ano:'2000',decada:'2000',titulo:'Implantação do Curso de Farmácia',descricao:'Implantação do Curso de Graduação em Farmácia e inauguração do Anexo 3 (Bloco CEU).',foto:'',destaque:false},
+    {id:'timeline-2010',ano:'2010',decada:'2010',titulo:'Denominação como Centro Universitário FMABC',descricao:'Denominação da instituição de ensino superior como Centro Universitário FMABC.',foto:'',destaque:false},
+    {id:'timeline-2013',ano:'2013',decada:'2010',titulo:'Retorno ao sistema federal',descricao:'A FMABC retoma ao sistema federal de ensino, em atendimento à legislação nacional.',foto:'',destaque:false},
+    {id:'timeline-2018',ano:'2018',decada:'2010',titulo:'Transformação em Centro Universitário',descricao:'A Faculdade de Medicina do ABC é transformada em Centro Universitário, em processo oficializado pelo Ministério da Educação.',foto:'',destaque:true},
+    {id:'timeline-2020',ano:'2020',decada:'2020',titulo:'Nome Centro Universitário FMABC',descricao:'Autorização da alteração do nome da instituição para Centro Universitário FMABC.',foto:'',destaque:false},
+    {id:'timeline-2023',ano:'2023',decada:'2020',titulo:'Centro de Formação de Psicólogos e Centro de Simulação',descricao:'Inauguração do Centro de Formação de Psicólogos — Clínica Escola do Curso de Psicologia — e do Centro de Simulação.',foto:'',destaque:false}
+  ];
+
+  let state = DEFAULT_EVENTS.map((x,i)=>({...x,ordem:i+1}));
+  let editId = '';
+  let initialized = false;
+
+  const $ = id => document.getElementById(id);
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const cacheUrl = url => {
+    if(!url) return '';
+    const sep = url.includes('?') ? '&' : '?';
+    return url + sep + 'timeline_cb=' + Date.now();
+  };
+  const toast = msg => {
+    if(typeof window.showToast === 'function') window.showToast(msg);
+    else alert(msg);
+  };
+
+  function normalize(item, index){
+    if(!item || typeof item !== 'object') return null;
+    return {
+      id:String(item.id || ('timeline-'+Date.now()+'-'+Math.random().toString(36).slice(2,8))),
+      ano:String(item.ano || '').trim().slice(0,30),
+      decada:String(item.decada || '').trim(),
+      titulo:String(item.titulo || '').trim().slice(0,180),
+      descricao:String(item.descricao || '').trim().slice(0,1200),
+      foto:String(item.foto || '').trim(),
+      destaque:item.destaque === true,
+      ordem:Number(item.ordem || index + 1)
+    };
+  }
+
+  function setStatus(message){
+    const el=$('statusTimelineAdmin');
+    if(el) el.textContent=message;
+  }
+
+  function getToken(){ return localStorage.getItem(TOKEN_KEY) || ''; }
+
+  async function api(path, options={}){
+    const headers = new Headers(options.headers || {});
+    if(options.body && !(options.body instanceof FormData) && !headers.has('Content-Type')){
+      headers.set('Content-Type','application/json');
+    }
+    const token=getToken();
+    if(token) headers.set('Authorization','Bearer '+token);
+    const r=await fetch(API_BASE+path,{...options,headers,cache:'no-store'});
+    let payload=null;
+    try{ payload=await r.json(); }catch{}
+    if(!r.ok){ throw new Error(payload?.error || `Cloudflare API HTTP ${r.status}`); }
+    return payload;
+  }
+
+  async function uploadFoto(file){
+    if(!file) return '';
+    if(!String(file.type||'').startsWith('image/')) throw new Error('O arquivo precisa ser uma imagem.');
+    if(file.size > 6*1024*1024) throw new Error('A imagem deve ter no máximo 6 MB.');
+    const token=getToken();
+    if(!token) throw new Error('Sessão administrativa expirada. Faça login novamente.');
+    const form=new FormData();
+    form.append('file', file, file.name || ('timeline-'+Date.now()+'.jpg'));
+    const r=await fetch(API_BASE+'/api/admin/upload?folder='+encodeURIComponent('linha-do-tempo'),{
+      method:'POST',headers:{Authorization:'Bearer '+token},body:form
+    });
+    let data=null; try{data=await r.json();}catch{}
+    if(!r.ok) throw new Error(data?.error || `Cloudflare API HTTP ${r.status}`);
+    if(!data?.url) throw new Error('O Worker não retornou a URL da foto.');
+    return data.url;
+  }
+
+  function render(){
+    const el=$('listaTimelineAdmin'); if(!el)return;
+    const filtro=String($('filtroTimelineAdmin')?.value || '').trim().toLowerCase();
+    const decada=String($('filtroTimelineDecada')?.value || '');
+    const all=[...state].sort((a,b)=>Number(a.ordem||0)-Number(b.ordem||0));
+    const list=all.filter(ev=>
+      (!filtro || `${ev.ano} ${ev.titulo} ${ev.descricao}`.toLowerCase().includes(filtro)) &&
+      (!decada || String(ev.decada)===decada)
+    );
+    if(!list.length){
+      el.innerHTML='<div class="timeline-admin-empty"><strong>Nenhum acontecimento encontrado.</strong><div>Cadastre um novo marco ou ajuste os filtros.</div></div>';
+      return;
+    }
+    el.innerHTML=list.map(ev=>{
+      const idx=all.findIndex(x=>String(x.id)===String(ev.id));
+      const foto=ev.foto || 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="120"><rect width="100%" height="100%" fill="#eef2ef"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#738095" font-family="Arial" font-size="14">Sem foto</text></svg>');
+      return `<article class="timeline-admin-item" draggable="false" data-timeline-card="${esc(ev.id)}">
+        <div class="timeline-admin-drag" title="Use as setas para reordenar">↕</div>
+        <img class="timeline-admin-thumb" src="${esc(cacheUrl(foto))}" alt="${esc(ev.titulo)}">
+        <div><div class="timeline-admin-year">${esc(ev.ano)}${ev.destaque?' · Destaque':''}</div><div class="timeline-admin-title">${esc(ev.titulo)}</div><div class="timeline-admin-desc">${esc(ev.descricao||'Sem descrição')}</div></div>
+        <div class="timeline-admin-actions">
+          <button type="button" data-timeline-action="up" data-timeline-id="${esc(ev.id)}" ${idx===0?'disabled':''}>↑</button>
+          <button type="button" data-timeline-action="down" data-timeline-id="${esc(ev.id)}" ${idx===all.length-1?'disabled':''}>↓</button>
+          <button type="button" data-timeline-action="edit" data-timeline-id="${esc(ev.id)}">Editar</button>
+          <button type="button" data-timeline-action="duplicate" data-timeline-id="${esc(ev.id)}">Duplicar</button>
+          <button type="button" data-timeline-action="delete" data-timeline-id="${esc(ev.id)}">Excluir</button>
+        </div>
+      </article>`;
+    }).join('');
+  }
+
+  async function load(notify=false){
+    try{
+      const data=await api('/api/config/timeline_events?v='+Date.now(),{method:'GET'});
+      const arr=Array.isArray(data?.valor) ? data.valor : (Array.isArray(data?.valor?.itens) ? data.valor.itens : []);
+      state=(arr.length ? arr.map(normalize).filter(Boolean) : DEFAULT_EVENTS.map((x,i)=>({...x,ordem:i+1}))).sort((a,b)=>Number(a.ordem||0)-Number(b.ordem||0));
+      setStatus('Linha do Tempo carregada do servidor.');
+    }catch(err){
+      state=DEFAULT_EVENTS.map((x,i)=>({...x,ordem:i+1}));
+      setStatus('Não foi possível carregar o servidor. Os marcos padrão estão sendo exibidos.');
+      console.error('Linha do Tempo:',err);
+      if(notify) toast('Não foi possível carregar a Linha do Tempo.');
+    }
+    render();
+    initialized=true;
+    return state;
+  }
+
+  async function save(notify=true){
+    const token=getToken();
+    if(!token){ toast('Sessão administrativa expirada. Faça login novamente.'); return false; }
+    try{
+      const payload=state.map((x,i)=>({...x,ordem:i+1}));
+      await api('/api/admin/config/timeline_events',{method:'PUT',body:JSON.stringify({valor:payload})});
+      state=payload;
+      render();
+      setStatus('Alterações salvas no Cloudflare.');
+      if(notify) toast('Linha do Tempo salva com sucesso no Cloudflare.');
+      return true;
+    }catch(err){
+      console.error('Erro ao salvar Linha do Tempo:',err);
+      toast('Não foi possível salvar a Linha do Tempo: '+(err.message||'erro desconhecido'));
+      return false;
+    }
+  }
+
+  function openModal(id=''){
+    editId=String(id||'');
+    const ev=editId ? state.find(x=>String(x.id)===editId) : null;
+    const modal=$('modalTimelineEditor'); if(!modal)return;
+    $('tituloModalTimeline').textContent=ev?'Editar acontecimento':'Novo acontecimento';
+    $('timelineEditId').value=ev?.id||'';
+    $('timelineAno').value=ev?.ano||'';
+    $('timelineDecada').value=ev?.decada||'';
+    $('timelineTitulo').value=ev?.titulo||'';
+    $('timelineDescricao').value=ev?.descricao||'';
+    $('timelineFotoUrl').value=ev?.foto||'';
+    $('timelineDestaque').checked=ev?.destaque===true;
+    $('timelineFotoArquivo').value='';
+    $('timelinePreviewFoto').src=ev?.foto ? cacheUrl(ev.foto) : '';
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden','false');
+    setTimeout(()=>$('timelineTitulo')?.focus(),50);
+  }
+
+  function closeModal(){
+    const modal=$('modalTimelineEditor');
+    if(modal){ modal.classList.remove('active'); modal.setAttribute('aria-hidden','true'); }
+    editId='';
+  }
+
+  async function submitForm(event){
+    if(event) event.preventDefault();
+    const id=String($('timelineEditId')?.value||'').trim();
+    const ano=String($('timelineAno')?.value||'').trim();
+    const decada=String($('timelineDecada')?.value||'').trim();
+    const titulo=String($('timelineTitulo')?.value||'').trim();
+    const descricao=String($('timelineDescricao')?.value||'').trim();
+    const arquivo=$('timelineFotoArquivo')?.files?.[0];
+    let foto=String($('timelineFotoUrl')?.value||'').trim();
+    if(!ano || !titulo){ toast('Informe o ano/período e o título do acontecimento.'); return false; }
+    try{
+      if(arquivo){ toast('Enviando foto do acontecimento...'); foto=await uploadFoto(arquivo); }
+      const registro={id:id||('timeline-'+Date.now()+'-'+Math.random().toString(36).slice(2,8)),ano,decada,titulo,descricao,foto,destaque:$('timelineDestaque')?.checked===true,ordem:0};
+      if(id){
+        const idx=state.findIndex(x=>String(x.id)===id);
+        if(idx>=0){registro.ordem=state[idx].ordem;state[idx]=registro;}
+        else state.push(registro);
+      }else{ registro.ordem=state.length+1; state.push(registro); }
+      const ok=await save(false);
+      if(ok){ closeModal(); toast(id?'Acontecimento atualizado com sucesso.':'Acontecimento cadastrado com sucesso.'); }
+      return ok;
+    }catch(err){ console.error(err); toast('Não foi possível salvar o acontecimento: '+(err.message||'erro desconhecido')); return false; }
+  }
+
+  async function remove(id){
+    const ev=state.find(x=>String(x.id)===String(id));
+    if(!ev)return;
+    if(!confirm(`Excluir o acontecimento “${ev.titulo}”?`))return;
+    state=state.filter(x=>String(x.id)!==String(id));
+    const ok=await save(true);
+    if(!ok){ await load(false); }
+  }
+
+  async function duplicate(id){
+    const ev=state.find(x=>String(x.id)===String(id)); if(!ev)return;
+    state.push({...ev,id:'timeline-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),titulo:ev.titulo+' (cópia)',destaque:false,ordem:state.length+1});
+    await save(true);
+  }
+
+  async function move(id,direction){
+    const list=[...state].sort((a,b)=>Number(a.ordem||0)-Number(b.ordem||0));
+    const idx=list.findIndex(x=>String(x.id)===String(id)); const next=idx+direction;
+    if(idx<0 || next<0 || next>=list.length)return;
+    [list[idx],list[next]]=[list[next],list[idx]];
+    state=list.map((x,i)=>({...x,ordem:i+1}));
+    await save(true);
+  }
+
+  async function restore(){
+    if(!confirm('Restaurar os marcos padrão da Linha do Tempo? Os acontecimentos cadastrados manualmente serão substituídos.'))return;
+    state=DEFAULT_EVENTS.map((x,i)=>({...x,ordem:i+1}));
+    render();
+    await save(true);
+  }
+
+  function manualRender(){ render(); }
+
+  function bind(){
+    if(initialized===false) render();
+    const novo=$('btnNovoEventoTimeline');
+    const atualizar=$('btnAtualizarTimeline');
+    const restaurar=$('btnRestaurarTimeline');
+    const salvar=$('btnSalvarTimelineAlteracoes');
+    const fechar=$('btnFecharModalTimeline');
+    const cancelar=$('btnCancelarModalTimeline');
+    const form=$('formTimelineAdmin');
+    const lista=$('listaTimelineAdmin');
+    const filtro=$('filtroTimelineAdmin');
+    const decada=$('filtroTimelineDecada');
+
+    if(novo && !novo.dataset.timelineController){novo.dataset.timelineController='1';novo.addEventListener('click',e=>{e.preventDefault();openModal('');});}
+    if(atualizar && !atualizar.dataset.timelineController){atualizar.dataset.timelineController='1';atualizar.addEventListener('click',e=>{e.preventDefault();load(true);});}
+    if(restaurar && !restaurar.dataset.timelineController){restaurar.dataset.timelineController='1';restaurar.addEventListener('click',e=>{e.preventDefault();restore();});}
+    if(salvar && !salvar.dataset.timelineController){salvar.dataset.timelineController='1';salvar.addEventListener('click',e=>{e.preventDefault();save(true);});}
+    if(fechar && !fechar.dataset.timelineController){fechar.dataset.timelineController='1';fechar.addEventListener('click',e=>{e.preventDefault();closeModal();});}
+    if(cancelar && !cancelar.dataset.timelineController){cancelar.dataset.timelineController='1';cancelar.addEventListener('click',e=>{e.preventDefault();closeModal();});}
+    if(form && !form.dataset.timelineController){form.dataset.timelineController='1';form.addEventListener('submit',e=>submitForm(e));}
+    if(filtro && !filtro.dataset.timelineController){filtro.dataset.timelineController='1';filtro.addEventListener('input',manualRender);}
+    if(decada && !decada.dataset.timelineController){decada.dataset.timelineController='1';decada.addEventListener('change',manualRender);}
+    if(lista && !lista.dataset.timelineController){
+      lista.dataset.timelineController='1';
+      lista.addEventListener('click',e=>{
+        const btn=e.target.closest('[data-timeline-action]'); if(!btn || btn.disabled)return;
+        e.preventDefault(); e.stopPropagation();
+        const id=btn.getAttribute('data-timeline-id')||'';
+        const action=btn.getAttribute('data-timeline-action');
+        if(action==='edit')openModal(id);
+        else if(action==='duplicate')duplicate(id);
+        else if(action==='delete')remove(id);
+        else if(action==='up')move(id,-1);
+        else if(action==='down')move(id,1);
+      });
+    }
+    const nav=document.querySelector('.admin-nav-item[onclick*="tabLinhaTempo"]');
+    if(nav && !nav.dataset.timelineController){
+      nav.dataset.timelineController='1';
+      nav.addEventListener('click',()=>setTimeout(()=>{bind();load(false);},20));
+    }
+    const modal=$('modalTimelineEditor');
+    if(modal && !modal.dataset.timelineController){
+      modal.dataset.timelineController='1';
+      modal.addEventListener('click',e=>{if(e.target===modal)closeModal();});
+    }
+    const fotoArquivo=$('timelineFotoArquivo');
+    if(fotoArquivo && !fotoArquivo.dataset.timelineController){
+      fotoArquivo.dataset.timelineController='1';
+      fotoArquivo.addEventListener('change',()=>{
+        const f=fotoArquivo.files?.[0]; if(!f)return;
+        const reader=new FileReader(); reader.onload=()=>{if($('timelinePreviewFoto'))$('timelinePreviewFoto').src=reader.result;}; reader.readAsDataURL(f);
+      });
+    }
+    const fotoUrl=$('timelineFotoUrl');
+    if(fotoUrl && !fotoUrl.dataset.timelineController){
+      fotoUrl.dataset.timelineController='1';
+      fotoUrl.addEventListener('input',()=>{const v=fotoUrl.value.trim();if(v && $('timelinePreviewFoto'))$('timelinePreviewFoto').src=cacheUrl(v);});
+    }
+  }
+
+  const apiObj={
+    abrirModalEventoTimeline:openModal,
+    editarEventoTimeline:openModal,
+    fecharModalEventoTimeline:closeModal,
+    salvarEventoTimeline:submitForm,
+    excluirEventoTimeline:remove,
+    duplicarEventoTimeline:duplicate,
+    moverTimeline:move,
+    restaurarTimelinePadrao:restore,
+    carregarTimelineDoBanco:load,
+    renderListaTimelineAdmin:manualRender,
+    salvarTimelineNoBanco:save,
+    arrastarTimeline:()=>{},
+    soltarTimeline:()=>{}
+  };
+  Object.assign(window,apiObj);
+
+  function start(){ bind(); load(false); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start,{once:true});
+  else start();
+  window.addEventListener('load',bind,{once:true});
+})();
+</script>
+
+<script id="fmabc-admin-standalone-script">
+(function(){
+  function prepararAreaAdministrativa(){
+    document.body.classList.add('fmabc-admin-standalone');
+    const overlay = document.getElementById('adminModalOverlay');
+    if (!overlay) return;
+    overlay.classList.add('active');
+    const logged = localStorage.getItem('fmabc_admin_logged') === 'true' && !!localStorage.getItem('fmabc_cf_admin_token');
+    overlay.classList.toggle('admin-route-logged-out', !logged);
+    const backBtn = document.getElementById('adminBackPortalBtn');
+    if (backBtn) {
+      backBtn.textContent = 'Voltar ao portal';
+      backBtn.setAttribute('aria-label', 'Voltar ao portal público');
+    }
+    if (logged) {
+      const painel = document.getElementById('painel-admin');
+      const login = document.getElementById('modal-login');
+      if (login) login.style.display = 'none';
+      if (painel) painel.style.display = 'flex';
+    } else {
+      const painel = document.getElementById('painel-admin');
+      const login = document.getElementById('modal-login');
+      if (login) login.style.display = 'block';
+      if (painel) painel.style.display = 'none';
+    }
+  }
+
+  window.fecharAdminModal = function(){
+    window.location.href = '../';
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', prepararAreaAdministrativa, {once:true});
+  } else {
+    prepararAreaAdministrativa();
+  }
+})();
+</script>
+
+
+<script id="fmabc-gallery-admin-script">
+(function(){
+  const GALERIA_FOTOS_CONFIG_KEY = 'fmabc_gallery_albums';
+  let albunsGaleria = [];
+  let albumGaleriaEditandoId = '';
+  let fotosAlbumGaleria = [];
+
+  function gerarIdAlbumGaleria(){
+    if(window.crypto?.randomUUID) return window.crypto.randomUUID();
+    return `album-${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
+  }
+
+  function slugGaleria(valor){
+    return String(valor||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,90) || 'album';
+  }
+
+  function escapeGaleria(value){
+    return String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function escapeGaleriaAttr(value){ return escapeGaleria(value); }
+
+  function normalizarFotoGaleria(item,index=0){
+    if(!item || typeof item!=='object') return null;
+    const url=String(item.url||item.src||'').trim();
+    if(!url) return null;
+    return {
+      id:String(item.id||`foto-${Date.now()}-${index}-${Math.random().toString(36).slice(2,6)}`),
+      url:url.slice(0,1000),
+      legenda:String(item.legenda||item.caption||'').trim().slice(0,180),
+      ordem:Number.isFinite(Number(item.ordem)) ? Number(item.ordem) : index+1
+    };
+  }
+
+  function normalizarAlbumGaleria(item,index=0){
+    if(!item || typeof item!=='object') return null;
+    const titulo=String(item.titulo||item.nome||'').trim();
+    if(!titulo) return null;
+    const fotos=Array.isArray(item.fotos) ? item.fotos.map(normalizarFotoGaleria).filter(Boolean) : [];
+    const slug=slugGaleria(item.slug||titulo);
+    return {
+      id:String(item.id||gerarIdAlbumGaleria()),
+      titulo:titulo.slice(0,160),
+      slug,
+      data:String(item.data||item.dataEvento||'').trim().slice(0,20),
+      descricao:String(item.descricao||'').trim().slice(0,800),
+      categoria:String(item.categoria||'').trim().slice(0,80),
+      capa:String(item.capa||item.imagem||'').trim().slice(0,1000),
+      publicado:item.publicado!==false,
+      destaque:item.destaque===true,
+      ordem:Number.isFinite(Number(item.ordem)) ? Number(item.ordem) : index+1,
+      createdAt:item.createdAt||'',
+      updatedAt:item.updatedAt||'' ,
+      fotos:fotos.sort((a,b)=>Number(a.ordem||0)-Number(b.ordem||0))
+    };
+  }
+
+  function ordenarAlbunsGaleria(){
+    albunsGaleria.sort((a,b)=>Number(a.ordem||0)-Number(b.ordem||0) || String(a.titulo).localeCompare(String(b.titulo),'pt-BR',{sensitivity:'base'}));
+    albunsGaleria=albunsGaleria.map((a,i)=>({...a,ordem:i+1}));
+  }
+
+  async function carregarGaleriaFotosDoBanco(notify=false){
+    try{
+      const r=await fetch(`${CLOUDFLARE_API_URL}/api/config/${encodeURIComponent(GALERIA_FOTOS_CONFIG_KEY)}?v=${Date.now()}`,{cache:'no-store'});
+      if(!r.ok) throw new Error(`Cloudflare API HTTP ${r.status}`);
+      const data=await r.json();
+      const valor=data?.valor;
+      const lista=Array.isArray(valor) ? valor : (Array.isArray(valor?.albuns) ? valor.albuns : []);
+      albunsGaleria=lista.map(normalizarAlbumGaleria).filter(Boolean);
+      ordenarAlbunsGaleria();
+      renderListaAlbunsGaleriaAdmin();
+      if(notify) showToast('Galeria de Fotos atualizada.');
+    }catch(err){
+      console.error('Erro ao carregar a Galeria de Fotos:',err);
+      albunsGaleria=[];
+      renderListaAlbunsGaleriaAdmin();
+      if(notify) showToast('Não foi possível carregar a Galeria de Fotos: ' + (err.message||'erro desconhecido'));
+    }
+  }
+
+  async function salvarGaleriaFotosNoBanco(notify=true){
+    registrarAtividadeAdmin();
+    if(!localStorage.getItem(ADMIN_TOKEN_KEY)){
+      if(notify) showToast('Sessão administrativa expirada. Faça login novamente.');
+      return false;
+    }
+    ordenarAlbunsGaleria();
+    const payload=albunsGaleria.map((a,i)=>({...a,ordem:i+1,fotos:(a.fotos||[]).map((f,j)=>({...f,ordem:j+1}))}));
+    try{
+      await cloudflareAdminFetch(`/api/admin/config/${encodeURIComponent(GALERIA_FOTOS_CONFIG_KEY)}`,{method:'PUT',body:JSON.stringify({valor:{albuns:payload}})});
+      albunsGaleria=payload;
+      renderListaAlbunsGaleriaAdmin();
+      if(notify) showToast('Galeria de Fotos salva no Cloudflare.');
+      return true;
+    }catch(err){
+      console.error('Erro ao salvar a Galeria de Fotos:',err);
+      if(notify) showToast('Não foi possível salvar a Galeria de Fotos: ' + (err.message||'erro desconhecido'));
+      return false;
+    }
+  }
+
+  function formatarDataGaleria(v){
+    if(!v) return 'Data não informada';
+    const d=new Date(`${v}T12:00:00`);
+    return Number.isNaN(d.getTime()) ? v : d.toLocaleDateString('pt-BR');
+  }
+
+  function renderListaAlbunsGaleriaAdmin(){
+    const container=document.getElementById('listaAlbunsGaleriaAdmin');
+    const status=document.getElementById('statusGaleriaFotosAdmin');
+    if(!container) return;
+    const filtro=String(document.getElementById('filtroGaleriaFotosAdmin')?.value||'').trim().toLowerCase();
+    const statusFiltro=String(document.getElementById('filtroGaleriaStatusAdmin')?.value||'');
+    const lista=albunsGaleria.filter(a=>{
+      const texto=`${a.titulo} ${a.descricao} ${a.categoria}`.toLowerCase();
+      const bateFiltro=!filtro || texto.includes(filtro);
+      const bateStatus=!statusFiltro || (statusFiltro==='publicado' ? a.publicado!==false : a.publicado===false);
+      return bateFiltro && bateStatus;
+    });
+    if(!lista.length){
+      container.innerHTML='<div class="gallery-admin-notice" style="grid-column:1/-1"><strong>Nenhum álbum encontrado.</strong><div>Use “Novo álbum” para criar o primeiro álbum da Galeria de Fotos.</div></div>';
+    }else{
+      container.innerHTML=lista.map((a)=>{
+        const capa=a.capa || a.fotos?.[0]?.url || '';
+        const imagem=capa ? escapeGaleriaAttr(urlSemCache(capa)) : 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="100%" height="100%" fill="#eef2ef"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#7b879a" font-family="Arial" font-size="22">Sem capa</text></svg>');
+        const publicado=a.publicado!==false;
+        return `<article class="gallery-admin-card">
+          <img class="gallery-admin-card-cover" src="${imagem}" alt="${escapeGaleriaAttr(a.titulo)}">
+          <div class="gallery-admin-card-body">
+            <div class="gallery-admin-card-top"><div><h4 class="gallery-admin-card-title">${escapeGaleria(a.titulo)}</h4><div class="gallery-admin-card-date">${escapeGaleria(formatarDataGaleria(a.data))}</div></div></div>
+            <p class="gallery-admin-card-desc">${escapeGaleria(a.descricao||'Sem descrição.')}</p>
+            <div class="gallery-admin-meta"><span class="gallery-admin-pill ${publicado?'':'draft'}">${publicado?'Publicado':'Rascunho'}</span><span class="gallery-admin-pill">${(a.fotos||[]).length} ${(a.fotos||[]).length===1?'foto':'fotos'}</span>${a.categoria?`<span class="gallery-admin-pill">${escapeGaleria(a.categoria)}</span>`:''}</div>
+            <div class="gallery-admin-actions">
+              <button type="button" onclick="moverAlbumGaleria('${escapeGaleriaAttr(a.id)}',-1)" ${Number(a.ordem)<=1?'disabled':''}>Subir</button>
+              <button type="button" onclick="moverAlbumGaleria('${escapeGaleriaAttr(a.id)}',1)" ${Number(a.ordem)>=albunsGaleria.length?'disabled':''}>Descer</button>
+              <button type="button" onclick="editarAlbumGaleria('${escapeGaleriaAttr(a.id)}')">Editar</button>
+              <button type="button" onclick="duplicarAlbumGaleria('${escapeGaleriaAttr(a.id)}')">Duplicar</button>
+              <button type="button" class="danger" onclick="excluirAlbumGaleria('${escapeGaleriaAttr(a.id)}')">Excluir</button>
+            </div>
+          </div>
+        </article>`;
+      }).join('');
+    }
+    if(status){
+      status.textContent=`${lista.length} ${lista.length===1?'álbum exibido':'álbuns exibidos'} de ${albunsGaleria.length} cadastrados.`;
+    }
+  }
+
+  function renderFotosEditorGaleria(){
+    const container=document.getElementById('listaFotosAlbumGaleria');
+    if(!container) return;
+    if(!fotosAlbumGaleria.length){
+      container.innerHTML='<div class="gallery-admin-notice"><strong>Nenhuma foto adicionada.</strong><div>Selecione várias imagens acima ou adicione uma URL.</div></div>';
+      return;
+    }
+    container.innerHTML=fotosAlbumGaleria.map((f,i)=>`<div class="gallery-photo-admin-item">
+      <img class="gallery-photo-admin-thumb" src="${escapeGaleriaAttr(urlSemCache(f.url))}" alt="${escapeGaleriaAttr(f.legenda||`Foto ${i+1}`)}">
+      <div class="gallery-photo-admin-main"><strong>Foto ${i+1}</strong><span>${escapeGaleria(f.url)}</span></div>
+      <div class="gallery-photo-admin-actions">
+        <button type="button" onclick="moverFotoGaleria(${i},-1)" ${i===0?'disabled':''}>↑</button>
+        <button type="button" onclick="moverFotoGaleria(${i},1)" ${i===fotosAlbumGaleria.length-1?'disabled':''}>↓</button>
+        <button type="button" class="danger" onclick="removerFotoGaleria(${i})">×</button>
+      </div>
+    </div>`).join('');
+  }
+
+  function abrirEditorAlbumGaleria(album=null){
+    const shell=document.getElementById('editorAlbumGaleria');
+    const form=document.getElementById('formAlbumGaleria');
+    if(!shell || !form) return;
+    albumGaleriaEditandoId=album ? String(album.id) : '';
+    fotosAlbumGaleria=album ? (album.fotos||[]).map((f,i)=>({...f,ordem:i+1})) : [];
+    document.getElementById('tituloEditorAlbumGaleria').textContent=album?'Editar álbum':'Novo álbum';
+    document.getElementById('subtituloEditorAlbumGaleria').textContent=album?'Atualize os dados e as fotos do álbum.':'Cadastre as informações do álbum e depois adicione as fotos.';
+    document.getElementById('albumGaleriaEditId').value=album?.id||'';
+    document.getElementById('albumGaleriaTitulo').value=album?.titulo||'';
+    document.getElementById('albumGaleriaData').value=album?.data||'';
+    document.getElementById('albumGaleriaDescricao').value=album?.descricao||'';
+    document.getElementById('albumGaleriaCategoria').value=album?.categoria||'';
+    document.getElementById('albumGaleriaPublicado').value=album?.publicado===false?'false':'true';
+    document.getElementById('albumGaleriaCapaUrl').value=album?.capa||'';
+    document.getElementById('albumGaleriaCapaArquivo').value='';
+    document.getElementById('albumGaleriaFotosArquivos').value='';
+    document.getElementById('albumGaleriaFotoUrl').value='';
+    atualizarPreviewCapaGaleria(album?.capa || fotosAlbumGaleria[0]?.url || '');
+    renderFotosEditorGaleria();
+    shell.classList.add('active');shell.setAttribute('aria-hidden','false');
+    shell.scrollIntoView({behavior:'smooth',block:'start'});
+    setTimeout(()=>document.getElementById('albumGaleriaTitulo')?.focus(),80);
+  }
+
+  function abrirNovoAlbumGaleria(){ abrirEditorAlbumGaleria(null); }
+
+  function fecharEditorAlbumGaleria(){
+    const shell=document.getElementById('editorAlbumGaleria');
+    if(shell){shell.classList.remove('active');shell.setAttribute('aria-hidden','true');}
+    albumGaleriaEditandoId='';fotosAlbumGaleria=[];
+  }
+
+  function atualizarPreviewCapaGaleria(url){
+    const img=document.getElementById('albumGaleriaCapaPreview');
+    if(img) img.src=url ? urlSemCache(url) : 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="100%" height="100%" fill="#eef2ef"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#7b879a" font-family="Arial" font-size="22">Sem capa</text></svg>');
+  }
+
+  async function salvarAlbumGaleria(event){
+    event.preventDefault();
+    registrarAtividadeAdmin();
+    if(!localStorage.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return;}
+    const titulo=document.getElementById('albumGaleriaTitulo').value.trim();
+    if(!titulo){showToast('Informe o título do álbum.');return;}
+    let capa=document.getElementById('albumGaleriaCapaUrl').value.trim();
+    const capaArquivo=document.getElementById('albumGaleriaCapaArquivo').files?.[0];
+    try{
+      if(capaArquivo){showToast('Enviando capa para o Cloudflare...');capa=await enviarArquivoParaStorage(capaArquivo,'galeria-fotos');}
+      const agora=new Date().toISOString();
+      const registro={
+        id:albumGaleriaEditandoId || gerarIdAlbumGaleria(),
+        titulo,slug:slugGaleria(titulo),data:document.getElementById('albumGaleriaData').value||'',
+        descricao:document.getElementById('albumGaleriaDescricao').value.trim(),
+        categoria:document.getElementById('albumGaleriaCategoria').value.trim(),
+        capa:capa||fotosAlbumGaleria[0]?.url||'',
+        publicado:document.getElementById('albumGaleriaPublicado').value!=='false',
+        destaque:false,ordem:0,createdAt:agora,updatedAt:agora,
+        fotos:fotosAlbumGaleria.map((f,i)=>({...f,ordem:i+1}))
+      };
+      if(albumGaleriaEditandoId){
+        const idx=albunsGaleria.findIndex(a=>String(a.id)===albumGaleriaEditandoId);
+        if(idx<0) throw new Error('Álbum não encontrado.');
+        registro.ordem=albunsGaleria[idx].ordem||idx+1;
+        registro.createdAt=albunsGaleria[idx].createdAt||agora;
+        albunsGaleria[idx]=registro;
+      }else{
+        registro.ordem=albunsGaleria.length+1;
+        albunsGaleria.push(registro);
+      }
+      if(!registro.capa && registro.fotos.length) registro.capa=registro.fotos[0].url;
+      const ok=await salvarGaleriaFotosNoBanco(false);
+      if(ok){fecharEditorAlbumGaleria();showToast(albumGaleriaEditandoId?'Álbum atualizado com sucesso.':'Álbum cadastrado com sucesso.');}
+    }catch(err){
+      console.error('Erro ao salvar álbum:',err);
+      showToast('Não foi possível salvar o álbum: '+(err.message||'erro desconhecido'));
+    }
+  }
+
+  async function adicionarFotosArquivosGaleria(files){
+    const lista=Array.from(files||[]);
+    if(!lista.length) return;
+    try{
+      for(const file of lista){
+        if(!String(file.type||'').startsWith('image/')) throw new Error(`O arquivo ${file.name} não é uma imagem válida.`);
+        showToast(`Enviando ${file.name}...`);
+        const url=await enviarArquivoParaStorage(file,'galeria-fotos');
+        fotosAlbumGaleria.push({id:`foto-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,url,legenda:'',ordem:fotosAlbumGaleria.length+1});
+      }
+      const capaAtual=document.getElementById('albumGaleriaCapaUrl')?.value.trim();
+      if(!capaAtual && fotosAlbumGaleria[0]?.url) atualizarPreviewCapaGaleria(fotosAlbumGaleria[0].url);
+      renderFotosEditorGaleria();
+      const input=document.getElementById('albumGaleriaFotosArquivos');if(input) input.value='';
+      showToast(`${lista.length} ${lista.length===1?'foto adicionada':'fotos adicionadas'} ao álbum.`);
+    }catch(err){
+      console.error(err);
+      showToast('Não foi possível adicionar as fotos: '+(err.message||'erro desconhecido'));
+    }
+  }
+
+  async function adicionarFotoUrlGaleria(){
+    const input=document.getElementById('albumGaleriaFotoUrl');
+    const url=String(input?.value||'').trim();
+    if(!url){showToast('Informe a URL da foto.');return;}
+    try{new URL(url);}catch{showToast('Informe uma URL válida.');return;}
+    fotosAlbumGaleria.push({id:`foto-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,url,legenda:'',ordem:fotosAlbumGaleria.length+1});
+    if(!document.getElementById('albumGaleriaCapaUrl')?.value.trim()) atualizarPreviewCapaGaleria(url);
+    input.value='';renderFotosEditorGaleria();showToast('Foto adicionada ao álbum.');
+  }
+
+  function removerFotoGaleria(index){
+    fotosAlbumGaleria.splice(index,1);fotosAlbumGaleria=fotosAlbumGaleria.map((f,i)=>({...f,ordem:i+1}));
+    const capa=document.getElementById('albumGaleriaCapaUrl')?.value.trim();
+    if(!capa) atualizarPreviewCapaGaleria(fotosAlbumGaleria[0]?.url||'');
+    renderFotosEditorGaleria();
+  }
+
+  function moverFotoGaleria(index,direcao){
+    const novo=index+direcao;if(index<0||novo<0||novo>=fotosAlbumGaleria.length)return;
+    [fotosAlbumGaleria[index],fotosAlbumGaleria[novo]]=[fotosAlbumGaleria[novo],fotosAlbumGaleria[index]];
+    fotosAlbumGaleria=fotosAlbumGaleria.map((f,i)=>({...f,ordem:i+1}));renderFotosEditorGaleria();
+  }
+
+  function usarPrimeiraFotoComoCapaGaleria(){
+    const foto=fotosAlbumGaleria[0];
+    if(!foto){showToast('Adicione pelo menos uma foto primeiro.');return;}
+    document.getElementById('albumGaleriaCapaUrl').value=foto.url;
+    atualizarPreviewCapaGaleria(foto.url);
+  }
+
+  async function editarAlbumGaleria(id){const a=albunsGaleria.find(x=>String(x.id)===String(id));if(a)abrirEditorAlbumGaleria(a);}
+
+  async function duplicarAlbumGaleria(id){
+    const a=albunsGaleria.find(x=>String(x.id)===String(id));if(!a)return;
+    const base=slugGaleria(`${a.titulo} copia`);let slug=base;let i=2;const slugs=new Set(albunsGaleria.map(x=>x.slug));while(slugs.has(slug))slug=`${base}-${i++}`;
+    albunsGaleria.push({...a,id:gerarIdAlbumGaleria(),titulo:`${a.titulo} (cópia)`,slug,publicado:false,ordem:albunsGaleria.length+1,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),fotos:(a.fotos||[]).map(f=>({...f,id:`foto-${Date.now()}-${Math.random().toString(36).slice(2,8)}`}))});
+    await salvarGaleriaFotosNoBanco(true);
+  }
+
+  async function excluirAlbumGaleria(id){
+    const a=albunsGaleria.find(x=>String(x.id)===String(id));if(!a)return;
+    if(!confirm(`Excluir o álbum “${a.titulo}”? Esta ação remove o cadastro do álbum da galeria.`))return;
+    albunsGaleria=albunsGaleria.filter(x=>String(x.id)!==String(id));
+    await salvarGaleriaFotosNoBanco(true);
+  }
+
+  async function moverAlbumGaleria(id,direcao){
+    ordenarAlbunsGaleria();
+    const idx=albunsGaleria.findIndex(x=>String(x.id)===String(id));
+    const novo=idx+direcao;if(idx<0||novo<0||novo>=albunsGaleria.length)return;
+    [albunsGaleria[idx],albunsGaleria[novo]]=[albunsGaleria[novo],albunsGaleria[idx]];
+    albunsGaleria=albunsGaleria.map((a,i)=>({...a,ordem:i+1}));
+    await salvarGaleriaFotosNoBanco(true);
+  }
+
+  document.addEventListener('change',e=>{
+    if(e.target?.id==='albumGaleriaCapaArquivo'){
+      const file=e.target.files?.[0];if(!file)return;
+      const reader=new FileReader();reader.onload=()=>atualizarPreviewCapaGaleria(reader.result);reader.readAsDataURL(file);
+    }
+    if(e.target?.id==='albumGaleriaFotosArquivos') adicionarFotosArquivosGaleria(e.target.files);
+  });
+  document.addEventListener('input',e=>{
+    if(e.target?.id==='albumGaleriaCapaUrl'){
+      const v=e.target.value.trim();if(v) atualizarPreviewCapaGaleria(v);
+    }
+  });
+
+  window.GALERIA_FOTOS_CONFIG_KEY=GALERIA_FOTOS_CONFIG_KEY;
+  window.carregarGaleriaFotosDoBanco=carregarGaleriaFotosDoBanco;
+  window.salvarGaleriaFotosNoBanco=salvarGaleriaFotosNoBanco;
+  window.abrirNovoAlbumGaleria=abrirNovoAlbumGaleria;
+  window.abrirEditorAlbumGaleria=abrirEditorAlbumGaleria;
+  window.fecharEditorAlbumGaleria=fecharEditorAlbumGaleria;
+  window.salvarAlbumGaleria=salvarAlbumGaleria;
+  window.editarAlbumGaleria=editarAlbumGaleria;
+  window.duplicarAlbumGaleria=duplicarAlbumGaleria;
+  window.excluirAlbumGaleria=excluirAlbumGaleria;
+  window.moverAlbumGaleria=moverAlbumGaleria;
+  window.adicionarFotoUrlGaleria=adicionarFotoUrlGaleria;
+  window.removerFotoGaleria=removerFotoGaleria;
+  window.moverFotoGaleria=moverFotoGaleria;
+  window.usarPrimeiraFotoComoCapaGaleria=usarPrimeiraFotoComoCapaGaleria;
+  window.renderListaAlbunsGaleriaAdmin=renderListaAlbunsGaleriaAdmin;
+  window.renderFotosEditorGaleria=renderFotosEditorGaleria;
+})();
+</script>
+
+
+  <div id="cursoEditModal" class="curso-edit-modal" aria-hidden="true">
+    <div class="curso-edit-box" role="dialog" aria-modal="true" aria-labelledby="cursoEditTitle">
+      <div class="curso-edit-head">
+        <h4 id="cursoEditTitle">Editar curso</h4>
+        <button type="button" class="curso-edit-close" onclick="fecharEdicaoCurso()" aria-label="Fechar">×</button>
+      </div>
+      <form id="cursoEditForm" onsubmit="salvarEdicaoCurso(event)">
+        <div class="curso-edit-body">
+          <input type="hidden" id="cursoEditId">
+          <div class="form-group">
+            <label for="cursoEditNome">Nome do Curso</label>
+            <input type="text" id="cursoEditNome" class="form-control" maxlength="180" required>
+          </div>
+          <div class="form-group">
+            <label for="cursoEditDescricao">Descrição do Curso</label>
+            <textarea id="cursoEditDescricao" class="form-control" rows="6" maxlength="1000"></textarea>
+          </div>
+        </div>
+        <div class="curso-edit-actions">
+          <button type="button" class="curso-edit-cancel" onclick="fecharEdicaoCurso()">Cancelar</button>
+          <button type="submit" class="curso-edit-save" id="btnSalvarEdicaoCurso">Salvar alterações</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
 </body>
 </html>
