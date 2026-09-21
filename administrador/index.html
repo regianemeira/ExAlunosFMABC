@@ -2968,6 +2968,32 @@
   @media(max-width:650px){.gallery-admin-toolbar-row{grid-template-columns:1fr}.gallery-admin-card{grid-template-columns:1fr}.gallery-admin-card-cover{width:100%;height:210px}.gallery-photos-admin-list{grid-template-columns:1fr}.gallery-add-url-row{grid-template-columns:1fr}}
 </style>
 
+
+<style id="fale-conosco-admin-style">
+.fale-admin-wrap{max-width:1100px;margin:0 auto}
+.fale-admin-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;flex-wrap:wrap;margin-bottom:16px}
+.fale-admin-head h3{margin:0 0 6px;color:var(--azul-institucional);font-size:1.35rem}
+.fale-admin-head p{margin:0;color:var(--slate-muted);line-height:1.55;max-width:780px}
+.fale-admin-toolbar{display:flex;gap:10px;flex-wrap:wrap}
+.fale-admin-primary,.fale-admin-secondary{border:1px solid transparent;border-radius:10px;padding:11px 16px;font-weight:800;cursor:pointer;transition:.2s ease;font:inherit}
+.fale-admin-primary{background:var(--verde-principal);color:#fff;border-color:var(--verde-principal);box-shadow:0 7px 16px rgba(55,113,102,.15)}
+.fale-admin-primary:hover{filter:brightness(.96);transform:translateY(-1px)}
+.fale-admin-secondary{background:#fff;color:var(--azul-institucional);border-color:var(--border-color)}
+.fale-admin-secondary:hover{border-color:var(--verde-principal);color:var(--verde-escuro);transform:translateY(-1px)}
+.fale-admin-status{border:1px solid var(--border-color);background:#fff;border-radius:12px;padding:11px 14px;color:var(--slate-muted);font-size:.86rem;margin-bottom:18px}
+.fale-admin-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.fale-admin-card{background:#fff;border:1px solid var(--border-color);border-radius:14px;padding:18px;box-shadow:0 7px 20px rgba(20,35,60,.04)}
+.fale-admin-card.full{grid-column:1/-1}
+.fale-admin-card h4{margin:0 0 14px;color:var(--azul-institucional);font-size:1rem}
+.fale-admin-two-col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.fale-admin-card-head-row{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.fale-admin-help{margin:0 0 12px;color:var(--slate-muted);font-size:.82rem;line-height:1.45}
+.fale-admin-subjects{min-height:190px;font-family:inherit;line-height:1.5;white-space:pre-wrap}
+.fale-admin-warning{margin-top:16px;border:1px solid #e3d9aa;background:#fffdf2;border-radius:12px;padding:13px 15px;color:#665b2c;font-size:.84rem;line-height:1.5}
+.fale-admin-actions{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:16px;padding-top:16px;border-top:1px solid var(--border-color)}
+@media(max-width:800px){.fale-admin-grid,.fale-admin-two-col{grid-template-columns:1fr}.fale-admin-card.full{grid-column:auto}.fale-admin-actions{justify-content:stretch}.fale-admin-actions button{flex:1 1 220px}}
+</style>
+
 </head>
 <body class="fmabc-admin-standalone">
 
@@ -3194,6 +3220,7 @@
           <button class="admin-nav-item active" onclick="switchAdminTab(event, 'tabHome')">Página Inicial</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabMenus')">Gestão de Menus</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabPaginas')">Gestão de Páginas</button>
+          <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabFaleConosco')">Edição do Fale Conosco</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabGaleriaFotos')">Galeria de Fotos</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabReitores')">Galeria de Reitores</button>
           <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabLinhaTempo')">Linha do Tempo</button>
@@ -3464,6 +3491,110 @@
 
 <!-- ABA DE PLANO DE FUNDO COM PREVIEW E TRANSIÇÃO SUAVE -->
           
+
+          <section id="tabFaleConosco" class="admin-tab-pane">
+            <div class="fale-admin-wrap">
+              <div class="fale-admin-head">
+                <div>
+                  <h3>Edição do Fale Conosco</h3>
+                  <p>Edite os textos exibidos na página pública de contato e os assuntos disponíveis no formulário. As alterações são salvas no Cloudflare e passam a valer para os visitantes.</p>
+                </div>
+                <div class="fale-admin-toolbar">
+                  <button type="button" class="fale-admin-secondary" onclick="carregarFaleConoscoAdmin(true)">Atualizar</button>
+                  <button type="button" class="fale-admin-primary" onclick="salvarFaleConoscoAdmin(event)">Salvar alterações</button>
+                </div>
+              </div>
+
+              <div id="statusFaleConoscoAdmin" class="fale-admin-status">Carregando configuração...</div>
+
+              <form id="formFaleConoscoAdmin" onsubmit="salvarFaleConoscoAdmin(event)">
+                <div class="fale-admin-grid">
+                  <section class="fale-admin-card">
+                    <h4>Topo da página</h4>
+                    <div class="form-group">
+                      <label for="faleAdminBadge">Texto de identificação</label>
+                      <input id="faleAdminBadge" class="form-control" type="text" maxlength="100" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="faleAdminTitle">Título principal</label>
+                      <input id="faleAdminTitle" class="form-control" type="text" maxlength="160" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="faleAdminSubtitle">Texto de apresentação</label>
+                      <textarea id="faleAdminSubtitle" class="form-control" rows="4" maxlength="600" required></textarea>
+                    </div>
+                  </section>
+
+                  <section class="fale-admin-card">
+                    <h4>Bloco de atendimento</h4>
+                    <div class="form-group">
+                      <label for="faleAdminSectionBadge">Identificação do atendimento</label>
+                      <input id="faleAdminSectionBadge" class="form-control" type="text" maxlength="100" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="faleAdminSectionTitle">Título do bloco</label>
+                      <input id="faleAdminSectionTitle" class="form-control" type="text" maxlength="160" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="faleAdminSectionIntro">Texto de orientação</label>
+                      <textarea id="faleAdminSectionIntro" class="form-control" rows="4" maxlength="700" required></textarea>
+                    </div>
+                  </section>
+
+                  <section class="fale-admin-card full">
+                    <h4>Avisos e mensagens</h4>
+                    <div class="fale-admin-two-col">
+                      <div class="form-group">
+                        <label for="faleAdminSensitiveNotice">Orientação sobre informações sensíveis</label>
+                        <textarea id="faleAdminSensitiveNotice" class="form-control" rows="3" maxlength="500" required></textarea>
+                      </div>
+                      <div class="form-group">
+                        <label for="faleAdminPrivacyNote">Texto abaixo do formulário</label>
+                        <textarea id="faleAdminPrivacyNote" class="form-control" rows="3" maxlength="500" required></textarea>
+                      </div>
+                    </div>
+                    <div class="fale-admin-two-col">
+                      <div class="form-group">
+                        <label for="faleAdminSubmitLabel">Texto do botão de envio</label>
+                        <input id="faleAdminSubmitLabel" class="form-control" type="text" maxlength="60" required>
+                      </div>
+                      <div class="form-group">
+                        <label for="faleAdminSuccessMessage">Mensagem após o envio</label>
+                        <input id="faleAdminSuccessMessage" class="form-control" type="text" maxlength="220" required>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="faleAdminProtocolMessage">Texto do protocolo</label>
+                      <input id="faleAdminProtocolMessage" class="form-control" type="text" maxlength="180" required>
+                    </div>
+                  </section>
+
+                  <section class="fale-admin-card full">
+                    <div class="fale-admin-card-head-row">
+                      <div>
+                        <h4 style="margin-bottom:4px;">Assuntos do formulário</h4>
+                        <p class="fale-admin-help">Informe um assunto por linha. A primeira opção será usada como “Selecione”.</p>
+                      </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                      <label for="faleAdminSubjects">Lista de assuntos</label>
+                      <textarea id="faleAdminSubjects" class="form-control fale-admin-subjects" rows="9" maxlength="1800" spellcheck="true"></textarea>
+                    </div>
+                  </section>
+                </div>
+
+                <div class="fale-admin-warning">
+                  <strong>Atenção:</strong> o texto de consentimento e a política de privacidade não são editados nesta aba. Alterações jurídicas ou na finalidade do tratamento devem ser avaliadas e validadas institucionalmente antes da publicação.
+                </div>
+
+                <div class="fale-admin-actions">
+                  <button type="button" class="fale-admin-secondary" onclick="restaurarFaleConoscoPadrao()">Restaurar padrão</button>
+                  <button type="submit" class="fale-admin-primary" id="btnSalvarFaleConoscoAdmin">Salvar alterações</button>
+                </div>
+              </form>
+            </div>
+          </section>
+
           <section id="tabGaleriaFotos" class="admin-tab-pane">
             <div class="gallery-admin-wrap">
               <div class="gallery-admin-head">
@@ -7440,6 +7571,9 @@ function switchAdminTab(e, tabId) {
       if (tabId === 'tabPaginas') {
         renderListaPaginasCMS();
       }
+      if (tabId === 'tabFaleConosco') {
+        carregarFaleConoscoAdmin(false);
+      }
       if (tabId === 'tabGaleriaFotos') {
         carregarGaleriaFotosDoBanco(false);
       }
@@ -8519,6 +8653,175 @@ function switchAdminTab(e, tabId) {
   window.usarPrimeiraFotoComoCapaGaleria=usarPrimeiraFotoComoCapaGaleria;
   window.renderListaAlbunsGaleriaAdmin=renderListaAlbunsGaleriaAdmin;
   window.renderFotosEditorGaleria=renderFotosEditorGaleria;
+})();
+</script>
+
+
+<script id="fale-conosco-admin-script">
+(() => {
+  const FALE_CONFIG_KEY = 'fale_conosco';
+  const FALE_DEFAULT = {
+    badge: 'Portal de Ex-Alunos',
+    title: 'Fale Conosco',
+    subtitle: 'Entre em contato com a FMABC para enviar dúvidas, solicitações ou informações relacionadas à sua trajetória como ex-aluno.',
+    sectionBadge: 'Atendimento',
+    sectionTitle: 'Como podemos ajudar?',
+    sectionIntro: 'Preencha o formulário abaixo.',
+    sensitiveNotice: 'Evite inserir informações sensíveis ou documentos que não sejam necessários para o atendimento.',
+    privacyNote: 'Para solicitações relacionadas aos seus direitos como titular de dados pessoais, utilize também o canal de privacidade informado na Política de Privacidade do portal.',
+    submitLabel: 'Enviar mensagem',
+    successMessage: 'Mensagem enviada com sucesso.',
+    protocolMessage: 'Sua mensagem foi registrada. Protocolo:',
+    subjects: [
+      'Selecione',
+      'Atualização cadastral',
+      'Acervo histórico',
+      'Eventos e reencontros',
+      'Documentos e certificados',
+      'Informações acadêmicas',
+      'Parcerias e projetos',
+      'Outro'
+    ]
+  };
+
+  function normalizarFaleConfig(valor) {
+    const v = valor && typeof valor === 'object' ? valor : {};
+    const subjects = Array.isArray(v.subjects) ? v.subjects : FALE_DEFAULT.subjects;
+    const limpa = subjects.map(x => String(x ?? '').trim()).filter(Boolean).slice(0, 40);
+    return {
+      ...FALE_DEFAULT,
+      ...v,
+      badge: String(v.badge ?? FALE_DEFAULT.badge).trim() || FALE_DEFAULT.badge,
+      title: String(v.title ?? FALE_DEFAULT.title).trim() || FALE_DEFAULT.title,
+      subtitle: String(v.subtitle ?? FALE_DEFAULT.subtitle).trim() || FALE_DEFAULT.subtitle,
+      sectionBadge: String(v.sectionBadge ?? FALE_DEFAULT.sectionBadge).trim() || FALE_DEFAULT.sectionBadge,
+      sectionTitle: String(v.sectionTitle ?? FALE_DEFAULT.sectionTitle).trim() || FALE_DEFAULT.sectionTitle,
+      sectionIntro: String(v.sectionIntro ?? FALE_DEFAULT.sectionIntro).trim() || FALE_DEFAULT.sectionIntro,
+      sensitiveNotice: String(v.sensitiveNotice ?? FALE_DEFAULT.sensitiveNotice).trim() || FALE_DEFAULT.sensitiveNotice,
+      privacyNote: String(v.privacyNote ?? FALE_DEFAULT.privacyNote).trim() || FALE_DEFAULT.privacyNote,
+      submitLabel: String(v.submitLabel ?? FALE_DEFAULT.submitLabel).trim() || FALE_DEFAULT.submitLabel,
+      successMessage: String(v.successMessage ?? FALE_DEFAULT.successMessage).trim() || FALE_DEFAULT.successMessage,
+      protocolMessage: String(v.protocolMessage ?? FALE_DEFAULT.protocolMessage).trim() || FALE_DEFAULT.protocolMessage,
+      subjects: limpa.length >= 2 ? limpa : [...FALE_DEFAULT.subjects]
+    };
+  }
+
+  function setValue(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.value = value ?? '';
+  }
+
+  function getValue(id) {
+    return String(document.getElementById(id)?.value ?? '').trim();
+  }
+
+  function preencherFaleConoscoAdmin(config) {
+    const v = normalizarFaleConfig(config);
+    setValue('faleAdminBadge', v.badge);
+    setValue('faleAdminTitle', v.title);
+    setValue('faleAdminSubtitle', v.subtitle);
+    setValue('faleAdminSectionBadge', v.sectionBadge);
+    setValue('faleAdminSectionTitle', v.sectionTitle);
+    setValue('faleAdminSectionIntro', v.sectionIntro);
+    setValue('faleAdminSensitiveNotice', v.sensitiveNotice);
+    setValue('faleAdminPrivacyNote', v.privacyNote);
+    setValue('faleAdminSubmitLabel', v.submitLabel);
+    setValue('faleAdminSuccessMessage', v.successMessage);
+    setValue('faleAdminProtocolMessage', v.protocolMessage);
+    setValue('faleAdminSubjects', v.subjects.slice(1).join('\n'));
+  }
+
+  function lerFaleConoscoAdmin() {
+    const subjects = getValue('faleAdminSubjects').split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+    return normalizarFaleConfig({
+      badge: getValue('faleAdminBadge'),
+      title: getValue('faleAdminTitle'),
+      subtitle: getValue('faleAdminSubtitle'),
+      sectionBadge: getValue('faleAdminSectionBadge'),
+      sectionTitle: getValue('faleAdminSectionTitle'),
+      sectionIntro: getValue('faleAdminSectionIntro'),
+      sensitiveNotice: getValue('faleAdminSensitiveNotice'),
+      privacyNote: getValue('faleAdminPrivacyNote'),
+      submitLabel: getValue('faleAdminSubmitLabel'),
+      successMessage: getValue('faleAdminSuccessMessage'),
+      protocolMessage: getValue('faleAdminProtocolMessage'),
+      subjects: ['Selecione', ...subjects.slice(0, 40)]
+    });
+  }
+
+  function validarFaleConoscoAdmin(v) {
+    const required = [v.badge, v.title, v.subtitle, v.sectionBadge, v.sectionTitle, v.sectionIntro, v.sensitiveNotice, v.privacyNote, v.submitLabel, v.successMessage, v.protocolMessage];
+    if (required.some(x => !String(x || '').trim())) {
+      showToast('Preencha todos os campos obrigatórios do Fale Conosco.');
+      return false;
+    }
+    if (!Array.isArray(v.subjects) || v.subjects.filter(Boolean).length < 2) {
+      showToast('Cadastre pelo menos um assunto além de “Selecione”.');
+      return false;
+    }
+    return true;
+  }
+
+  async function carregarFaleConoscoAdmin(notify = false) {
+    const status = document.getElementById('statusFaleConoscoAdmin');
+    if (status) status.textContent = 'Carregando configuração do Fale Conosco...';
+    try {
+      const resposta = await fetch(`${CLOUDFLARE_API_URL}/api/config/${encodeURIComponent(FALE_CONFIG_KEY)}?v=${Date.now()}`, { cache: 'no-store' });
+      if (resposta.status === 404) {
+        preencherFaleConoscoAdmin(FALE_DEFAULT);
+        if (status) status.textContent = 'Nenhuma personalização cadastrada. O formulário está usando o padrão.';
+        if (notify) showToast('Fale Conosco carregado com o padrão.');
+        return;
+      }
+      if (!resposta.ok) throw new Error(`Cloudflare API HTTP ${resposta.status}`);
+      const data = await resposta.json();
+      preencherFaleConoscoAdmin(data?.valor);
+      if (status) status.textContent = data?.updated_at ? `Última atualização: ${data.updated_at}` : 'Configuração carregada.';
+      if (notify) showToast('Configuração do Fale Conosco atualizada.');
+    } catch (error) {
+      console.error('Fale Conosco:', error);
+      preencherFaleConoscoAdmin(FALE_DEFAULT);
+      if (status) status.textContent = 'Não foi possível carregar a configuração. O padrão foi mantido.';
+      if (notify) showToast('Não foi possível carregar o Fale Conosco.');
+    }
+  }
+
+  async function salvarFaleConoscoAdmin(event) {
+    if (event?.preventDefault) event.preventDefault();
+    const btn = document.getElementById('btnSalvarFaleConoscoAdmin');
+    const status = document.getElementById('statusFaleConoscoAdmin');
+    const valor = lerFaleConoscoAdmin();
+    if (!validarFaleConoscoAdmin(valor)) return;
+
+    if (btn) { btn.disabled = true; btn.textContent = 'Salvando...'; }
+    if (status) status.textContent = 'Salvando as alterações no Cloudflare...';
+    try {
+      const data = await cloudflareAdminFetch(`/api/admin/config/${encodeURIComponent(FALE_CONFIG_KEY)}`, {
+        method: 'PUT',
+        body: JSON.stringify({ valor })
+      });
+      preencherFaleConoscoAdmin(data?.valor || valor);
+      if (status) status.textContent = data?.updated_at ? `Salvo com sucesso. Última atualização: ${data.updated_at}` : 'Salvo com sucesso no Cloudflare.';
+      showToast('Fale Conosco salvo com sucesso.');
+    } catch (error) {
+      console.error('Erro ao salvar Fale Conosco:', error);
+      if (status) status.textContent = `Não foi possível salvar: ${error.message || 'erro desconhecido'}`;
+      showToast(`Não foi possível salvar o Fale Conosco: ${error.message || 'erro desconhecido'}`);
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = 'Salvar alterações'; }
+    }
+  }
+
+  function restaurarFaleConoscoPadrao() {
+    if (!confirm('Restaurar os textos e assuntos padrão do Fale Conosco? As alterações ainda não serão salvas até você clicar em “Salvar alterações”.')) return;
+    preencherFaleConoscoAdmin(FALE_DEFAULT);
+    const status = document.getElementById('statusFaleConoscoAdmin');
+    if (status) status.textContent = 'Padrão restaurado no formulário. Clique em “Salvar alterações” para publicar.';
+  }
+
+  window.carregarFaleConoscoAdmin = carregarFaleConoscoAdmin;
+  window.salvarFaleConoscoAdmin = salvarFaleConoscoAdmin;
+  window.restaurarFaleConoscoPadrao = restaurarFaleConoscoPadrao;
 })();
 </script>
 
