@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Depoimentos de ex-alunos | Memória FMABC</title>
+<title>Depoimentos | Memória FMABC</title>
 <style>
 :root{--azul:#4B5172;--verde:#339C5B;--verde-escuro:#377166;--verde-claro:#C6E2B4;--bg:#F7F9F8;--br:#D8DFDB;--texto:#232738;--muted:#555E70;--shadow:0 14px 35px rgba(35,39,56,.10)}
 *{box-sizing:border-box}html{background:var(--bg)}body{margin:0;min-height:100vh;color:var(--texto);font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;line-height:1.6;background:var(--bg)}
@@ -190,8 +190,8 @@ body::before{content:"";position:fixed;inset:0;background-image:var(--bg-image);
     </nav>
   </nav>
 <main class="page-container">
-<section class="page-hero"><span class="page-kicker">Memória FMABC</span><h1 class="page-title">Depoimentos de ex-alunos</h1><p class="page-subtitle">Memórias, experiências e mensagens de quem fez parte da história da FMABC.</p></section>
-<section class="page-content"><h2 class="placeholder-title">Compartilhe sua memória</h2><div id="fmabcEditableContent" class="placeholder-text" style="max-width:none"><p>Envie seu depoimento para integrar o acervo histórico da sua turma. O conteúdo será encaminhado para análise antes da publicação.</p></div><div class="form-card"><form id="formDepoimento" novalidate><div class="grid-2"><div class="field"><label for="nome">Seu nome</label><input id="nome" maxlength="120" required placeholder="Nome completo ou nome social"></div><div class="field"><label for="turma">Sua turma / curso</label><select id="turma" required><option value="">Carregando turmas...</option></select></div><div class="field full"><label for="texto">Seu depoimento</label><textarea id="texto" maxlength="300" required placeholder="Escreva sua mensagem sobre seu período na FMABC..."></textarea></div></div><div class="lgpd-consent"><input type="checkbox" id="consentimentoLGPD" required><label for="consentimentoLGPD">Li a <a href="politica-privacidade.html" target="_blank" rel="noopener noreferrer">Política de Privacidade</a> e, de forma livre, informada e inequívoca, autorizo o tratamento do meu nome, turma/curso e depoimento para recebimento, análise, aprovação e publicação no Portal de Ex-Alunos FMABC.</label></div><div class="lgpd-consent-error" id="lgpdConsentError">Para enviar o depoimento, marque a opção de ciência e autorização do tratamento dos dados.</div><div class="submit-row"><button type="submit" class="btn-submit">Enviar depoimento</button></div><div class="status" id="status"></div></form></div></section>
+<section class="page-hero"><span class="page-kicker">Memória FMABC</span><h1 class="page-title">Depoimentos</h1><p class="page-subtitle">Memórias, experiências e mensagens de quem fez parte da história da FMABC.</p></section>
+<section class="page-content"><h2 class="placeholder-title">Compartilhe sua memória</h2><div id="fmabcEditableContent" class="placeholder-text" style="max-width:none"><p>Envie seu depoimento para integrar o acervo histórico da sua turma. O conteúdo será encaminhado para análise antes da publicação.</p></div><div class="form-card"><form id="formDepoimento" novalidate><div class="grid-2"><div class="field"><label for="nome">Seu nome</label><input id="nome" maxlength="120" required placeholder="Nome completo ou nome social"></div><div class="field"><label for="turma">Sua turma / curso</label><select id="turma" required><option value="">Carregando turmas...</option></select></div><div class="field full"><label for="texto">Seu depoimento</label><textarea id="texto" maxlength="300" required placeholder="Escreva sua mensagem sobre sua trajetória na FMABC..."></textarea></div></div><div class="lgpd-consent"><input type="checkbox" id="consentimentoLGPD" required><label for="consentimentoLGPD">Li a <a href="politica-privacidade.html" target="_blank" rel="noopener noreferrer">Política de Privacidade</a> e, de forma livre, informada e inequívoca, autorizo o tratamento do meu nome, turma/curso e depoimento para recebimento, análise, aprovação e publicação no Memória FMABC.</label></div><div class="lgpd-consent-error" id="lgpdConsentError">Para enviar o depoimento, marque a opção de ciência e autorização do tratamento dos dados.</div><div class="submit-row"><button type="submit" class="btn-submit">Enviar depoimento</button></div><div class="status" id="status"></div></form></div></section>
 </main>
 <footer class="footer">
   <p id="footerAddress">Endereço: Av. Príncipe de Gales, 821 - Vila Príncipe de Gales, Santo André - SP</p>
@@ -203,13 +203,13 @@ body::before{content:"";position:fixed;inset:0;background-image:var(--bg-image);
 const MENU_PADRAO = [
   {id:'inicio',label:'Início',url:'index.html',target:'_self',visible:true},
   {id:'linha-do-tempo',label:'Linha do tempo',url:'linha-do-tempo.html',target:'_self',visible:true},
-  {id:'depoimentos-ex-alunos',label:'Depoimentos de ex-alunos',url:'depoimentos-ex-alunos.html',target:'_self',visible:true},
+  {id:'depoimentos-ex-alunos',label:'Depoimentos',url:'depoimentos.html',target:'_self',visible:true},
   {id:'galeria-diretores-reitores',label:'Fotos e galeria de diretores e reitores',url:'galeria-diretores-reitores.html',target:'_self',visible:true},
   {id:'professores-emeritos',label:'Professores eméritos',url:'professores-emeritos.html',target:'_self',visible:true}
 ];
-const MAPA_ANTIGO={'#inicio':'index.html','#linha-do-tempo':'linha-do-tempo.html','#depoimentos-ex-alunos':'depoimentos-ex-alunos.html','#galeria-diretores-reitores':'galeria-diretores-reitores.html','#professores-emeritos':'professores-emeritos.html'};
+const MAPA_ANTIGO={'#inicio':'index.html','#linha-do-tempo':'linha-do-tempo.html','#depoimentos-ex-alunos':'depoimentos.html','#galeria-diretores-reitores':'galeria-diretores-reitores.html','#professores-emeritos':'professores-emeritos.html'};
 function normalizarUrlMenu(url){const v=String(url||'').trim();if(!v)return '';if(v.startsWith('#'))return v;if(/^https?:\/\//i.test(v))return v;return v.startsWith('/')?v:v.replace(/^\/+/, '');}
-function normalizarItens(valor){const itens=Array.isArray(valor)?valor:(Array.isArray(valor?.itens)?valor.itens:[]),usados=new Set(),out=[];itens.forEach((item,i)=>{if(!item||typeof item!=='object')return;const label=String(item.label??item.nome??'').trim(),url=normalizarUrlMenu(MAPA_ANTIGO[item.url]||item.url);if(!label||!url)return;let id=String(item.id||`menu-${i+1}`),base=id,c=2;while(usados.has(id))id=`${base}-${c++}`;usados.add(id);out.push({id,label:label.slice(0,80),url:url.slice(0,500),target:item.target==='_blank'?'_blank':'_self',visible:item.visible!==false});});return out;}
+function normalizarItens(valor){const itens=Array.isArray(valor)?valor:(Array.isArray(valor?.itens)?valor.itens:[]),usados=new Set(),out=[];itens.forEach((item,i)=>{if(!item||typeof item!=='object')return;let label=String(item.label??item.nome??'').trim(),url=normalizarUrlMenu(MAPA_ANTIGO[item.url]||item.url);if(url==='depoimentos-ex-alunos.html')url='depoimentos.html';if(String(item.id||'')==='depoimentos-ex-alunos'||url==='depoimentos.html')label='Depoimentos';if(!label||!url)return;let id=String(item.id||`menu-${i+1}`),base=id,c=2;while(usados.has(id))id=`${base}-${c++}`;usados.add(id);out.push({id,label:label.slice(0,80),url:url.slice(0,500),target:item.target==='_blank'?'_blank':'_self',visible:item.visible!==false});});return out;}
 function paginaAtual(){return (location.pathname.split('/').pop()||'index.html').toLowerCase();}
 function renderMenu(itens){const el=document.getElementById('siteMenuContainer');if(!el)return;el.innerHTML='';const vis=(itens.length?itens:MENU_PADRAO).filter(i=>i.visible!==false);vis.forEach(item=>{const a=document.createElement('a');a.className='public-memory-menu-link';a.href=item.url;a.textContent=item.label;a.target=item.target==='_blank'?'_blank':'_self';if(a.target==='_blank')a.rel='noopener noreferrer';const target=String(item.url).split('?')[0].split('#')[0].split('/').pop().toLowerCase();if(target===paginaAtual())a.classList.add('active');el.appendChild(a);});}
 async function carregarMenu(){try{const r=await fetch(`${CLOUDFLARE_API_URL}/api/config/site_menu?v=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);const data=await r.json(),itens=normalizarItens(data?.valor);renderMenu(itens.length?itens:MENU_PADRAO);}catch(e){renderMenu(MENU_PADRAO);console.warn('Menu padrão carregado:',e);}}
@@ -225,7 +225,7 @@ document.getElementById('formDepoimento').addEventListener('submit',async e=>{e.
 (function(){
   const API='https://fmabc-acervo-api.armredessociais.workers.dev';
   const PAGE_ID='depoimentos-ex-alunos';
-  const FALLBACK_TITLE='Depoimentos de ex-alunos';
+  const FALLBACK_TITLE='Depoimentos';
   const FALLBACK_SUMMARY='Memórias, experiências e mensagens de quem fez parte da história da FMABC.';
   function sanitizarHtml(html){
     const doc=new DOMParser().parseFromString(String(html||''),'text/html');
@@ -279,6 +279,7 @@ document.getElementById('formDepoimento').addEventListener('submit',async e=>{e.
     'index.html':'inicio',
     'linha-do-tempo.html':'linha-do-tempo',
     'depoimentos-ex-alunos.html':'depoimentos-ex-alunos',
+    'depoimentos.html':'depoimentos-ex-alunos',
     'galeria-diretores-reitores.html':'galeria-diretores-reitores',
     'professores-emeritos.html':'professores-emeritos'
   };

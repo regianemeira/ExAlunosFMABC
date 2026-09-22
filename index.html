@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Acervo de Turmas & Painel Admin - FMABC</title>
+  <title>Memória FMABC | Acervo Institucional</title>
   
 
   <style>
@@ -2939,11 +2939,11 @@
       <div class="lgpd-modal-header">
         <button type="button" class="lgpd-modal-close" onclick="fecharPoliticaPrivacidade()" aria-label="Fechar">×</button>
         <h2 id="lgpdModalTitulo">Política de Privacidade e Proteção de Dados</h2>
-        <p>Portal de Ex-Alunos FMABC · Versão 1.0 · 21/09/2026</p>
+        <p>Memória FMABC · Versão 1.0 · 21/09/2026</p>
       </div>
       <div class="lgpd-modal-body">
         <h3>1. Objetivo</h3>
-        <p>Esta política informa, de forma clara e acessível, como o Portal de Ex-Alunos FMABC trata dados pessoais quando eles são fornecidos ou utilizados em funcionalidades do portal.</p>
+        <p>Esta política informa, de forma clara e acessível, como o Memória FMABC trata dados pessoais quando eles são fornecidos ou utilizados em funcionalidades do portal.</p>
 
         <h3>2. Responsável pelo tratamento</h3>
         <p>O Centro Universitário FMABC, mantido pela Fundação do ABC, é o responsável pelas decisões sobre o tratamento de dados pessoais no contexto deste portal.</p>
@@ -4973,7 +4973,7 @@
     const MENU_PADRAO = [
       { id: 'inicio', pageId: 'inicio', label: 'Início', url: 'index.html', target: '_self', visible: true },
       { id: 'linha-do-tempo', pageId: 'linha-do-tempo', label: 'Linha do tempo', url: 'linha-do-tempo.html', target: '_self', visible: true },
-      { id: 'depoimentos-ex-alunos', pageId: 'depoimentos-ex-alunos', label: 'Depoimentos de ex-alunos', url: 'depoimentos-ex-alunos.html', target: '_self', visible: true },
+      { id: 'depoimentos-ex-alunos', pageId: 'depoimentos-ex-alunos', label: 'Depoimentos', url: 'depoimentos.html', target: '_self', visible: true },
       { id: 'galeria-diretores-reitores', pageId: 'galeria-diretores-reitores', label: 'Fotos e galeria de diretores e reitores', url: 'galeria-diretores-reitores.html', target: '_self', visible: true },
       { id: 'professores-emeritos', pageId: 'professores-emeritos', label: 'Professores eméritos', url: 'professores-emeritos.html', target: '_self', visible: true }
     ];
@@ -5008,8 +5008,10 @@
 
       itens.forEach((item, index) => {
         if (!item || typeof item !== 'object') return;
-        const label = String(item.label ?? item.nome ?? '').trim();
-        const url = normalizarUrlMenu(item.url ?? item.link ?? '');
+        let label = String(item.label ?? item.nome ?? '').trim();
+        let url = normalizarUrlMenu(item.url ?? item.link ?? '');
+        if (url === 'depoimentos-ex-alunos.html') url = 'depoimentos.html';
+        if (String(item.id || '') === 'depoimentos-ex-alunos' || url === 'depoimentos.html') label = 'Depoimentos';
         if (!label || !url) return;
 
         // Impede duplicação de um mesmo destino interno no menu.
@@ -5042,7 +5044,7 @@
       const mapa = {
         '#inicio': 'index.html',
         '#linha-do-tempo': 'linha-do-tempo.html',
-        '#depoimentos-ex-alunos': 'depoimentos-ex-alunos.html',
+        '#depoimentos-ex-alunos': 'depoimentos.html',
         '#galeria-diretores-reitores': 'galeria-diretores-reitores.html',
         '#professores-emeritos': 'professores-emeritos.html'
       };
@@ -5391,7 +5393,7 @@
     const PAGINAS_SISTEMA = [
       { id:'inicio', tipo:'sistema', titulo:'Página Inicial', url:'index.html', resumo:'Página principal do acervo de turmas.', conteudo:'', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'institucional', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:true, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:1, podeExcluir:false },
       { id:'linha-do-tempo', tipo:'sistema', titulo:'Linha do tempo', url:'linha-do-tempo.html', resumo:'Principais marcos da história da FMABC, organizados cronologicamente.', conteudo:'<p>Área exclusiva para a linha do tempo institucional.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'memoria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:2, podeExcluir:false },
-      { id:'depoimentos-ex-alunos', tipo:'sistema', titulo:'Depoimentos de ex-alunos', url:'depoimentos-ex-alunos.html', resumo:'Memórias, experiências e mensagens de quem fez parte da história da FMABC.', conteudo:'<p>Envie seu depoimento para integrar o acervo histórico da sua turma. O conteúdo será encaminhado para análise antes da publicação.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'memoria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:3, podeExcluir:false },
+      { id:'depoimentos-ex-alunos', tipo:'sistema', titulo:'Depoimentos', url:'depoimentos.html', resumo:'Memórias, experiências e mensagens de quem fez parte da história da FMABC.', conteudo:'<p>Envie seu depoimento para integrar o acervo histórico da sua turma. O conteúdo será encaminhado para análise antes da publicação.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'memoria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:3, podeExcluir:false },
       { id:'galeria-diretores-reitores', tipo:'sistema', titulo:'Fotos e galeria de diretores e reitores', url:'galeria-diretores-reitores.html', resumo:'Registro visual das gestões e dos personagens que marcaram a trajetória institucional.', conteudo:'<p>Área exclusiva para fotos e galeria de diretores e reitores.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'galeria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:4, podeExcluir:false },
       { id:'professores-emeritos', tipo:'sistema', titulo:'Professores eméritos', url:'professores-emeritos.html', resumo:'Memória e reconhecimento dos professores eméritos da instituição.', conteudo:'<p>Área exclusiva para o acervo dos professores eméritos.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'memoria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:5, podeExcluir:false }
     ];

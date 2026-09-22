@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Linha do tempo | Memória FMABC</title>
+<title>Depoimentos | Memória FMABC</title>
 <style>
 :root{--azul:#4B5172;--verde:#339C5B;--verde-escuro:#377166;--verde-claro:#C6E2B4;--bg:#F7F9F8;--br:#D8DFDB;--texto:#232738;--muted:#555E70;--shadow:0 14px 35px rgba(35,39,56,.10)}
 *{box-sizing:border-box}html{background:var(--bg)}body{margin:0;min-height:100vh;color:var(--texto);font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;line-height:1.6;background:var(--bg)}
@@ -160,17 +160,6 @@ body::before{content:"";position:fixed;inset:0;background-image:var(--bg-image);
   }
 </style>
 
-<style id="fmabc-timeline-public-style">
-  .timeline-page-wrap{margin-top:28px;background:rgba(255,255,255,.94);border:1px solid rgba(75,81,114,.12);border-radius:20px;padding:32px;box-shadow:0 10px 30px rgba(15,23,42,.07)}
-  .timeline-toolbar-public{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;border-bottom:1px solid #e7ece9;padding-bottom:22px;margin-bottom:24px}.timeline-toolbar-public strong{display:block;color:var(--azul);font-size:1.15rem}.timeline-toolbar-public span{display:block;color:var(--muted);font-size:.9rem;margin-top:3px}.timeline-decadas{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.timeline-decade-btn{border:1px solid #d6dfda;background:#fff;color:var(--azul);border-radius:999px;padding:7px 11px;font-size:.78rem;font-weight:800;cursor:pointer}.timeline-decade-btn.active,.timeline-decade-btn:hover{background:var(--verde);color:#fff;border-color:var(--verde)}
-  .timeline-publico{position:relative;padding:12px 4px 30px}.timeline-publico::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:3px;background:linear-gradient(var(--verde),#b8d9c4);transform:translateX(-50%);border-radius:99px}
-  .timeline-evento{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 74px minmax(0,1fr);gap:18px;align-items:center;margin:22px 0}.timeline-evento-slot{min-width:0}.timeline-evento-slot.left{grid-column:1}.timeline-evento-slot.right{grid-column:3}.timeline-evento-card{background:#fff;border:1px solid #e0e5e2;border-radius:16px;padding:18px 20px;box-shadow:0 8px 24px rgba(35,39,56,.06);transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}.timeline-evento-card:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(35,39,56,.10);border-color:#c6ddd0}
-  .timeline-evento-foto{width:100%;max-height:190px;object-fit:cover;border-radius:12px;margin-bottom:12px;border:1px solid #e2e8e4}.timeline-evento-meta{font-size:.78rem;font-weight:900;color:var(--verde);text-transform:uppercase;letter-spacing:.06em}.timeline-evento-title{margin:4px 0 7px;color:var(--azul);font-size:1.08rem}.timeline-evento-desc{margin:0;color:var(--muted);font-size:.93rem}.timeline-marker{grid-column:2;width:54px;height:54px;justify-self:center;border-radius:50%;background:#fff;border:4px solid var(--verde);box-shadow:0 0 0 7px rgba(51,156,91,.12);display:flex;align-items:center;justify-content:center;color:var(--verde);font-weight:900;font-size:.72rem;text-align:center;line-height:1.05;z-index:2}.timeline-evento.destacado .timeline-evento-card{border-color:#a9d1b8;box-shadow:0 12px 32px rgba(51,156,91,.14)}.timeline-evento.destacado .timeline-marker{background:var(--verde);color:#fff}
-  .timeline-vazio{padding:40px 20px;text-align:center;color:var(--muted);border:1px dashed #cdd8d1;border-radius:14px;background:#fafcfb}
-  .timeline-loading{text-align:center;padding:30px;color:var(--muted)}
-  @media(max-width:780px){.timeline-page-wrap{padding:22px}.timeline-publico::before{left:22px;transform:none}.timeline-evento{grid-template-columns:44px 1fr;gap:12px}.timeline-marker{grid-column:1;width:44px;height:44px;font-size:.64rem}.timeline-evento-slot.left,.timeline-evento-slot.right{grid-column:2}.timeline-evento-card{padding:15px}.timeline-decadas{justify-content:flex-start}}
-</style>
-
 <style id="fmabc-lgpd-style">
   .lgpd-footer-links{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}
   .lgpd-footer-links a{color:inherit;text-decoration:underline;text-underline-offset:3px;font-weight:700}
@@ -201,19 +190,13 @@ body::before{content:"";position:fixed;inset:0;background-image:var(--bg-image);
     </nav>
   </nav>
 <main class="page-container">
-<section class="page-hero"><span class="page-kicker">Nossa História</span><h1 class="page-title">Linha do tempo</h1><p class="page-subtitle">Uma trajetória construída ao longo de décadas de ensino, pesquisa, assistência e transformação social.</p></section>
-<section class="timeline-page-wrap">
-  <div class="timeline-toolbar-public">
-    <div><strong>Memória FMABC</strong><span>Explore os principais marcos da instituição.</span></div>
-    <div id="timelineDecadasPublic" class="timeline-decadas"></div>
-  </div>
-  <div id="timelinePublico" class="timeline-publico"></div>
-</section>
+<section class="page-hero"><span class="page-kicker">Memória FMABC</span><h1 class="page-title">Depoimentos</h1><p class="page-subtitle">Memórias, experiências e mensagens de quem fez parte da história da FMABC.</p></section>
+<section class="page-content"><h2 class="placeholder-title">Compartilhe sua memória</h2><div id="fmabcEditableContent" class="placeholder-text" style="max-width:none"><p>Envie seu depoimento para integrar o acervo histórico da sua turma. O conteúdo será encaminhado para análise antes da publicação.</p></div><div class="form-card"><form id="formDepoimento" novalidate><div class="grid-2"><div class="field"><label for="nome">Seu nome</label><input id="nome" maxlength="120" required placeholder="Nome completo ou nome social"></div><div class="field"><label for="turma">Sua turma / curso</label><select id="turma" required><option value="">Carregando turmas...</option></select></div><div class="field full"><label for="texto">Seu depoimento</label><textarea id="texto" maxlength="300" required placeholder="Escreva sua mensagem sobre sua trajetória na FMABC..."></textarea></div></div><div class="lgpd-consent"><input type="checkbox" id="consentimentoLGPD" required><label for="consentimentoLGPD">Li a <a href="politica-privacidade.html" target="_blank" rel="noopener noreferrer">Política de Privacidade</a> e, de forma livre, informada e inequívoca, autorizo o tratamento do meu nome, turma/curso e depoimento para recebimento, análise, aprovação e publicação no Memória FMABC.</label></div><div class="lgpd-consent-error" id="lgpdConsentError">Para enviar o depoimento, marque a opção de ciência e autorização do tratamento dos dados.</div><div class="submit-row"><button type="submit" class="btn-submit">Enviar depoimento</button></div><div class="status" id="status"></div></form></div></section>
 </main>
 <footer class="footer">
   <p id="footerAddress">Endereço: Av. Príncipe de Gales, 821 - Vila Príncipe de Gales, Santo André - SP</p>
   <p id="footerEmail">Contato: contato@fmabc.br</p>
-  <div class="lgpd-footer-links" aria-label="Privacidade e proteção de dados"><a href="politica-privacidade.html">Política de Privacidade</a><span aria-hidden="true">|</span><a href="mailto:lgpd@fmabc.br">Canal LGPD: lgpd@fmabc.br</a></div>
+<div class="lgpd-footer-links" aria-label="Privacidade e proteção de dados"><a href="politica-privacidade.html">Política de Privacidade</a><span aria-hidden="true">|</span><a href="mailto:lgpd@fmabc.br">Canal LGPD: lgpd@fmabc.br</a></div>
   <div class="credit">Desenvolvido por Regiane Meira</div>
 </footer>
 <script>const CLOUDFLARE_API_URL = "https://fmabc-acervo-api.armredessociais.workers.dev";
@@ -233,10 +216,86 @@ async function carregarMenu(){try{const r=await fetch(`${CLOUDFLARE_API_URL}/api
 async function carregarPlanoDeFundo(){try{const r=await fetch(`${CLOUDFLARE_API_URL}/api/config/background_config?v=${Date.now()}`,{cache:'no-store'});if(!r.ok)return;const data=await r.json(),v=data?.valor||{};if(v.imagem)document.documentElement.style.setProperty('--bg-image',`url("${v.imagem}")`);if(v.opacidade!=null)document.documentElement.style.setProperty('--bg-opacity',String(v.opacidade));}catch(e){}}
 async function carregarRodape(){try{const r=await fetch(`${CLOUDFLARE_API_URL}/api/config/site_footer?v=${Date.now()}`,{cache:'no-store'});if(!r.ok)return;const d=await r.json(),v=d?.valor||{};if(v.endereco)document.getElementById('footerAddress').textContent='Endereço: '+v.endereco;if(v.email)document.getElementById('footerEmail').textContent='Contato via e-mail: '+v.email;}catch(e){}}
 document.addEventListener('DOMContentLoaded',()=>{Promise.all([carregarMenu(),carregarPlanoDeFundo(),carregarRodape()]);});</script>
+<script>
+async function carregarTurmas(){const s=document.getElementById('turma');try{const r=await fetch(`${CLOUDFLARE_API_URL}/api/turmas?v=${Date.now()}`,{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);const lista=await r.json();s.innerHTML='<option value="">Selecione sua turma...</option>'; (Array.isArray(lista)?lista:[]).forEach(t=>{const o=document.createElement('option');o.value=t.id;o.textContent=`${t.titulo||t.nome||'Turma'}${t.ano?' • '+t.ano:''}`;s.appendChild(o)});if(s.options.length===1)s.innerHTML='<option value="">Nenhuma turma disponível</option>';}catch(e){s.innerHTML='<option value="">Não foi possível carregar as turmas</option>';}}
+document.getElementById('formDepoimento').addEventListener('submit',async e=>{e.preventDefault();const nome=document.getElementById('nome').value.trim(),turma_id=document.getElementById('turma').value,text=document.getElementById('texto').value.trim(),consentimento=document.getElementById('consentimentoLGPD'),consentError=document.getElementById('lgpdConsentError'),status=document.getElementById('status');if(!nome||!turma_id||!text){status.textContent='Preencha todos os campos.';return}if(!consentimento?.checked){consentError.style.display='block';consentimento?.focus();status.textContent='';return}consentError.style.display='none';status.textContent='Enviando...';try{const r=await fetch(`${CLOUDFLARE_API_URL}/api/depoimentos`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({turma_id,autor:nome,texto:text,lgpd_aceito:true,politica_versao:'1.0'})});const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.error||'Não foi possível enviar o depoimento.');e.target.reset();status.textContent='Depoimento enviado para análise.';}catch(err){status.textContent=err.message||'Não foi possível enviar o depoimento.';}});carregarTurmas();
+</script>
 
-
-\n\n
-
+\n<script id="fmabc-editable-system-page">
+(function(){
+  const API='https://fmabc-acervo-api.armredessociais.workers.dev';
+  const PAGE_ID='depoimentos-ex-alunos';
+  const FALLBACK_TITLE='Depoimentos';
+  const FALLBACK_SUMMARY='Memórias, experiências e mensagens de quem fez parte da história da FMABC.';
+  function sanitizarHtml(html){
+    const doc=new DOMParser().parseFromString(String(html||''),'text/html');
+    const permitidas=new Set(['P','BR','STRONG','B','EM','I','U','S','H2','H3','H4','UL','OL','LI','A','BLOCKQUOTE','IMG','DIV','SPAN','TABLE','THEAD','TBODY','TR','TH','TD']);
+    doc.body.querySelectorAll('*').forEach(el=>{
+      if(!permitidas.has(el.tagName)){el.replaceWith(...Array.from(el.childNodes));return;}
+      Array.from(el.attributes).forEach(attr=>{const n=attr.name.toLowerCase();if(n.startsWith('on')||n==='srcdoc'||n==='style'){el.removeAttribute(attr.name);}});
+      if(el.tagName==='A'){const href=el.getAttribute('href')||'';if(!/^(https?:|mailto:|tel:|#)/i.test(href))el.removeAttribute('href');else el.setAttribute('rel','noopener noreferrer');}
+      if(el.tagName==='IMG'){const src=el.getAttribute('src')||'';if(!/^(https?:|data:image\/)/i.test(src))el.removeAttribute('src');el.setAttribute('loading','lazy');el.removeAttribute('width');el.removeAttribute('height');}
+    });
+    return doc.body.innerHTML;
+  }
+  function adicionarMeta(name,content){if(!content)return;let m=document.querySelector('meta[name="'+name+'"]');if(!m){m=document.createElement('meta');m.name=name;document.head.appendChild(m);}m.content=content;}
+  function inserirBanner(hero,url,alt){
+    if(!hero||!url)return;
+    let wrap=document.getElementById('fmabcSystemPageBanner');
+    if(!wrap){wrap=document.createElement('div');wrap.id='fmabcSystemPageBanner';wrap.style.cssText='margin-top:26px;border-radius:18px;overflow:hidden;box-shadow:0 12px 30px rgba(0,0,0,.14);background:#fff;';hero.insertAdjacentElement('afterend',wrap);}
+    wrap.innerHTML='';const img=document.createElement('img');img.src=url;img.alt=alt||'';img.style.cssText='display:block;width:100%;max-height:460px;object-fit:cover;';wrap.appendChild(img);
+  }
+  async function carregar(){
+    try{
+      const r=await fetch(API+'/api/config/portal_pages?v='+Date.now(),{cache:'no-store'});
+      if(!r.ok)return;
+      const d=await r.json();const pages=Array.isArray(d?.valor?.pages)?d.valor.pages:[];
+      const page=pages.find(p=>p&&String(p.id||'')===PAGE_ID);if(!page)return;
+      const root=document.querySelector('main.page-container');const hero=root?.querySelector('.page-hero');
+      const title=(page.titulo||FALLBACK_TITLE).trim()||FALLBACK_TITLE;
+      const summary=(page.resumo||FALLBACK_SUMMARY).trim();
+      const titleEl=root?.querySelector('.page-title');if(titleEl)titleEl.textContent=title;
+      const sub=root?.querySelector('.page-subtitle');if(sub)sub.textContent=summary;
+      document.title=(page.seoTitulo||title)+' | Memória FMABC';
+      adicionarMeta('description',page.seoDescricao||summary);adicionarMeta('keywords',page.seoKeywords||'');
+      if(hero&&page.imagem)inserirBanner(hero,page.imagem,page.bannerAlt||title);
+      const contentBox=document.getElementById('fmabcEditableContent');
+      if(contentBox && page.conteudo)contentBox.innerHTML=sanitizarHtml(page.conteudo);
+      const secondary=page.conteudoSecundario||'';
+      const info=page.informacoesAdicionais||'';
+      function addSection(id,titleText,html){let sec=document.getElementById(id);if(!html){if(sec)sec.remove();return;}if(!sec){sec=document.createElement('section');sec.id=id;sec.className='page-content';root.appendChild(sec);}sec.innerHTML='<h2 class="placeholder-title"></h2><div class="placeholder-text" style="max-width:none"></div>';sec.querySelector('h2').textContent=titleText;sec.querySelector('div').innerHTML=sanitizarHtml(html);}
+      addSection('fmabcSecondaryContent','Conteúdo complementar',secondary);
+      addSection('fmabcAdditionalContent','Informações adicionais',info);
+    }catch(e){console.warn('Não foi possível carregar a configuração administrativa da página.',e);}
+  }
+  document.addEventListener('DOMContentLoaded',carregar);
+})();
+</script>\n
+<script id="fmabc-page-visibility-guard">
+(function(){
+  const API='https://fmabc-acervo-api.armredessociais.workers.dev';
+  const path=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  const map={
+    'index.html':'inicio',
+    'linha-do-tempo.html':'linha-do-tempo',
+    'depoimentos.html':'depoimentos-ex-alunos',
+    'galeria-diretores-reitores.html':'galeria-diretores-reitores',
+    'professores-emeritos.html':'professores-emeritos'
+  };
+  const id=map[path];
+  if(!id || id==='inicio') return;
+  fetch(`${API}/api/config/portal_pages?v=${Date.now()}`,{cache:'no-store'})
+    .then(r=>r.ok?r.json():null)
+    .then(data=>{
+      const pages=Array.isArray(data?.valor?.pages)?data.valor.pages:[];
+      const page=pages.find(p=>String(p?.id||'')===id);
+      if(page && page.visivel===false){
+        document.body.innerHTML=`<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:30px;background:#F7F9F8;font-family:Arial,Helvetica,sans-serif;color:#232738"><div style="max-width:720px;background:#fff;border:1px solid #D8DFDB;border-radius:20px;padding:42px;text-align:center;box-shadow:0 14px 35px rgba(35,39,56,.10)"><h1 style="margin:0 0 12px;color:#4B5172">Página indisponível</h1><p style="margin:0 0 24px;color:#555E70">Esta página foi ocultada temporariamente pela administração do portal.</p><a href="index.html" style="display:inline-block;padding:11px 18px;border-radius:10px;background:#339C5B;color:#fff;text-decoration:none;font-weight:800">Voltar ao início</a></div></div>`;
+        document.title='Página indisponível | Memória FMABC';
+      }
+    }).catch(()=>{});
+})();
+</script>
 
 
 <div class="lgpd-notice" id="fmabcLgpdNotice" role="region" aria-label="Aviso de privacidade">
@@ -255,30 +314,3 @@ document.addEventListener('DOMContentLoaded',()=>{Promise.all([carregarMenu(),ca
 </script>
 
 </body></html>
-
-<script id="fmabc-timeline-public-loader">
-(function(){
-  const API='https://fmabc-acervo-api.armredessociais.workers.dev';
-  const PADRAO=[
-    {ano:'1969',decada:'1960',titulo:'Autorização da Faculdade de Medicina do ABC',descricao:'Autorização da instituição para funcionar como Faculdade de Medicina do ABC.',foto:'',destaque:true,ordem:1},
-    {ano:'1971',decada:'1970',titulo:'Primeiro prédio do campus',descricao:'Entrega do primeiro prédio do campus universitário, o Prédio Central.',foto:'',destaque:false,ordem:2},
-    {ano:'1975',decada:'1970',titulo:'Reconhecimento federal',descricao:'Reconhecimento da Faculdade de Medicina do ABC e início do Programa de Residência Médica.',foto:'',destaque:false,ordem:3},
-    {ano:'1976',decada:'1970',titulo:'Primeiro Congresso Médico Universitário do ABC',descricao:'Realização da primeira edição do Congresso Médico Universitário do ABC (COMUABC).',foto:'',destaque:false,ordem:4},
-    {ano:'1982',decada:'1980',titulo:'Credenciamento da Residência Médica',descricao:'Credenciamento dos programas de Residência Médica pela CNRM/MEC.',foto:'',destaque:false,ordem:5},
-    {ano:'1983',decada:'1980',titulo:'Transferência para o sistema estadual',descricao:'Transferência da Faculdade de Medicina do ABC do sistema federal para o sistema estadual de ensino.',foto:'',destaque:false,ordem:6},
-    {ano:'1998',decada:'1990',titulo:'Início da Pós-Graduação stricto sensu',descricao:'Início do Programa de Pós-Graduação stricto sensu, nível Mestrado, em Ciências da Saúde.',foto:'',destaque:false,ordem:7},
-    {ano:'2000',decada:'2000',titulo:'Implantação do Curso de Farmácia',descricao:'Implantação do Curso de Graduação em Farmácia.',foto:'',destaque:false,ordem:8},
-    {ano:'2010',decada:'2010',titulo:'Denominação como Centro Universitário FMABC',descricao:'Denominação da instituição de ensino superior como Centro Universitário FMABC.',foto:'',destaque:false,ordem:9},
-    {ano:'2013',decada:'2010',titulo:'Retorno ao sistema federal',descricao:'A FMABC retoma ao sistema federal de ensino, em atendimento à legislação nacional.',foto:'',destaque:false,ordem:10},
-    {ano:'2018',decada:'2010',titulo:'Transformação em Centro Universitário',descricao:'A Faculdade de Medicina do ABC é transformada em Centro Universitário.',foto:'',destaque:true,ordem:11},
-    {ano:'2020',decada:'2020',titulo:'Nome Centro Universitário FMABC',descricao:'Autorização da alteração do nome da instituição para Centro Universitário FMABC.',foto:'',destaque:false,ordem:12},
-    {ano:'2023',decada:'2020',titulo:'Centro de Formação de Psicólogos e Centro de Simulação',descricao:'Inauguração do Centro de Formação de Psicólogos e do Centro de Simulação.',foto:'',destaque:false,ordem:13}
-  ];
-  let eventos=[];let filtro='';
-  function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-  function renderDecadas(){const el=document.getElementById('timelineDecadasPublic');if(!el)return;const set=[...new Set(eventos.map(e=>String(e.decada||'').trim()).filter(Boolean))].sort((a,b)=>Number(a)-Number(b));el.innerHTML='';const all=document.createElement('button');all.className='timeline-decade-btn active';all.textContent='Todas';all.dataset.value='';all.onclick=()=>{filtro='';document.querySelectorAll('.timeline-decade-btn').forEach(b=>b.classList.remove('active'));all.classList.add('active');renderEventos();};el.appendChild(all);set.forEach(d=>{const b=document.createElement('button');b.className='timeline-decade-btn';b.textContent=d;b.dataset.value=d;b.onclick=()=>{filtro=d;document.querySelectorAll('.timeline-decade-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderEventos();};el.appendChild(b);});}
-  function renderEventos(){const el=document.getElementById('timelinePublico');if(!el)return;const lista=eventos.filter(e=>!filtro||String(e.decada)===String(filtro)).sort((a,b)=>Number(a.ordem||0)-Number(b.ordem||0));if(!lista.length){el.innerHTML='<div class="timeline-vazio">Nenhum marco cadastrado para este período.</div>';return;}el.innerHTML=lista.map((e,i)=>{const foto=e.foto?`<img class="timeline-evento-foto" src="${esc(e.foto)}" alt="${esc(e.titulo)}" loading="lazy">`:'';const lado=i%2===0?'left':'right';const card=`<div class="timeline-evento-slot ${lado}"><div class="timeline-evento-card">${foto}<div class="timeline-evento-meta">${esc(e.ano)}</div><h2 class="timeline-evento-title">${esc(e.titulo)}</h2><p class="timeline-evento-desc">${esc(e.descricao||'')}</p></div></div>`;return `<article class="timeline-evento ${e.destaque?'destacado':''}">${lado==='left'?card:'<div class="timeline-evento-slot left"></div>'}<div class="timeline-marker">${esc(e.ano)}</div>${lado==='right'?card:'<div class="timeline-evento-slot right"></div>'}</article>`;}).join('');}
-  async function carregar(){const el=document.getElementById('timelinePublico');if(el)el.innerHTML='<div class="timeline-loading">Carregando memória institucional...</div>';try{const r=await fetch(API+'/api/config/timeline_events?v='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();const arr=Array.isArray(d?.valor)?d.valor:[];eventos=arr.length?arr:PADRAO;}catch(e){eventos=PADRAO;console.warn('Linha do tempo padrão carregada.',e);}renderDecadas();renderEventos();}
-  document.addEventListener('DOMContentLoaded',carregar);
-})();
-</script>
