@@ -4049,7 +4049,7 @@
                 </div>
                 <div class="form-group">
                   <label>Senha</label>
-                  <input type="password" id="usr-senha" class="form-control" placeholder="Senha" required>
+                  <input type="password" id="usr-senha" class="form-control" placeholder="Mínimo de 12 caracteres" minlength="12" maxlength="256" autocomplete="new-password" required>
                 </div>
               </div>
               <button type="submit" class="btn-save">Adicionar Novo Usuário</button>
@@ -4275,9 +4275,13 @@
     // =========================================================
     const CLOUDFLARE_API_URL = 'https://fmabc-acervo-api.armredessociais.workers.dev';
     const ADMIN_TOKEN_KEY = 'fmabc_cf_admin_token';
+    const ADMIN_SESSION_STORAGE = window.sessionStorage;
+
+    // Remove tokens antigos que poderiam ter ficado persistidos no localStorage.
+    try { localStorage.removeItem(ADMIN_TOKEN_KEY); } catch {}
 
     async function cloudflareAdminFetch(path, options = {}) {
-      const token = localStorage.getItem(ADMIN_TOKEN_KEY) || '';
+      const token = ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY) || '';
       const headers = new Headers(options.headers || {});
       if (!headers.has('Content-Type') && options.body && !(options.body instanceof FormData)) headers.set('Content-Type', 'application/json');
       if (token) headers.set('Authorization', `Bearer ${token}`);
@@ -4285,6 +4289,9 @@
       if (!response.ok) {
         let message = `Cloudflare API HTTP ${response.status}`;
         try { const err = await response.json(); if (err?.error) message = err.error; } catch {}
+        if (response.status === 401 && typeof encerrarSessaoPorInatividade === 'function') {
+          encerrarSessaoPorInatividade(false, 'Sua sessão administrativa expirou. Faça login novamente.');
+        }
         throw new Error(message);
       }
       return response.json();
@@ -4361,7 +4368,7 @@
       if (file.size > FMABC_STORAGE_MAX_FILE_SIZE) {
         throw new Error('A imagem deve ter no máximo 6 MB.');
       }
-      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
+      if (!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)) {
         throw new Error('Sessão administrativa expirada. Faça login novamente.');
       }
 
@@ -4370,7 +4377,7 @@
       const form = new FormData();
       form.append('file', uploadFile);
 
-      const token = localStorage.getItem(ADMIN_TOKEN_KEY);
+      const token = ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY);
       const response = await fetch(`${CLOUDFLARE_API_URL}/api/admin/upload?folder=${encodeURIComponent(pasta)}`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
@@ -4421,7 +4428,7 @@
 
     async function salvarConfigInstitucional(id, valor) {
       registrarAtividadeAdmin();
-      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
+      if (!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)) {
         showToast('Sessão administrativa expirada. Faça login novamente.');
         return false;
       }
@@ -4549,7 +4556,7 @@
     // Gravação administrativa do Hero usa o Cloudflare D1.
     async function persistirHeroNoBanco(imagens, informar = true) {
       registrarAtividadeAdmin();
-      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
+      if (!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)) {
         if (informar) showToast('Sessão administrativa expirada. Faça login novamente.');
         return false;
       }
@@ -4864,7 +4871,7 @@
 
     async function persistirBannerSocialNoBanco(imagens, informar = true) {
       registrarAtividadeAdmin();
-      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
+      if (!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)) {
         if (informar) showToast('Sessão administrativa expirada. Faça login novamente.');
         return false;
       }
@@ -4986,71 +4993,104 @@
     }
 
 
-    const ADMIN_IDLE_LIMIT = 15 * 60 * 1000; // 15 minutos de inatividade
+    const ADMIN_IDLE_LIMIT = 15 * 60 * 1000;
+    const ADMIN_HEARTBEAT_INTERVAL = 4 * 60 * 1000;
     let adminIdleTimer = null;
+    let adminHeartbeatTimer = null;
+    let adminLastHeartbeatAt = 0;
+
+    function atualizarArmazenamentoSessaoLocal(nome, email, ultima) {
+      ADMIN_SESSION_STORAGE.setItem('fmabc_admin_logged', 'true');
+      ADMIN_SESSION_STORAGE.setItem('fmabc_admin_name', nome || 'Administrador');
+      ADMIN_SESSION_STORAGE.setItem('fmabc_admin_email', email || '');
+      ADMIN_SESSION_STORAGE.setItem('fmabc_admin_last_activity', String(ultima || Date.now()));
+    }
+
+    function limparArmazenamentoSessaoLocal() {
+      [ADMIN_TOKEN_KEY,'fmabc_admin_logged','fmabc_admin_name','fmabc_admin_email','fmabc_admin_last_activity']
+        .forEach(k => ADMIN_SESSION_STORAGE.removeItem(k));
+      // Elimina qualquer token da implementação anterior.
+      try { localStorage.removeItem(ADMIN_TOKEN_KEY); } catch {}
+    }
 
     function registrarAtividadeAdmin() {
       if (!isAdminLoggedIn) return;
-      localStorage.setItem('fmabc_admin_last_activity', String(Date.now()));
+      const agora = Date.now();
+      ADMIN_SESSION_STORAGE.setItem('fmabc_admin_last_activity', String(agora));
       iniciarTemporizadorInatividadeAdmin();
+      if (agora - adminLastHeartbeatAt >= ADMIN_HEARTBEAT_INTERVAL) {
+        adminLastHeartbeatAt = agora;
+        enviarHeartbeatAdmin();
+      }
     }
 
-    function encerrarSessaoPorInatividade() {
+    async function enviarHeartbeatAdmin() {
+      if (!isAdminLoggedIn) return;
+      const token = ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY) || '';
+      if (!token) return;
+      try {
+        const response = await fetch(`${CLOUDFLARE_API_URL}/api/admin/heartbeat`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (response.status === 401) encerrarSessaoPorInatividade(false, 'Sua sessão administrativa expirou. Faça login novamente.');
+      } catch (error) {
+        console.warn('Heartbeat administrativo indisponível:', error);
+      }
+    }
+
+    async function revogarSessaoAdminNoServidor() {
+      const token = ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY) || '';
+      if (!token) return;
+      try {
+        await fetch(`${CLOUDFLARE_API_URL}/api/admin/logout`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+      } catch {}
+    }
+
+    async function encerrarSessaoPorInatividade(revogar = true, mensagem = 'Sessão encerrada após 15 minutos de inatividade.') {
+      if (revogar) await revogarSessaoAdminNoServidor();
       isAdminLoggedIn = false;
       currentUserName = '';
       currentAdminEmail = '';
-      localStorage.removeItem(ADMIN_TOKEN_KEY);
+      limparArmazenamentoSessaoLocal();
 
-      localStorage.removeItem('fmabc_admin_logged');
-      localStorage.removeItem('fmabc_admin_name');
-      localStorage.removeItem('fmabc_admin_email');
-      localStorage.removeItem('fmabc_admin_last_activity');
-      sessionStorage.removeItem('fmabc_admin_logged');
-      sessionStorage.removeItem('fmabc_admin_name');
-      sessionStorage.removeItem('fmabc_admin_email');
-
-      if (adminIdleTimer) {
-        clearTimeout(adminIdleTimer);
-        adminIdleTimer = null;
-      }
+      if (adminIdleTimer) { clearTimeout(adminIdleTimer); adminIdleTimer = null; }
+      if (adminHeartbeatTimer) { clearInterval(adminHeartbeatTimer); adminHeartbeatTimer = null; }
 
       atualizarNavegacaoAdmin();
-
       const painel = document.getElementById('painel-admin');
       const login = document.getElementById('modal-login');
-
       if (painel) painel.style.display = 'none';
       if (login) login.style.display = 'block';
-
-      showToast('Sessão encerrada após 15 minutos de inatividade.');
+      if (mensagem) showToast(mensagem);
     }
 
     function iniciarTemporizadorInatividadeAdmin() {
       if (adminIdleTimer) clearTimeout(adminIdleTimer);
       if (!isAdminLoggedIn) return;
-
-      const ultima = Number(localStorage.getItem('fmabc_admin_last_activity') || 0);
+      const ultima = Number(ADMIN_SESSION_STORAGE.getItem('fmabc_admin_last_activity') || 0);
       const decorrido = Date.now() - ultima;
       const restante = ADMIN_IDLE_LIMIT - decorrido;
-
       if (restante <= 0) {
-        encerrarSessaoPorInatividade();
+        encerrarSessaoPorInatividade(true);
         return;
       }
-
-      adminIdleTimer = setTimeout(encerrarSessaoPorInatividade, restante + 50);
+      adminIdleTimer = setTimeout(() => encerrarSessaoPorInatividade(true), restante + 50);
     }
 
     async function restaurarSessaoAdminPersistente() {
-      const token = localStorage.getItem(ADMIN_TOKEN_KEY) || '';
-      const logado = localStorage.getItem('fmabc_admin_logged') === 'true';
-      const nome = localStorage.getItem('fmabc_admin_name') || 'Administrador';
-      const email = localStorage.getItem('fmabc_admin_email') || '';
-      const ultima = Number(localStorage.getItem('fmabc_admin_last_activity') || 0);
+      const token = ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY) || '';
+      const logado = ADMIN_SESSION_STORAGE.getItem('fmabc_admin_logged') === 'true';
+      const nome = ADMIN_SESSION_STORAGE.getItem('fmabc_admin_name') || 'Administrador';
+      const email = ADMIN_SESSION_STORAGE.getItem('fmabc_admin_email') || '';
+      const ultima = Number(ADMIN_SESSION_STORAGE.getItem('fmabc_admin_last_activity') || 0);
 
       if (!token || !logado || !email || !ultima) return false;
       if (Date.now() - ultima >= ADMIN_IDLE_LIMIT) {
-        encerrarSessaoPorInatividade();
+        await encerrarSessaoPorInatividade(true);
         return false;
       }
 
@@ -5060,57 +5100,55 @@
         isAdminLoggedIn = true;
         currentUserName = data.user.nome || nome;
         currentAdminEmail = data.user.email || email;
+        atualizarArmazenamentoSessaoLocal(currentUserName, currentAdminEmail, ultima);
         atualizarNavegacaoAdmin();
         iniciarTemporizadorInatividadeAdmin();
+        iniciarHeartbeatAdmin();
         return true;
       } catch (err) {
-        localStorage.removeItem(ADMIN_TOKEN_KEY);
-        encerrarSessaoPorInatividade();
+        await encerrarSessaoPorInatividade(false, 'Sua sessão administrativa expirou. Faça login novamente.');
         return false;
       }
     }
 
-    function configurarMonitorAtividadeAdmin() {
-      const eventos = ['click', 'keydown', 'mousemove', 'scroll', 'touchstart', 'pointerdown'];
-      let ultimoRegistro = 0;
+    function iniciarHeartbeatAdmin() {
+      if (adminHeartbeatTimer) clearInterval(adminHeartbeatTimer);
+      if (!isAdminLoggedIn) return;
+      adminHeartbeatTimer = setInterval(() => {
+        if (!document.hidden) enviarHeartbeatAdmin();
+      }, ADMIN_HEARTBEAT_INTERVAL);
+    }
 
+    function configurarMonitorAtividadeAdmin() {
+      const eventos = ['click', 'keydown', 'scroll', 'touchstart', 'pointerdown'];
+      let ultimoRegistro = 0;
       eventos.forEach(tipo => {
         document.addEventListener(tipo, () => {
           if (!isAdminLoggedIn) return;
-
           const agora = Date.now();
           if (agora - ultimoRegistro < 1500) return;
           ultimoRegistro = agora;
-
           registrarAtividadeAdmin();
         }, { passive: true });
       });
-
       window.addEventListener('focus', () => {
         if (!isAdminLoggedIn) return;
-
-        const ultima = Number(localStorage.getItem('fmabc_admin_last_activity') || 0);
+        const ultima = Number(ADMIN_SESSION_STORAGE.getItem('fmabc_admin_last_activity') || 0);
         if (Date.now() - ultima >= ADMIN_IDLE_LIMIT) {
-          encerrarSessaoPorInatividade();
+          encerrarSessaoPorInatividade(true);
           return;
         }
-
         registrarAtividadeAdmin();
       });
-
-      // Não atualiza a atividade apenas porque a página foi recarregada:
-      // a sessão continuará válida pelo tempo restante de inatividade.
     }
 
     function atualizarNavegacaoAdmin() {
-      // A área administrativa é uma página independente.
-      // O portal público mantém apenas um acesso discreto no rodapé.
       const container = document.getElementById('adminNavActions');
       if (!container) return;
       container.innerHTML = `
-        <a class="btn-admin-access" href="administrador/" aria-label="Abrir área administrativa">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-5.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8Z"/></svg>
-          Área Administrativa
+        <a class="btn-admin-access" href="../index.html" aria-label="Voltar ao portal público">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          Portal Público
         </a>
       `;
     }
@@ -5136,7 +5174,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, senha })
         });
-        const data = await resposta.json();
+        const data = await resposta.json().catch(() => ({}));
         if (!resposta.ok || !data?.token) {
           alert(data?.error || 'Usuário ou senha incorretos.');
           return;
@@ -5144,18 +5182,14 @@
         isAdminLoggedIn = true;
         currentUserName = data.user?.nome || 'Administrador';
         currentAdminEmail = data.user?.email || email;
-        localStorage.setItem(ADMIN_TOKEN_KEY, data.token);
-        localStorage.setItem('fmabc_admin_logged', 'true');
-        localStorage.setItem('fmabc_admin_name', currentUserName);
-        localStorage.setItem('fmabc_admin_email', currentAdminEmail);
-        localStorage.setItem('fmabc_admin_last_activity', String(Date.now()));
-        sessionStorage.setItem('fmabc_admin_logged', 'true');
-        sessionStorage.setItem('fmabc_admin_name', currentUserName);
-        sessionStorage.setItem('fmabc_admin_email', currentAdminEmail);
-        registrarAtividadeAdmin();
+        ADMIN_SESSION_STORAGE.setItem(ADMIN_TOKEN_KEY, data.token);
+        atualizarArmazenamentoSessaoLocal(currentUserName, currentAdminEmail, Date.now());
+        adminLastHeartbeatAt = Date.now();
         document.getElementById('modal-login').style.display = 'none';
         document.getElementById('painel-admin').style.display = 'flex';
         atualizarNavegacaoAdmin();
+        iniciarTemporizadorInatividadeAdmin();
+        iniciarHeartbeatAdmin();
         carregarUsuarios();
         preencherCamposAdmin();
         showToast('Login realizado com sucesso!');
@@ -5165,34 +5199,9 @@
       }
     }
 
-    function fazerLogoutAdmin() {
-      isAdminLoggedIn = false;
-      currentUserName = '';
-      currentAdminEmail = '';
-      localStorage.removeItem(ADMIN_TOKEN_KEY);
-
-      localStorage.removeItem('fmabc_admin_logged');
-      localStorage.removeItem('fmabc_admin_name');
-      localStorage.removeItem('fmabc_admin_email');
-      localStorage.removeItem('fmabc_admin_last_activity');
-      sessionStorage.removeItem('fmabc_admin_logged');
-      sessionStorage.removeItem('fmabc_admin_name');
-      sessionStorage.removeItem('fmabc_admin_email');
-
-      if (adminIdleTimer) {
-        clearTimeout(adminIdleTimer);
-        adminIdleTimer = null;
-      }
-
-      atualizarNavegacaoAdmin();
-
-      const painel = document.getElementById('painel-admin');
-      if (painel) painel.style.display = 'none';
-
-      const login = document.getElementById('modal-login');
-      if (login) login.style.display = 'block';
-
-      showToast('Sessão encerrada com sucesso.');
+    async function fazerLogoutAdmin() {
+      await revogarSessaoAdminNoServidor();
+      await encerrarSessaoPorInatividade(false, 'Sessão encerrada com sucesso.');
     }
 
     async function carregarUsuarios() {
@@ -5223,7 +5232,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', async () => {
-      restaurarSessaoAdminPersistente();
+      await restaurarSessaoAdminPersistente();
       configurarMonitorAtividadeAdmin();
       await carregarPlanoDeFundoDoBanco();
 
@@ -5314,13 +5323,13 @@
         // A autenticação atual usa token do Cloudflare, não senha em memória.
         // Durante o carregamento da página, aguarda a restauração da sessão quando necessário.
         if (!isAdminLoggedIn) {
-          const token = localStorage.getItem(ADMIN_TOKEN_KEY) || '';
+          const token = ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY) || '';
           if (token) {
             await restaurarSessaoAdminPersistente();
           }
         }
 
-        if (!isAdminLoggedIn || !localStorage.getItem(ADMIN_TOKEN_KEY)) {
+        if (!isAdminLoggedIn || !ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)) {
           showToast('Sessão administrativa expirada. Faça login novamente.');
           event.target.value = '';
           return;
@@ -5381,7 +5390,7 @@
     }
 
     async function salvarPlanoDeFundoNoBanco(bgFinal, opacityInput) {
-      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
+      if (!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)) {
         showToast('Sessão administrativa expirada. Faça login novamente.');
         return false;
       }
@@ -5871,7 +5880,7 @@
 
     async function salvarMenuNoBanco() {
       registrarAtividadeAdmin();
-      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
+      if (!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)) {
         showToast('Sessão administrativa expirada. Faça login novamente.');
         return false;
       }
@@ -6121,7 +6130,7 @@
       renderListaPaginasCMS();preencherSelectPaginaMae();
     }
     async function salvarPaginasNoBanco(){
-      registrarAtividadeAdmin();if(!localStorage.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return false;}
+      registrarAtividadeAdmin();if(!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return false;}
       try{
         atualizarOrdemPaginasAPartirDaLista(obterOrdemPaginas());
         const customsLimpos=paginasCustomizadas
@@ -6192,7 +6201,7 @@
     function alternarMenuPagina(id){const custom=localizarCustom(id);if(custom){custom.menu=custom.menu===false;if(custom.menu)garantirMenuDaPagina({...custom,url:`pagina.html?slug=${encodeURIComponent(custom.slug)}`,visivel:custom.visivel});else removerMenuDaPagina(custom.id);}const sistema=PAGINAS_SISTEMA.find(p=>String(p.id)===String(id));if(sistema){sistema.menu=sistema.menu===false;if(sistema.menu)garantirMenuDaPagina(sistema);else{const item=encontrarMenuDaPagina(sistema);if(item)item.visible=false;}}renderListaPaginasCMS();renderMenuPublico();showToast('Presença no menu alterada. Clique em “Salvar alterações”.');}
 
     async function salvarPaginaPortal(event){
-      event.preventDefault();registrarAtividadeAdmin();if(!localStorage.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return;}
+      event.preventDefault();registrarAtividadeAdmin();if(!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return;}
       const get=id=>document.getElementById(id);const titulo=get('inputPaginaTitulo').value.trim();let slug=slugSeguroPagina(get('inputPaginaSlug').value.trim()||titulo);const tituloPublico=get('inputPaginaTituloPublico').value.trim()||titulo,resumo=get('inputPaginaResumo').value.trim();
       if(!titulo){alert('Informe o nome da página.');return;}const duplicada=paginasCustomizadas.find(p=>String(p.slug)===slug&&String(p.id)!==String(paginaEditandoId));if(duplicada)slug=slug+'-'+Date.now().toString().slice(-4);
       let imagemFinal=get('inputPaginaImagemUrl').value.trim();const arquivo=get('inputPaginaImagemFile').files?.[0];
@@ -6377,7 +6386,7 @@
 
       if (!id) { showToast('Curso não identificado.'); return; }
       if (!nome) { showToast('Informe o nome do curso.'); return; }
-      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
+      if (!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)) {
         showToast('Sessão administrativa expirada. Faça login novamente.');
         return;
       }
@@ -6405,7 +6414,7 @@
         showToast('Curso não encontrado.');
         return;
       }
-      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
+      if (!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)) {
         showToast('Sessão administrativa expirada. Faça login novamente.');
         return;
       }
@@ -6536,7 +6545,7 @@
 
     async function salvarOrdemTurmasNoBanco() {
       registrarAtividadeAdmin();
-      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
+      if (!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)) {
         showToast('Sessão administrativa expirada. Faça login novamente.');
         return;
       }
@@ -6695,7 +6704,7 @@
       const descricao = descInput.value.trim();
 
       if (!nome) return;
-      if (!isAdminLoggedIn || !localStorage.getItem(ADMIN_TOKEN_KEY)) {
+      if (!isAdminLoggedIn || !ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)) {
         showToast('Sessão administrativa expirada. Faça login novamente.');
         return;
       }
@@ -6799,7 +6808,7 @@
     async function salvarTurmaNoBanco(turma) {
       registrarAtividadeAdmin();
       try {
-        const token = localStorage.getItem(ADMIN_TOKEN_KEY);
+        const token = ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY);
         if (!token) {
           showToast('Sessão administrativa expirada. Faça login novamente.');
           return false;
@@ -7396,7 +7405,7 @@
     }
     async function salvarTimelineNoBanco(notify=true){
       registrarAtividadeAdmin();
-      if(!localStorage.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return false;}
+      if(!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return false;}
       try{
         const payload=timelineEventos.map((e,i)=>({...e,ordem:i+1}));
         await cloudflareAdminFetch(`/api/admin/config/${encodeURIComponent(TIMELINE_CONFIG_KEY)}`,{method:'PUT',body:JSON.stringify({valor:payload})});
@@ -7550,7 +7559,7 @@
 
     async function salvarReitoresNoBanco(notify=true) {
       registrarAtividadeAdmin();
-      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
+      if (!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)) {
         showToast('Sessão administrativa expirada. Faça login novamente.');
         return false;
       }
@@ -8368,7 +8377,7 @@ function switchAdminTab(e, tabId) {
     const overlay = document.getElementById('adminModalOverlay');
     if (!overlay) return;
     overlay.classList.add('active');
-    const logged = localStorage.getItem('fmabc_admin_logged') === 'true' && !!localStorage.getItem('fmabc_cf_admin_token');
+    const logged = ADMIN_SESSION_STORAGE.getItem('fmabc_admin_logged') === 'true' && !!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY);
     overlay.classList.toggle('admin-route-logged-out', !logged);
     const backBtn = document.getElementById('adminBackPortalBtn');
     if (backBtn) {
@@ -8484,7 +8493,7 @@ function switchAdminTab(e, tabId) {
 
   async function salvarGaleriaFotosNoBanco(notify=true){
     registrarAtividadeAdmin();
-    if(!localStorage.getItem(ADMIN_TOKEN_KEY)){
+    if(!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)){
       if(notify) showToast('Sessão administrativa expirada. Faça login novamente.');
       return false;
     }
@@ -8609,7 +8618,7 @@ function switchAdminTab(e, tabId) {
   async function salvarAlbumGaleria(event){
     event.preventDefault();
     registrarAtividadeAdmin();
-    if(!localStorage.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return;}
+    if(!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return;}
     const titulo=document.getElementById('albumGaleriaTitulo').value.trim();
     if(!titulo){showToast('Informe o título do álbum.');return;}
     let capa=document.getElementById('albumGaleriaCapaUrl').value.trim();
