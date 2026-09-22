@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Memória FMABC | Painel Administrativo - FMABC</title>
+  <title>Acervo de Turmas & Painel Admin - FMABC</title>
   
 
   <style>
@@ -670,10 +670,23 @@
     .btn-close-admin:hover { background: rgba(255, 255, 255, 0.28); }
 
     .admin-body { display: flex; flex: 1; overflow: hidden; }
-    .admin-sidebar { width: 240px; background: white; border-right: 1px solid var(--border-color); padding: 20px 0; display: flex; flex-direction: column; }
-    .admin-nav-item { padding: 14px 24px; border: none; background: transparent; text-align: left; font-size: 0.9rem; font-weight: bold; color: var(--slate-muted); cursor: pointer; border-left: 4px solid transparent; transition: var(--transition-fast); }
+    .admin-sidebar { width: 270px; background: white; border-right: 1px solid var(--border-color); padding: 14px 0 22px; display: flex; flex-direction: column; overflow-y: auto; }
+    .admin-nav-item { width: 100%; padding: 12px 22px 12px 26px; border: none; background: transparent; text-align: left; font-size: 0.88rem; font-weight: 700; color: var(--slate-muted); cursor: pointer; border-left: 4px solid transparent; transition: var(--transition-fast); line-height: 1.25; }
     .admin-nav-item:hover { background-color: var(--verde-pastel-suave); color: var(--verde-escuro); }
     .admin-nav-item.active { border-left-color: var(--verde-principal); background-color: var(--verde-pastel-suave); color: var(--verde-escuro); }
+
+    .admin-nav-group { margin: 2px 10px; border: 1px solid #e7ece9; border-radius: 10px; overflow: hidden; background: #fff; }
+    .admin-nav-group-toggle { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px 12px 16px; border: none; background: #f8faf9; color: var(--azul-institucional); font-size: 0.86rem; font-weight: 800; text-align: left; cursor: pointer; }
+    .admin-nav-group-toggle:hover { background: var(--verde-pastel-suave); }
+    .admin-nav-group-toggle .group-caret { width: 18px; height: 18px; flex: 0 0 18px; display: grid; place-items: center; border: 1px solid #cfd9d3; border-radius: 50%; font-size: 0.95rem; line-height: 1; transform: rotate(0deg); transition: transform .18s ease, background .18s ease; }
+    .admin-nav-group.open .admin-nav-group-toggle .group-caret { transform: rotate(90deg); background: var(--verde-pastel-suave); }
+    .admin-nav-group-items { display: none; padding: 4px 0 6px; border-top: 1px solid #edf1ef; }
+    .admin-nav-group.open .admin-nav-group-items { display: block; }
+    .admin-nav-group-items .admin-nav-item { padding-left: 30px; font-size: 0.84rem; }
+    .admin-nav-group.is-active .admin-nav-group-toggle { color: var(--verde-escuro); background: #f1f7f3; }
+    .admin-nav-group.is-active { border-color: #d4e5da; }
+
+    .admin-nav-item-standalone { margin: 2px 10px; border-radius: 10px; width: calc(100% - 20px); }
 
     .admin-content { flex: 1; padding: 28px 36px; overflow-y: auto; background: white; }
     .admin-tab-pane { display: none; }
@@ -1466,16 +1479,22 @@
 
       .admin-sidebar {
         width: 100%;
-        max-height: 145px;
+        max-height: 230px;
         overflow-y: auto;
-        display: flex;
-        flex-wrap: wrap;
-        align-content: flex-start;
+        display: block;
       }
 
       .admin-nav-item {
-        flex: 1 1 190px;
+        width: 100%;
         text-align: left;
+      }
+
+      .admin-nav-item-standalone {
+        width: calc(100% - 20px);
+      }
+
+      .admin-nav-group {
+        margin: 6px 10px;
       }
 
       .admin-content {
@@ -3218,23 +3237,77 @@
       </div>
 
       <div class="admin-body">
-        <nav class="admin-sidebar">
-          <button class="admin-nav-item active" onclick="switchAdminTab(event, 'tabHome')">Página Inicial</button>
-          <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabMenus')">Gestão de Menus</button>
-          <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabPaginas')">Gestão de Páginas</button>
-          <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabFaleConosco')">Edição do Fale Conosco</button>
-          <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabMensagensContato')">Mensagens do Fale Conosco</button>
-          <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabGaleriaFotos')">Galeria de Fotos</button>
-          <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabReitores')">Galeria de Reitores</button>
-          <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabLinhaTempo')">Linha do Tempo</button>
-          <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabPlanoDeFundo')">Plano de Fundo</button>
-          <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabCursos')">Inclusão de Cursos</button>
-          <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabTurmas')">Gestão de Turmas</button>
-          <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabModalEdicao')">Edição do Modal / Detalhes</button>
-          <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabUsuariosAdmin')">Gerenciar Usuários</button>
-          <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabRodape')">Editar Rodapé</button>
-          <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabBannerSocial')">Hero / Banners da Página Inicial</button>
-          <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabSocialConfig')">Banner Redes Sociais</button>
+        <nav class="admin-sidebar" aria-label="Navegação administrativa">
+          <button class="admin-nav-item admin-nav-item-standalone active" onclick="switchAdminTab(event, 'tabHome')">Página Inicial</button>
+
+          <div class="admin-nav-group" data-admin-group="conteudo">
+            <button type="button" class="admin-nav-group-toggle" aria-expanded="false" onclick="toggleAdminNavGroup(this)">
+              <span>Conteúdo e Navegação</span>
+              <span class="group-caret" aria-hidden="true">›</span>
+            </button>
+            <div class="admin-nav-group-items">
+              <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabMenus')">Gestão de Menus</button>
+              <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabPaginas')">Gestão de Páginas</button>
+            </div>
+          </div>
+
+          <div class="admin-nav-group" data-admin-group="fale-conosco">
+            <button type="button" class="admin-nav-group-toggle" aria-expanded="false" onclick="toggleAdminNavGroup(this)">
+              <span>Fale Conosco</span>
+              <span class="group-caret" aria-hidden="true">›</span>
+            </button>
+            <div class="admin-nav-group-items">
+              <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabFaleConosco')">Edição do Fale Conosco</button>
+              <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabMensagensContato')">Mensagens do Fale Conosco</button>
+            </div>
+          </div>
+
+          <div class="admin-nav-group" data-admin-group="memoria">
+            <button type="button" class="admin-nav-group-toggle" aria-expanded="false" onclick="toggleAdminNavGroup(this)">
+              <span>Memória e Acervo</span>
+              <span class="group-caret" aria-hidden="true">›</span>
+            </button>
+            <div class="admin-nav-group-items">
+              <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabGaleriaFotos')">Galeria de Fotos</button>
+              <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabReitores')">Galeria de Reitores</button>
+              <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabLinhaTempo')">Linha do Tempo</button>
+            </div>
+          </div>
+
+          <div class="admin-nav-group" data-admin-group="visual">
+            <button type="button" class="admin-nav-group-toggle" aria-expanded="false" onclick="toggleAdminNavGroup(this)">
+              <span>Identidade Visual</span>
+              <span class="group-caret" aria-hidden="true">›</span>
+            </button>
+            <div class="admin-nav-group-items">
+              <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabPlanoDeFundo')">Plano de Fundo</button>
+              <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabBannerSocial')">Hero / Banners da Página Inicial</button>
+              <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabSocialConfig')">Banner Redes Sociais</button>
+              <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabRodape')">Editar Rodapé</button>
+            </div>
+          </div>
+
+          <div class="admin-nav-group" data-admin-group="cursos">
+            <button type="button" class="admin-nav-group-toggle" aria-expanded="false" onclick="toggleAdminNavGroup(this)">
+              <span>Cursos e Turmas</span>
+              <span class="group-caret" aria-hidden="true">›</span>
+            </button>
+            <div class="admin-nav-group-items">
+              <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabCursos')">Inclusão de Cursos</button>
+              <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabTurmas')">Gestão de Turmas</button>
+              <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabModalEdicao')">Edição do Modal / Detalhes</button>
+            </div>
+          </div>
+
+          <div class="admin-nav-group" data-admin-group="administracao">
+            <button type="button" class="admin-nav-group-toggle" aria-expanded="false" onclick="toggleAdminNavGroup(this)">
+              <span>Administração</span>
+              <span class="group-caret" aria-hidden="true">›</span>
+            </button>
+            <div class="admin-nav-group-items">
+              <button class="admin-nav-item" onclick="switchAdminTab(event, 'tabUsuariosAdmin')">Gerenciar Usuários</button>
+            </div>
+          </div>
         </nav>
 
         <main class="admin-content">
@@ -3636,7 +3709,7 @@
                     <tr>
                       <th>Protocolo</th>
                       <th>Data</th>
-                      <th>Nome</th>
+                      <th>Ex-aluno</th>
                       <th>Assunto</th>
                       <th>Status</th>
                       <th style="text-align:right">Ação</th>
@@ -4049,7 +4122,7 @@
                 </div>
                 <div class="form-group">
                   <label>Senha</label>
-                  <input type="password" id="usr-senha" class="form-control" placeholder="Mínimo de 12 caracteres" minlength="12" maxlength="256" autocomplete="new-password" required>
+                  <input type="password" id="usr-senha" class="form-control" placeholder="Senha" required>
                 </div>
               </div>
               <button type="submit" class="btn-save">Adicionar Novo Usuário</button>
@@ -4275,13 +4348,9 @@
     // =========================================================
     const CLOUDFLARE_API_URL = 'https://fmabc-acervo-api.armredessociais.workers.dev';
     const ADMIN_TOKEN_KEY = 'fmabc_cf_admin_token';
-    const ADMIN_SESSION_STORAGE = window.sessionStorage;
-
-    // Remove tokens antigos que poderiam ter ficado persistidos no localStorage.
-    try { localStorage.removeItem(ADMIN_TOKEN_KEY); } catch {}
 
     async function cloudflareAdminFetch(path, options = {}) {
-      const token = ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY) || '';
+      const token = localStorage.getItem(ADMIN_TOKEN_KEY) || '';
       const headers = new Headers(options.headers || {});
       if (!headers.has('Content-Type') && options.body && !(options.body instanceof FormData)) headers.set('Content-Type', 'application/json');
       if (token) headers.set('Authorization', `Bearer ${token}`);
@@ -4289,9 +4358,6 @@
       if (!response.ok) {
         let message = `Cloudflare API HTTP ${response.status}`;
         try { const err = await response.json(); if (err?.error) message = err.error; } catch {}
-        if (response.status === 401 && typeof encerrarSessaoPorInatividade === 'function') {
-          encerrarSessaoPorInatividade(false, 'Sua sessão administrativa expirou. Faça login novamente.');
-        }
         throw new Error(message);
       }
       return response.json();
@@ -4368,7 +4434,7 @@
       if (file.size > FMABC_STORAGE_MAX_FILE_SIZE) {
         throw new Error('A imagem deve ter no máximo 6 MB.');
       }
-      if (!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)) {
+      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
         throw new Error('Sessão administrativa expirada. Faça login novamente.');
       }
 
@@ -4377,7 +4443,7 @@
       const form = new FormData();
       form.append('file', uploadFile);
 
-      const token = ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY);
+      const token = localStorage.getItem(ADMIN_TOKEN_KEY);
       const response = await fetch(`${CLOUDFLARE_API_URL}/api/admin/upload?folder=${encodeURIComponent(pasta)}`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
@@ -4428,7 +4494,7 @@
 
     async function salvarConfigInstitucional(id, valor) {
       registrarAtividadeAdmin();
-      if (!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)) {
+      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
         showToast('Sessão administrativa expirada. Faça login novamente.');
         return false;
       }
@@ -4556,7 +4622,7 @@
     // Gravação administrativa do Hero usa o Cloudflare D1.
     async function persistirHeroNoBanco(imagens, informar = true) {
       registrarAtividadeAdmin();
-      if (!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)) {
+      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
         if (informar) showToast('Sessão administrativa expirada. Faça login novamente.');
         return false;
       }
@@ -4871,7 +4937,7 @@
 
     async function persistirBannerSocialNoBanco(imagens, informar = true) {
       registrarAtividadeAdmin();
-      if (!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)) {
+      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
         if (informar) showToast('Sessão administrativa expirada. Faça login novamente.');
         return false;
       }
@@ -4993,104 +5059,71 @@
     }
 
 
-    const ADMIN_IDLE_LIMIT = 15 * 60 * 1000;
-    const ADMIN_HEARTBEAT_INTERVAL = 4 * 60 * 1000;
+    const ADMIN_IDLE_LIMIT = 15 * 60 * 1000; // 15 minutos de inatividade
     let adminIdleTimer = null;
-    let adminHeartbeatTimer = null;
-    let adminLastHeartbeatAt = 0;
-
-    function atualizarArmazenamentoSessaoLocal(nome, email, ultima) {
-      ADMIN_SESSION_STORAGE.setItem('fmabc_admin_logged', 'true');
-      ADMIN_SESSION_STORAGE.setItem('fmabc_admin_name', nome || 'Administrador');
-      ADMIN_SESSION_STORAGE.setItem('fmabc_admin_email', email || '');
-      ADMIN_SESSION_STORAGE.setItem('fmabc_admin_last_activity', String(ultima || Date.now()));
-    }
-
-    function limparArmazenamentoSessaoLocal() {
-      [ADMIN_TOKEN_KEY,'fmabc_admin_logged','fmabc_admin_name','fmabc_admin_email','fmabc_admin_last_activity']
-        .forEach(k => ADMIN_SESSION_STORAGE.removeItem(k));
-      // Elimina qualquer token da implementação anterior.
-      try { localStorage.removeItem(ADMIN_TOKEN_KEY); } catch {}
-    }
 
     function registrarAtividadeAdmin() {
       if (!isAdminLoggedIn) return;
-      const agora = Date.now();
-      ADMIN_SESSION_STORAGE.setItem('fmabc_admin_last_activity', String(agora));
+      localStorage.setItem('fmabc_admin_last_activity', String(Date.now()));
       iniciarTemporizadorInatividadeAdmin();
-      if (agora - adminLastHeartbeatAt >= ADMIN_HEARTBEAT_INTERVAL) {
-        adminLastHeartbeatAt = agora;
-        enviarHeartbeatAdmin();
-      }
     }
 
-    async function enviarHeartbeatAdmin() {
-      if (!isAdminLoggedIn) return;
-      const token = ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY) || '';
-      if (!token) return;
-      try {
-        const response = await fetch(`${CLOUDFLARE_API_URL}/api/admin/heartbeat`, {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (response.status === 401) encerrarSessaoPorInatividade(false, 'Sua sessão administrativa expirou. Faça login novamente.');
-      } catch (error) {
-        console.warn('Heartbeat administrativo indisponível:', error);
-      }
-    }
-
-    async function revogarSessaoAdminNoServidor() {
-      const token = ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY) || '';
-      if (!token) return;
-      try {
-        await fetch(`${CLOUDFLARE_API_URL}/api/admin/logout`, {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-      } catch {}
-    }
-
-    async function encerrarSessaoPorInatividade(revogar = true, mensagem = 'Sessão encerrada após 15 minutos de inatividade.') {
-      if (revogar) await revogarSessaoAdminNoServidor();
+    function encerrarSessaoPorInatividade() {
       isAdminLoggedIn = false;
       currentUserName = '';
       currentAdminEmail = '';
-      limparArmazenamentoSessaoLocal();
+      localStorage.removeItem(ADMIN_TOKEN_KEY);
 
-      if (adminIdleTimer) { clearTimeout(adminIdleTimer); adminIdleTimer = null; }
-      if (adminHeartbeatTimer) { clearInterval(adminHeartbeatTimer); adminHeartbeatTimer = null; }
+      localStorage.removeItem('fmabc_admin_logged');
+      localStorage.removeItem('fmabc_admin_name');
+      localStorage.removeItem('fmabc_admin_email');
+      localStorage.removeItem('fmabc_admin_last_activity');
+      sessionStorage.removeItem('fmabc_admin_logged');
+      sessionStorage.removeItem('fmabc_admin_name');
+      sessionStorage.removeItem('fmabc_admin_email');
+
+      if (adminIdleTimer) {
+        clearTimeout(adminIdleTimer);
+        adminIdleTimer = null;
+      }
 
       atualizarNavegacaoAdmin();
+
       const painel = document.getElementById('painel-admin');
       const login = document.getElementById('modal-login');
+
       if (painel) painel.style.display = 'none';
       if (login) login.style.display = 'block';
-      if (mensagem) showToast(mensagem);
+
+      showToast('Sessão encerrada após 15 minutos de inatividade.');
     }
 
     function iniciarTemporizadorInatividadeAdmin() {
       if (adminIdleTimer) clearTimeout(adminIdleTimer);
       if (!isAdminLoggedIn) return;
-      const ultima = Number(ADMIN_SESSION_STORAGE.getItem('fmabc_admin_last_activity') || 0);
+
+      const ultima = Number(localStorage.getItem('fmabc_admin_last_activity') || 0);
       const decorrido = Date.now() - ultima;
       const restante = ADMIN_IDLE_LIMIT - decorrido;
+
       if (restante <= 0) {
-        encerrarSessaoPorInatividade(true);
+        encerrarSessaoPorInatividade();
         return;
       }
-      adminIdleTimer = setTimeout(() => encerrarSessaoPorInatividade(true), restante + 50);
+
+      adminIdleTimer = setTimeout(encerrarSessaoPorInatividade, restante + 50);
     }
 
     async function restaurarSessaoAdminPersistente() {
-      const token = ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY) || '';
-      const logado = ADMIN_SESSION_STORAGE.getItem('fmabc_admin_logged') === 'true';
-      const nome = ADMIN_SESSION_STORAGE.getItem('fmabc_admin_name') || 'Administrador';
-      const email = ADMIN_SESSION_STORAGE.getItem('fmabc_admin_email') || '';
-      const ultima = Number(ADMIN_SESSION_STORAGE.getItem('fmabc_admin_last_activity') || 0);
+      const token = localStorage.getItem(ADMIN_TOKEN_KEY) || '';
+      const logado = localStorage.getItem('fmabc_admin_logged') === 'true';
+      const nome = localStorage.getItem('fmabc_admin_name') || 'Administrador';
+      const email = localStorage.getItem('fmabc_admin_email') || '';
+      const ultima = Number(localStorage.getItem('fmabc_admin_last_activity') || 0);
 
       if (!token || !logado || !email || !ultima) return false;
       if (Date.now() - ultima >= ADMIN_IDLE_LIMIT) {
-        await encerrarSessaoPorInatividade(true);
+        encerrarSessaoPorInatividade();
         return false;
       }
 
@@ -5100,55 +5133,57 @@
         isAdminLoggedIn = true;
         currentUserName = data.user.nome || nome;
         currentAdminEmail = data.user.email || email;
-        atualizarArmazenamentoSessaoLocal(currentUserName, currentAdminEmail, ultima);
         atualizarNavegacaoAdmin();
         iniciarTemporizadorInatividadeAdmin();
-        iniciarHeartbeatAdmin();
         return true;
       } catch (err) {
-        await encerrarSessaoPorInatividade(false, 'Sua sessão administrativa expirou. Faça login novamente.');
+        localStorage.removeItem(ADMIN_TOKEN_KEY);
+        encerrarSessaoPorInatividade();
         return false;
       }
     }
 
-    function iniciarHeartbeatAdmin() {
-      if (adminHeartbeatTimer) clearInterval(adminHeartbeatTimer);
-      if (!isAdminLoggedIn) return;
-      adminHeartbeatTimer = setInterval(() => {
-        if (!document.hidden) enviarHeartbeatAdmin();
-      }, ADMIN_HEARTBEAT_INTERVAL);
-    }
-
     function configurarMonitorAtividadeAdmin() {
-      const eventos = ['click', 'keydown', 'scroll', 'touchstart', 'pointerdown'];
+      const eventos = ['click', 'keydown', 'mousemove', 'scroll', 'touchstart', 'pointerdown'];
       let ultimoRegistro = 0;
+
       eventos.forEach(tipo => {
         document.addEventListener(tipo, () => {
           if (!isAdminLoggedIn) return;
+
           const agora = Date.now();
           if (agora - ultimoRegistro < 1500) return;
           ultimoRegistro = agora;
+
           registrarAtividadeAdmin();
         }, { passive: true });
       });
+
       window.addEventListener('focus', () => {
         if (!isAdminLoggedIn) return;
-        const ultima = Number(ADMIN_SESSION_STORAGE.getItem('fmabc_admin_last_activity') || 0);
+
+        const ultima = Number(localStorage.getItem('fmabc_admin_last_activity') || 0);
         if (Date.now() - ultima >= ADMIN_IDLE_LIMIT) {
-          encerrarSessaoPorInatividade(true);
+          encerrarSessaoPorInatividade();
           return;
         }
+
         registrarAtividadeAdmin();
       });
+
+      // Não atualiza a atividade apenas porque a página foi recarregada:
+      // a sessão continuará válida pelo tempo restante de inatividade.
     }
 
     function atualizarNavegacaoAdmin() {
+      // A área administrativa é uma página independente.
+      // O portal público mantém apenas um acesso discreto no rodapé.
       const container = document.getElementById('adminNavActions');
       if (!container) return;
       container.innerHTML = `
-        <a class="btn-admin-access" href="../index.html" aria-label="Voltar ao portal público">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-          Portal Público
+        <a class="btn-admin-access" href="administrador/" aria-label="Abrir área administrativa">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-5.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8Z"/></svg>
+          Área Administrativa
         </a>
       `;
     }
@@ -5174,7 +5209,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, senha })
         });
-        const data = await resposta.json().catch(() => ({}));
+        const data = await resposta.json();
         if (!resposta.ok || !data?.token) {
           alert(data?.error || 'Usuário ou senha incorretos.');
           return;
@@ -5182,14 +5217,18 @@
         isAdminLoggedIn = true;
         currentUserName = data.user?.nome || 'Administrador';
         currentAdminEmail = data.user?.email || email;
-        ADMIN_SESSION_STORAGE.setItem(ADMIN_TOKEN_KEY, data.token);
-        atualizarArmazenamentoSessaoLocal(currentUserName, currentAdminEmail, Date.now());
-        adminLastHeartbeatAt = Date.now();
+        localStorage.setItem(ADMIN_TOKEN_KEY, data.token);
+        localStorage.setItem('fmabc_admin_logged', 'true');
+        localStorage.setItem('fmabc_admin_name', currentUserName);
+        localStorage.setItem('fmabc_admin_email', currentAdminEmail);
+        localStorage.setItem('fmabc_admin_last_activity', String(Date.now()));
+        sessionStorage.setItem('fmabc_admin_logged', 'true');
+        sessionStorage.setItem('fmabc_admin_name', currentUserName);
+        sessionStorage.setItem('fmabc_admin_email', currentAdminEmail);
+        registrarAtividadeAdmin();
         document.getElementById('modal-login').style.display = 'none';
         document.getElementById('painel-admin').style.display = 'flex';
         atualizarNavegacaoAdmin();
-        iniciarTemporizadorInatividadeAdmin();
-        iniciarHeartbeatAdmin();
         carregarUsuarios();
         preencherCamposAdmin();
         showToast('Login realizado com sucesso!');
@@ -5199,9 +5238,34 @@
       }
     }
 
-    async function fazerLogoutAdmin() {
-      await revogarSessaoAdminNoServidor();
-      await encerrarSessaoPorInatividade(false, 'Sessão encerrada com sucesso.');
+    function fazerLogoutAdmin() {
+      isAdminLoggedIn = false;
+      currentUserName = '';
+      currentAdminEmail = '';
+      localStorage.removeItem(ADMIN_TOKEN_KEY);
+
+      localStorage.removeItem('fmabc_admin_logged');
+      localStorage.removeItem('fmabc_admin_name');
+      localStorage.removeItem('fmabc_admin_email');
+      localStorage.removeItem('fmabc_admin_last_activity');
+      sessionStorage.removeItem('fmabc_admin_logged');
+      sessionStorage.removeItem('fmabc_admin_name');
+      sessionStorage.removeItem('fmabc_admin_email');
+
+      if (adminIdleTimer) {
+        clearTimeout(adminIdleTimer);
+        adminIdleTimer = null;
+      }
+
+      atualizarNavegacaoAdmin();
+
+      const painel = document.getElementById('painel-admin');
+      if (painel) painel.style.display = 'none';
+
+      const login = document.getElementById('modal-login');
+      if (login) login.style.display = 'block';
+
+      showToast('Sessão encerrada com sucesso.');
     }
 
     async function carregarUsuarios() {
@@ -5232,7 +5296,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', async () => {
-      await restaurarSessaoAdminPersistente();
+      restaurarSessaoAdminPersistente();
       configurarMonitorAtividadeAdmin();
       await carregarPlanoDeFundoDoBanco();
 
@@ -5323,13 +5387,13 @@
         // A autenticação atual usa token do Cloudflare, não senha em memória.
         // Durante o carregamento da página, aguarda a restauração da sessão quando necessário.
         if (!isAdminLoggedIn) {
-          const token = ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY) || '';
+          const token = localStorage.getItem(ADMIN_TOKEN_KEY) || '';
           if (token) {
             await restaurarSessaoAdminPersistente();
           }
         }
 
-        if (!isAdminLoggedIn || !ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)) {
+        if (!isAdminLoggedIn || !localStorage.getItem(ADMIN_TOKEN_KEY)) {
           showToast('Sessão administrativa expirada. Faça login novamente.');
           event.target.value = '';
           return;
@@ -5390,7 +5454,7 @@
     }
 
     async function salvarPlanoDeFundoNoBanco(bgFinal, opacityInput) {
-      if (!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)) {
+      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
         showToast('Sessão administrativa expirada. Faça login novamente.');
         return false;
       }
@@ -5551,7 +5615,7 @@
     const MENU_PADRAO = [
       { id: 'inicio', pageId: 'inicio', label: 'Início', url: 'index.html', target: '_self', visible: true },
       { id: 'linha-do-tempo', pageId: 'linha-do-tempo', label: 'Linha do tempo', url: 'linha-do-tempo.html', target: '_self', visible: true },
-      { id: 'depoimentos-ex-alunos', pageId: 'depoimentos-ex-alunos', label: 'Depoimentos', url: 'depoimentos.html', target: '_self', visible: true },
+      { id: 'depoimentos-ex-alunos', pageId: 'depoimentos-ex-alunos', label: 'Depoimentos de ex-alunos', url: 'depoimentos-ex-alunos.html', target: '_self', visible: true },
       { id: 'galeria-diretores-reitores', pageId: 'galeria-diretores-reitores', label: 'Fotos e galeria de diretores e reitores', url: 'galeria-diretores-reitores.html', target: '_self', visible: true },
       { id: 'galeria-fotos', pageId: 'galeria-fotos', label: 'Galeria de Fotos', url: 'galeria-fotos.html', target: '_self', visible: true },
       { id: 'professores-emeritos', pageId: 'professores-emeritos', label: 'Professores eméritos', url: 'professores-emeritos.html', target: '_self', visible: true }
@@ -5587,10 +5651,8 @@
 
       itens.forEach((item, index) => {
         if (!item || typeof item !== 'object') return;
-        let label = String(item.label ?? item.nome ?? '').trim();
-        let url = normalizarUrlMenu(item.url ?? item.link ?? '');
-        if (url === 'depoimentos-ex-alunos.html') url = 'depoimentos.html';
-        if (String(item.id || '') === 'depoimentos-ex-alunos' || url === 'depoimentos.html') label = 'Depoimentos';
+        const label = String(item.label ?? item.nome ?? '').trim();
+        const url = normalizarUrlMenu(item.url ?? item.link ?? '');
         if (!label || !url) return;
 
         // Impede duplicação de um mesmo destino interno no menu.
@@ -5623,7 +5685,7 @@
       const mapa = {
         '#inicio': 'index.html',
         '#linha-do-tempo': 'linha-do-tempo.html',
-        '#depoimentos-ex-alunos': 'depoimentos.html',
+        '#depoimentos-ex-alunos': 'depoimentos-ex-alunos.html',
         '#galeria-diretores-reitores': 'galeria-diretores-reitores.html',
         '#galeria-fotos': 'galeria-fotos.html',
         '#professores-emeritos': 'professores-emeritos.html'
@@ -5880,7 +5942,7 @@
 
     async function salvarMenuNoBanco() {
       registrarAtividadeAdmin();
-      if (!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)) {
+      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
         showToast('Sessão administrativa expirada. Faça login novamente.');
         return false;
       }
@@ -6005,7 +6067,7 @@
     const PAGINAS_SISTEMA = [
       { id:'inicio', tipo:'sistema', titulo:'Página Inicial', url:'index.html', resumo:'Página principal do acervo de turmas.', conteudo:'', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'institucional', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:true, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:1, podeExcluir:false },
       { id:'linha-do-tempo', tipo:'sistema', titulo:'Linha do tempo', url:'linha-do-tempo.html', resumo:'Principais marcos da história da FMABC, organizados cronologicamente.', conteudo:'<p>Área exclusiva para a linha do tempo institucional.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'memoria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:2, podeExcluir:false },
-      { id:'depoimentos-ex-alunos', tipo:'sistema', titulo:'Depoimentos', url:'depoimentos.html', resumo:'Memórias, experiências e mensagens de quem fez parte da história da FMABC.', conteudo:'<p>Envie seu depoimento para integrar o acervo histórico da sua turma. O conteúdo será encaminhado para análise antes da publicação.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'memoria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:3, podeExcluir:false },
+      { id:'depoimentos-ex-alunos', tipo:'sistema', titulo:'Depoimentos de ex-alunos', url:'depoimentos-ex-alunos.html', resumo:'Memórias, experiências e mensagens de quem fez parte da história da FMABC.', conteudo:'<p>Envie seu depoimento para integrar o acervo histórico da sua turma. O conteúdo será encaminhado para análise antes da publicação.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'memoria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:3, podeExcluir:false },
       { id:'galeria-diretores-reitores', tipo:'sistema', titulo:'Fotos e galeria de diretores e reitores', url:'galeria-diretores-reitores.html', resumo:'Registro visual das gestões e dos personagens que marcaram a trajetória institucional.', conteudo:'<p>Área exclusiva para fotos e galeria de diretores e reitores.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'galeria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:4, podeExcluir:false },
       { id:'galeria-fotos', tipo:'sistema', titulo:'Galeria de Fotos', url:'galeria-fotos.html', resumo:'Álbuns fotográficos institucionais com registros de eventos, cerimônias e momentos históricos.', conteudo:'<p>Galeria institucional de fotos, organizada em álbuns.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'Galeria de Fotos FMABC', modelo:'galeria-fotos', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'fotografia', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:5, podeExcluir:false },
       { id:'professores-emeritos', tipo:'sistema', titulo:'Professores eméritos', url:'professores-emeritos.html', resumo:'Memória e reconhecimento dos professores eméritos da instituição.', conteudo:'<p>Área exclusiva para o acervo dos professores eméritos.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'memoria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:6, podeExcluir:false }
@@ -6130,7 +6192,7 @@
       renderListaPaginasCMS();preencherSelectPaginaMae();
     }
     async function salvarPaginasNoBanco(){
-      registrarAtividadeAdmin();if(!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return false;}
+      registrarAtividadeAdmin();if(!localStorage.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return false;}
       try{
         atualizarOrdemPaginasAPartirDaLista(obterOrdemPaginas());
         const customsLimpos=paginasCustomizadas
@@ -6201,7 +6263,7 @@
     function alternarMenuPagina(id){const custom=localizarCustom(id);if(custom){custom.menu=custom.menu===false;if(custom.menu)garantirMenuDaPagina({...custom,url:`pagina.html?slug=${encodeURIComponent(custom.slug)}`,visivel:custom.visivel});else removerMenuDaPagina(custom.id);}const sistema=PAGINAS_SISTEMA.find(p=>String(p.id)===String(id));if(sistema){sistema.menu=sistema.menu===false;if(sistema.menu)garantirMenuDaPagina(sistema);else{const item=encontrarMenuDaPagina(sistema);if(item)item.visible=false;}}renderListaPaginasCMS();renderMenuPublico();showToast('Presença no menu alterada. Clique em “Salvar alterações”.');}
 
     async function salvarPaginaPortal(event){
-      event.preventDefault();registrarAtividadeAdmin();if(!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return;}
+      event.preventDefault();registrarAtividadeAdmin();if(!localStorage.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return;}
       const get=id=>document.getElementById(id);const titulo=get('inputPaginaTitulo').value.trim();let slug=slugSeguroPagina(get('inputPaginaSlug').value.trim()||titulo);const tituloPublico=get('inputPaginaTituloPublico').value.trim()||titulo,resumo=get('inputPaginaResumo').value.trim();
       if(!titulo){alert('Informe o nome da página.');return;}const duplicada=paginasCustomizadas.find(p=>String(p.slug)===slug&&String(p.id)!==String(paginaEditandoId));if(duplicada)slug=slug+'-'+Date.now().toString().slice(-4);
       let imagemFinal=get('inputPaginaImagemUrl').value.trim();const arquivo=get('inputPaginaImagemFile').files?.[0];
@@ -6386,7 +6448,7 @@
 
       if (!id) { showToast('Curso não identificado.'); return; }
       if (!nome) { showToast('Informe o nome do curso.'); return; }
-      if (!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)) {
+      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
         showToast('Sessão administrativa expirada. Faça login novamente.');
         return;
       }
@@ -6414,7 +6476,7 @@
         showToast('Curso não encontrado.');
         return;
       }
-      if (!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)) {
+      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
         showToast('Sessão administrativa expirada. Faça login novamente.');
         return;
       }
@@ -6545,7 +6607,7 @@
 
     async function salvarOrdemTurmasNoBanco() {
       registrarAtividadeAdmin();
-      if (!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)) {
+      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
         showToast('Sessão administrativa expirada. Faça login novamente.');
         return;
       }
@@ -6704,7 +6766,7 @@
       const descricao = descInput.value.trim();
 
       if (!nome) return;
-      if (!isAdminLoggedIn || !ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)) {
+      if (!isAdminLoggedIn || !localStorage.getItem(ADMIN_TOKEN_KEY)) {
         showToast('Sessão administrativa expirada. Faça login novamente.');
         return;
       }
@@ -6808,7 +6870,7 @@
     async function salvarTurmaNoBanco(turma) {
       registrarAtividadeAdmin();
       try {
-        const token = ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY);
+        const token = localStorage.getItem(ADMIN_TOKEN_KEY);
         if (!token) {
           showToast('Sessão administrativa expirada. Faça login novamente.');
           return false;
@@ -7405,7 +7467,7 @@
     }
     async function salvarTimelineNoBanco(notify=true){
       registrarAtividadeAdmin();
-      if(!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return false;}
+      if(!localStorage.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return false;}
       try{
         const payload=timelineEventos.map((e,i)=>({...e,ordem:i+1}));
         await cloudflareAdminFetch(`/api/admin/config/${encodeURIComponent(TIMELINE_CONFIG_KEY)}`,{method:'PUT',body:JSON.stringify({valor:payload})});
@@ -7559,7 +7621,7 @@
 
     async function salvarReitoresNoBanco(notify=true) {
       registrarAtividadeAdmin();
-      if (!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)) {
+      if (!localStorage.getItem(ADMIN_TOKEN_KEY)) {
         showToast('Sessão administrativa expirada. Faça login novamente.');
         return false;
       }
@@ -7663,12 +7725,43 @@
     document.addEventListener('keydown',e=>{if(e.key==='Escape')fecharModalReitor();});
     document.addEventListener('click',e=>{const modal=document.getElementById('modalReitorEditor');if(modal&&e.target===modal)fecharModalReitor();});
 
-function switchAdminTab(e, tabId) {
+function toggleAdminNavGroup(button) {
+      const group = button?.closest('.admin-nav-group');
+      if (!group) return;
+      const willOpen = !group.classList.contains('open');
+      document.querySelectorAll('.admin-nav-group').forEach(g => {
+        g.classList.remove('open');
+        g.classList.remove('is-active');
+        const toggle = g.querySelector('.admin-nav-group-toggle');
+        if (toggle) toggle.setAttribute('aria-expanded', 'false');
+      });
+      if (willOpen) {
+        group.classList.add('open');
+        button.setAttribute('aria-expanded', 'true');
+      }
+      registrarAtividadeAdmin();
+    }
+
+    function switchAdminTab(e, tabId) {
       registrarAtividadeAdmin();
       document.querySelectorAll('.admin-nav-item').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.admin-tab-pane').forEach(p => p.classList.remove('active'));
 
-      e.currentTarget.classList.add('active');
+      const currentButton = e.currentTarget;
+      currentButton.classList.add('active');
+
+      const parentGroup = currentButton.closest('.admin-nav-group');
+      document.querySelectorAll('.admin-nav-group').forEach(g => {
+        g.classList.remove('open', 'is-active');
+        const toggle = g.querySelector('.admin-nav-group-toggle');
+        if (toggle) toggle.setAttribute('aria-expanded', 'false');
+      });
+      if (parentGroup) {
+        parentGroup.classList.add('open', 'is-active');
+        const toggle = parentGroup.querySelector('.admin-nav-group-toggle');
+        if (toggle) toggle.setAttribute('aria-expanded', 'true');
+      }
+
       document.getElementById(tabId).classList.add('active');
       if (tabId === 'tabMenus') {
         renderEditorMenu();
@@ -8377,7 +8470,7 @@ function switchAdminTab(e, tabId) {
     const overlay = document.getElementById('adminModalOverlay');
     if (!overlay) return;
     overlay.classList.add('active');
-    const logged = ADMIN_SESSION_STORAGE.getItem('fmabc_admin_logged') === 'true' && !!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY);
+    const logged = localStorage.getItem('fmabc_admin_logged') === 'true' && !!localStorage.getItem('fmabc_cf_admin_token');
     overlay.classList.toggle('admin-route-logged-out', !logged);
     const backBtn = document.getElementById('adminBackPortalBtn');
     if (backBtn) {
@@ -8493,7 +8586,7 @@ function switchAdminTab(e, tabId) {
 
   async function salvarGaleriaFotosNoBanco(notify=true){
     registrarAtividadeAdmin();
-    if(!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)){
+    if(!localStorage.getItem(ADMIN_TOKEN_KEY)){
       if(notify) showToast('Sessão administrativa expirada. Faça login novamente.');
       return false;
     }
@@ -8618,7 +8711,7 @@ function switchAdminTab(e, tabId) {
   async function salvarAlbumGaleria(event){
     event.preventDefault();
     registrarAtividadeAdmin();
-    if(!ADMIN_SESSION_STORAGE.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return;}
+    if(!localStorage.getItem(ADMIN_TOKEN_KEY)){showToast('Sessão administrativa expirada. Faça login novamente.');return;}
     const titulo=document.getElementById('albumGaleriaTitulo').value.trim();
     if(!titulo){showToast('Informe o título do álbum.');return;}
     let capa=document.getElementById('albumGaleriaCapaUrl').value.trim();
@@ -8864,9 +8957,9 @@ function switchAdminTab(e, tabId) {
 (() => {
   const FALE_CONFIG_KEY = 'fale_conosco';
   const FALE_DEFAULT = {
-    badge: 'Memória FMABC',
+    badge: 'Portal de Ex-Alunos',
     title: 'Fale Conosco',
-    subtitle: 'Entre em contato com a FMABC para enviar dúvidas, solicitações ou informações relacionadas à sua trajetória na FMABC.',
+    subtitle: 'Entre em contato com a FMABC para enviar dúvidas, solicitações ou informações relacionadas à sua trajetória como ex-aluno.',
     sectionBadge: 'Atendimento',
     sectionTitle: 'Como podemos ajudar?',
     sectionIntro: 'Preencha o formulário abaixo.',
