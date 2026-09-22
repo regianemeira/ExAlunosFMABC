@@ -2,13 +2,45 @@ const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  "Vary": "Origin",
 };
+
+const SECURITY_HEADERS = {
+  "X-Content-Type-Options": "nosniff",
+  "Referrer-Policy": "no-referrer",
+  "X-Frame-Options": "DENY",
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+  "Cache-Control": "no-store",
+};
+
+const SESSION_IDLE_MS = 15 * 60 * 1000;
+const SESSION_MAX_MS = 8 * 60 * 60 * 1000;
+const PBKDF2_ITERATIONS = 600000;
+const PBKDF2_HASH = "SHA-256";
+const PBKDF2_LENGTH_BITS = 256;
+const RATE_WINDOW_MS = 60 * 1000;
+const rateBuckets = new Map();
+let adminSessionsSchemaReady = null;
+
+const PUBLIC_CONFIG_KEYS = new Set([
+  "background_config",
+  "fale_conosco",
+  "fotos_galeria",
+  "hero_images",
+  "portal_pages",
+  "site_footer",
+  "site_menu",
+  "social_banner",
+  "timeline_events",
+  "turmas_order",
+]);
 
 function json(data, status = 200, extraHeaders = {}) {
   return new Response(JSON.stringify(data, null, 2), {
     status,
     headers: {
       "Content-Type": "application/json; charset=utf-8",
+      ...SECURITY_HEADERS,
       ...CORS_HEADERS,
       ...extraHeaders,
     },
@@ -28,75 +60,177 @@ function bytesFromText(text) {
   return new TextEncoder().encode(text);
 }
 
+function bytesFromBase64url(value) {
+  const normalized = String(value || "").replace(/-/g, "+").replace(/_/g, "/");
+  const padded = normalized + "===".slice((normalized.length + 3) % 4);
+  const binary = atob(padded);
+  return Uint8Array.from(binary, char => char.charCodeAt(0));
+}
+
 async function sha256Hex(text) {
   const digest = await crypto.subtle.digest("SHA-256", bytesFromText(text));
   return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
-async function verifyPassword(password, storedHash) {
-  if (!storedHash || !storedHash.startsWith("sha256:")) return false;
-  return (await sha256Hex(password)) === storedHash.slice(7);
+function safeEqualBytes(a, b) {
+  if (!(a instanceof Uint8Array) || !(b instanceof Uint8Array) || a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a[i] ^ b[i];
+  return diff === 0;
 }
 
-async function hmacSha256(secret, message) {
-  const key = await crypto.subtle.importKey(
-    "raw",
-    bytesFromText(secret),
-    { name: "HMAC", hash: "SHA-256" },
-    false,
-    ["sign", "verify"]
+async function hashPassword(password) {
+  const normalized = String(password ?? "");
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const key = await crypto.subtle.importKey("raw", bytesFromText(normalized), { name: "PBKDF2" }, false, ["deriveBits"]);
+  const derived = await crypto.subtle.deriveBits(
+    { name: "PBKDF2", salt, iterations: PBKDF2_ITERATIONS, hash: PBKDF2_HASH },
+    key,
+    PBKDF2_LENGTH_BITS
   );
-  const sig = await crypto.subtle.sign("HMAC", key, bytesFromText(message));
-  return base64urlFromBytes(new Uint8Array(sig));
+  return `pbkdf2-sha256$${PBKDF2_ITERATIONS}$${base64urlFromBytes(salt)}$${base64urlFromBytes(new Uint8Array(derived))}`;
 }
 
-async function createSessionToken(email, name, secret) {
-  const payload = {
-    email,
-    name,
-    exp: Date.now() + 12 * 60 * 60 * 1000,
-    nonce: crypto.randomUUID(),
-  };
-  const encoded = base64urlFromBytes(bytesFromText(JSON.stringify(payload)));
-  const sig = await hmacSha256(secret, encoded);
-  return `${encoded}.${sig}`;
+async function verifyPbkdf2Password(password, encoded) {
+  const parts = String(encoded || "").split("$");
+  if (parts.length !== 4 || parts[0] !== "pbkdf2-sha256") return false;
+  const iterations = Number(parts[1]);
+  if (!Number.isInteger(iterations) || iterations < 100000 || iterations > 1200000) return false;
+  let salt, expected;
+  try {
+    salt = bytesFromBase64url(parts[2]);
+    expected = bytesFromBase64url(parts[3]);
+  } catch {
+    return false;
+  }
+  if (salt.length < 16 || expected.length !== 32) return false;
+  const key = await crypto.subtle.importKey("raw", bytesFromText(String(password ?? "")), { name: "PBKDF2" }, false, ["deriveBits"]);
+  const derived = await crypto.subtle.deriveBits(
+    { name: "PBKDF2", salt, iterations, hash: PBKDF2_HASH },
+    key,
+    PBKDF2_LENGTH_BITS
+  );
+  return safeEqualBytes(new Uint8Array(derived), expected);
 }
 
-function textFromBase64url(value) {
-  const padded = value.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((value.length + 3) % 4);
-  const binary = atob(padded);
-  const bytes = Uint8Array.from(binary, char => char.charCodeAt(0));
-  return new TextDecoder().decode(bytes);
+async function verifyLegacySha256Password(password, storedHash) {
+  if (!String(storedHash || "").startsWith("sha256:")) return false;
+  const candidate = await sha256Hex(password);
+  return safeEqualBytes(bytesFromHex(candidate), bytesFromHex(String(storedHash).slice(7)));
+}
+
+function bytesFromHex(value) {
+  const hex = String(value || "").trim();
+  if (!/^[0-9a-fA-F]+$/.test(hex) || hex.length % 2 !== 0) return new Uint8Array(0);
+  const bytes = new Uint8Array(hex.length / 2);
+  for (let i = 0; i < bytes.length; i++) bytes[i] = parseInt(hex.slice(i * 2, i * 2 + 2), 16);
+  return bytes;
+}
+
+function getAllowedOrigins(env) {
+  const configured = String(env.ALLOWED_ORIGINS || "").split(",").map(v => v.trim()).filter(Boolean);
+  if (configured.length) return new Set(configured);
+  // Fallback para o GitHub Pages atualmente utilizado pelo projeto.
+  return new Set(["https://regianemeira.github.io"]);
+}
+
+function isAllowedBrowserOrigin(request, env) {
+  const origin = request.headers.get("Origin");
+  if (!origin) return true;
+  return getAllowedOrigins(env).has(origin);
+}
+
+function getClientIp(request) {
+  return String(request.headers.get("CF-Connecting-IP") || request.headers.get("X-Forwarded-For") || "unknown").split(",")[0].trim();
+}
+
+function localRateLimit(key, limit, windowMs = RATE_WINDOW_MS) {
+  const now = Date.now();
+  const current = rateBuckets.get(key);
+  if (!current || now - current.startedAt >= windowMs) {
+    rateBuckets.set(key, { startedAt: now, count: 1 });
+    if (rateBuckets.size > 5000) {
+      for (const [k, v] of rateBuckets) {
+        if (now - v.startedAt >= windowMs) rateBuckets.delete(k);
+      }
+    }
+    return { allowed: true, retryAfter: Math.ceil(windowMs / 1000) };
+  }
+  current.count += 1;
+  const remaining = Math.max(0, windowMs - (now - current.startedAt));
+  return { allowed: current.count <= limit, retryAfter: Math.ceil(remaining / 1000) };
+}
+
+async function enforceRateLimit(request, env, bindingName, key, fallbackLimit) {
+  try {
+    const binding = env?.[bindingName];
+    if (binding && typeof binding.limit === "function") {
+      const { success } = await binding.limit({ key });
+      return { allowed: !!success, retryAfter: 60 };
+    }
+  } catch (error) {
+    console.warn(`Rate limiter ${bindingName} indisponível; usando fallback local.`, error?.message || error);
+  }
+  return localRateLimit(`${bindingName}:${key}`, fallbackLimit);
+}
+
+async function createSessionToken() {
+  return base64urlFromBytes(crypto.getRandomValues(new Uint8Array(32)));
+}
+
+async function createSession(request, env, user) {
+  await ensureAdminSessionsSchema(env);
+  const token = await createSessionToken();
+  const tokenHash = await sha256Hex(token);
+  const now = Date.now();
+  const expiresAt = new Date(now + SESSION_MAX_MS).toISOString();
+  const id = crypto.randomUUID();
+  await env.DB.prepare(`
+    INSERT INTO admin_sessions (id, user_id, token_hash, created_at, last_seen_at, expires_at, revoked_at)
+    VALUES (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?, NULL)
+  `).bind(id, user.id, tokenHash, expiresAt).run();
+  return token;
+}
+
+async function revokeSession(request, env) {
+  const header = request.headers.get("Authorization") || "";
+  if (!header.startsWith("Bearer ")) return;
+  const token = header.slice(7).trim();
+  if (!token) return;
+  const tokenHash = await sha256Hex(token);
+  await ensureAdminSessionsSchema(env);
+  await env.DB.prepare(`UPDATE admin_sessions SET revoked_at = CURRENT_TIMESTAMP WHERE token_hash = ? AND revoked_at IS NULL`).bind(tokenHash).run();
 }
 
 async function verifySession(request, env) {
   const header = request.headers.get("Authorization") || "";
   if (!header.startsWith("Bearer ")) return null;
-  if (!env.ADMIN_PASSWORD) return null;
-
   const token = header.slice(7).trim();
-  const dot = token.indexOf(".");
-  if (dot <= 0) return null;
-
-  const encoded = token.slice(0, dot);
-  const signature = token.slice(dot + 1);
+  if (!token || token.length < 40 || token.length > 200) return null;
 
   try {
-    const expected = await hmacSha256(env.ADMIN_PASSWORD, encoded);
-    if (signature !== expected) return null;
-
-    const payload = JSON.parse(textFromBase64url(encoded));
-    if (!payload?.email || !payload?.exp || Date.now() > Number(payload.exp)) return null;
-
-    const user = await env.DB.prepare(`
-      SELECT id, nome, email
-      FROM usuarios_admin
-      WHERE email = ?
+    await ensureAdminSessionsSchema(env);
+    const tokenHash = await sha256Hex(token);
+    const session = await env.DB.prepare(`
+      SELECT s.id AS session_id, s.user_id, s.created_at, s.last_seen_at, s.expires_at,
+             u.id, u.nome, u.email
+      FROM admin_sessions s
+      JOIN usuarios_admin u ON u.id = s.user_id
+      WHERE s.token_hash = ? AND s.revoked_at IS NULL
       LIMIT 1
-    `).bind(payload.email).first();
+    `).bind(tokenHash).first();
+    if (!session) return null;
 
-    if (!user) return null;
-    return user;
+    const now = Date.now();
+    const lastSeen = Date.parse(String(session.last_seen_at || "" ).replace(" ", "T") + "Z");
+    const expires = Date.parse(String(session.expires_at || ""));
+    if (!Number.isFinite(lastSeen) || !Number.isFinite(expires) || now > expires || now - lastSeen > SESSION_IDLE_MS) {
+      await env.DB.prepare(`UPDATE admin_sessions SET revoked_at = CURRENT_TIMESTAMP WHERE id = ?`).bind(session.session_id).run();
+      return null;
+    }
+
+    await env.DB.prepare(`UPDATE admin_sessions SET last_seen_at = CURRENT_TIMESTAMP WHERE id = ?`).bind(session.session_id).run();
+    return { id: session.id, nome: session.nome, email: session.email, session_id: session.session_id };
   } catch {
     return null;
   }
@@ -104,6 +238,31 @@ async function verifySession(request, env) {
 
 function requireAdmin(request, env) {
   return verifySession(request, env);
+}
+
+async function ensureAdminSessionsSchema(env) {
+  if (adminSessionsSchemaReady) return adminSessionsSchemaReady;
+  adminSessionsSchemaReady = (async () => {
+    await env.DB.prepare(`
+      CREATE TABLE IF NOT EXISTS admin_sessions (
+        id TEXT PRIMARY KEY,
+        user_id TEXT NOT NULL,
+        token_hash TEXT NOT NULL UNIQUE,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        last_seen_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        expires_at TEXT NOT NULL,
+        revoked_at TEXT DEFAULT NULL
+      )
+    `).run();
+    await env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_admin_sessions_token_hash ON admin_sessions(token_hash)`).run();
+    await env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_admin_sessions_user_id ON admin_sessions(user_id)`).run();
+  })();
+  try {
+    await adminSessionsSchemaReady;
+  } catch (error) {
+    adminSessionsSchemaReady = null;
+    throw error;
+  }
 }
 
 function parseJson(value, fallback = []) {
@@ -149,6 +308,8 @@ async function appendApprovedDepoimentos(env, turma) {
 }
 
 async function createPublicDepoimento(request, env) {
+  const rate = await enforceRateLimit(request, env, "DEPOIMENTO_RATE_LIMITER", `depoimento:${getClientIp(request)}`, 5);
+  if (!rate.allowed) return json({ error: 'Muitas solicitações. Tente novamente em alguns instantes.' }, 429, { 'Retry-After': String(rate.retryAfter) });
   await ensureDepoimentosSchema(env);
   let body;
   try { body = await request.json(); } catch { return json({ error: 'JSON inválido.' }, 400); }
@@ -242,6 +403,8 @@ function gerarProtocoloContato() {
 }
 
 async function createPublicContato(request, env) {
+  const rate = await enforceRateLimit(request, env, "CONTACT_RATE_LIMITER", `contact:${getClientIp(request)}`, 5);
+  if (!rate.allowed) return json({ error: 'Muitas solicitações. Tente novamente em alguns instantes.' }, 429, { 'Retry-After': String(rate.retryAfter) });
   await ensureContatosSchema(env);
   let body;
   try { body = await request.json(); } catch { return json({ error: 'JSON inválido.' }, 400); }
@@ -357,51 +520,70 @@ function assetUrl(requestUrl, key) {
 }
 
 async function adminLogin(request, env) {
-  if (!env.ADMIN_PASSWORD) {
-    return json({ error: "ADMIN_PASSWORD não configurada no Worker." }, 500);
+  const ip = getClientIp(request);
+  const email = String((await request.clone().json().catch(() => ({})))?.email || "").trim().toLowerCase();
+  const rateIp = await enforceRateLimit(request, env, "LOGIN_RATE_LIMITER", `login-ip:${ip}`, 20);
+  const rateAccount = await enforceRateLimit(request, env, "LOGIN_RATE_LIMITER", `login-account:${email}`, 5);
+  if (!rateIp.allowed || !rateAccount.allowed) {
+    const retryAfter = Math.max(rateIp.retryAfter || 60, rateAccount.retryAfter || 60);
+    return json({ error: "Muitas tentativas de login. Tente novamente em alguns instantes." }, 429, { "Retry-After": String(retryAfter) });
   }
 
   let body;
   try { body = await request.json(); } catch { return json({ error: "JSON inválido." }, 400); }
 
-  const email = String(body?.email || "").trim().toLowerCase();
+  const loginEmail = String(body?.email || "").trim().toLowerCase();
   const senha = String(body?.senha || "");
-
-  if (!email || !senha) return json({ error: "Informe e-mail e senha." }, 400);
+  if (!loginEmail || !senha) return json({ error: "Informe e-mail e senha." }, 400);
+  if (loginEmail.length > 254 || senha.length > 256) return json({ error: "Usuário ou senha incorretos." }, 401);
 
   const user = await env.DB.prepare(`
-    SELECT id, nome, email
+    SELECT id, nome, email, senha
     FROM usuarios_admin
     WHERE lower(email) = ?
     LIMIT 1
-  `).bind(email).first();
+  `).bind(loginEmail).first();
 
-  if (!user) {
-    return json({ error: "Usuário ou senha incorretos." }, 401);
+  if (!user) return json({ error: "Usuário ou senha incorretos." }, 401);
+
+  let senhaValida = false;
+  let needsUpgrade = false;
+
+  if (user.senha && String(user.senha).startsWith("pbkdf2-sha256$")) {
+    senhaValida = await verifyPbkdf2Password(senha, user.senha);
+  } else if (user.senha && String(user.senha).startsWith("sha256:")) {
+    senhaValida = await verifyLegacySha256Password(senha, user.senha);
+    needsUpgrade = senhaValida;
+  } else if (!user.senha && env.ADMIN_PASSWORD && env.ADMIN_BOOTSTRAP_EMAIL && loginEmail === String(env.ADMIN_BOOTSTRAP_EMAIL).trim().toLowerCase()) {
+    // Compatibilidade temporária apenas com a conta de bootstrap explicitamente definida.
+    senhaValida = senha === env.ADMIN_PASSWORD;
+    needsUpgrade = senhaValida;
   }
 
-  // Compatibilidade com o administrador principal atual, autenticado pelo secret do Worker.
-  let senhaValida = senha === env.ADMIN_PASSWORD;
+  if (!senhaValida) return json({ error: "Usuário ou senha incorretos." }, 401);
 
-  // Novos administradores podem usar senha própria, armazenada apenas como hash SHA-256 no D1.
-  if (!senhaValida && user.senha) {
-    senhaValida = await verifyPassword(senha, user.senha);
+  if (needsUpgrade) {
+    const upgradedHash = await hashPassword(senha);
+    await env.DB.prepare(`UPDATE usuarios_admin SET senha = ? WHERE id = ?`).bind(upgradedHash, user.id).run();
   }
 
-  if (!senhaValida) {
-    return json({ error: "Usuário ou senha incorretos." }, 401);
-  }
-
-  const token = await createSessionToken(user.email, user.nome, env.ADMIN_PASSWORD);
+  const token = await createSession(request, env, user);
   return json({
     ok: true,
     token,
-    user: {
-      id: user.id,
-      nome: user.nome,
-      email: user.email,
-    },
+    user: { id: user.id, nome: user.nome, email: user.email },
   });
+}
+
+async function adminLogout(request, env) {
+  try { await revokeSession(request, env); } catch {}
+  return json({ ok: true });
+}
+
+async function adminHeartbeat(request, env) {
+  const admin = await requireAdmin(request, env);
+  if (!admin) return json({ error: "Sessão expirada." }, 401);
+  return json({ ok: true, user: { id: admin.id, nome: admin.nome, email: admin.email } });
 }
 
 async function adminUpload(request, env) {
@@ -414,8 +596,10 @@ async function adminUpload(request, env) {
   const file = form.get("file");
 
   if (!(file instanceof File)) return json({ error: "Arquivo não informado." }, 400);
-  if (!String(file.type || "").startsWith("image/")) return json({ error: "O arquivo precisa ser uma imagem." }, 400);
+  const allowedTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
+  if (!allowedTypes.has(String(file.type || "").toLowerCase())) return json({ error: "Formato de imagem não permitido. Use JPG, PNG, WEBP ou GIF." }, 400);
   if (file.size > 6 * 1024 * 1024) return json({ error: "A imagem deve ter no máximo 6 MB." }, 400);
+  if (String(file.name || "").length > 180) return json({ error: "Nome de arquivo muito longo." }, 400);
 
   const ext = extensionFromType(file.type, file.name);
   const key = `${folder}/${Date.now()}-${crypto.randomUUID()}.${ext}`;
@@ -461,15 +645,15 @@ async function createAdminUser(request, env) {
   if (!nome || !email || !senha) {
     return json({ error: "Nome, e-mail e senha são obrigatórios." }, 400);
   }
-  if (senha.length < 6) {
-    return json({ error: "A senha deve ter pelo menos 6 caracteres." }, 400);
+  if (senha.length < 12 || senha.length > 256) {
+    return json({ error: "A senha deve ter entre 12 e 256 caracteres." }, 400);
   }
 
   const existente = await env.DB.prepare(`SELECT id FROM usuarios_admin WHERE lower(email) = ? LIMIT 1`).bind(email).first();
   if (existente) return json({ error: "Já existe um administrador com este e-mail." }, 409);
 
   const id = crypto.randomUUID();
-  const senhaHash = `sha256:${await sha256Hex(senha)}`;
+  const senhaHash = await hashPassword(senha);
 
   await env.DB.prepare(`
     INSERT INTO usuarios_admin (id, nome, email, senha, created_at)
@@ -491,6 +675,8 @@ async function deleteAdminUser(request, env, id) {
   const existing = await env.DB.prepare(`SELECT id FROM usuarios_admin WHERE id = ? LIMIT 1`).bind(id).first();
   if (!existing) return json({ error: "Administrador não encontrado." }, 404);
 
+  await ensureAdminSessionsSchema(env);
+  await env.DB.prepare(`UPDATE admin_sessions SET revoked_at = CURRENT_TIMESTAMP WHERE user_id = ? AND revoked_at IS NULL`).bind(id).run();
   await env.DB.prepare(`DELETE FROM usuarios_admin WHERE id = ?`).bind(id).run();
   return json({ ok: true, id });
 }
@@ -691,12 +877,17 @@ export default {
     const path = url.pathname.replace(/\/+$/, "") || "/";
 
     try {
+      if (!isAllowedBrowserOrigin(request, env)) {
+        return json({ error: "Origem não autorizada." }, 403);
+      }
+
       if (path === "/health" && request.method === "GET") {
-        const db = await env.DB.prepare("SELECT 1 AS ok").first();
-        return json({ ok: true, worker: "fmabc-acervo-api", d1: db?.ok === 1, r2: !!env.BUCKET, adminPasswordConfigured: !!env.ADMIN_PASSWORD });
+        return json({ ok: true });
       }
 
       if (path === "/api/admin/login" && request.method === "POST") return adminLogin(request, env);
+      if (path === "/api/admin/logout" && request.method === "POST") return adminLogout(request, env);
+      if (path === "/api/admin/heartbeat" && request.method === "POST") return adminHeartbeat(request, env);
 
       if (path === "/api/admin/me" && request.method === "GET") {
         const admin = await requireAdmin(request, env);
@@ -776,6 +967,8 @@ export default {
 
       const configMatch = path.match(/^\/api\/config\/([^/]+)$/);
       if (configMatch && request.method === "GET") {
+        const configId = decodeURIComponent(configMatch[1]);
+        if (!PUBLIC_CONFIG_KEYS.has(configId)) return json({ error: "Configuração não encontrada." }, 404);
         await env.DB.prepare(`
           CREATE TABLE IF NOT EXISTS site_config (
             id TEXT PRIMARY KEY,
@@ -799,41 +992,19 @@ export default {
         object.writeHttpMetadata(headers);
         headers.set("etag", object.httpEtag);
         headers.set("Cache-Control", "public, max-age=31536000, immutable");
+        headers.set("X-Content-Type-Options", "nosniff");
+        headers.set("Referrer-Policy", "no-referrer");
+        headers.set("X-Frame-Options", "DENY");
+        headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
         return new Response(object.body, { status: 200, headers });
       }
 
       return json({
         error: "Rota não encontrada.",
-        routes: [
-          "GET /health",
-          "POST /api/admin/login",
-          "GET /api/admin/me",
-          "POST /api/admin/upload?folder=...",
-          "GET /api/admin/usuarios",
-          "POST /api/admin/usuarios",
-          "DELETE /api/admin/usuarios/:id",
-          "GET /api/turmas",
-          "GET /api/turmas/:id",
-          "POST /api/admin/turmas",
-          "PUT /api/admin/turmas/:id",
-          "DELETE /api/admin/turmas/:id",
-          "POST /api/depoimentos",
-          "POST /api/contatos",
-          "GET /api/admin/contatos",
-          "PUT /api/admin/contatos/:id/status",
-          "GET /api/admin/depoimentos?turma_id=...",
-          "PUT /api/admin/depoimentos/:id/aprovar",
-          "GET /api/cursos",
-          "POST /api/admin/cursos",
-          "PUT /api/admin/cursos/:id",
-          "DELETE /api/admin/cursos/:id",
-          "GET /api/config/:id",
-          "GET /assets/*",
-        ],
       }, 404);
     } catch (error) {
       console.error("Worker error:", error);
-      return json({ error: "Erro interno do Worker.", message: error?.message || String(error) }, 500);
+      return json({ error: "Erro interno do Worker." }, 500);
     }
   },
 };
