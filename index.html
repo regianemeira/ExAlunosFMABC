@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Memória FMABC | Acervo Institucional</title>
+  <title>Acervo de Turmas & Painel Admin - FMABC</title>
   
 
   <style>
@@ -305,7 +305,7 @@
     @media (max-width:900px){ .hero-memory,.hero-memory-track{height:580px;min-height:580px}.hero-slide-content{width:min(680px,calc(100% - 60px));padding:58px 30px 165px}.hero-search-panel{left:20px;right:20px;bottom:62px}.hero-controls{left:20px;right:20px} }
     @media (max-width:620px){
       .hero-memory {
-        aspect-ratio: 1916 / 681;
+        aspect-ratio: 1920 / 780;
         min-height: 0;
       }
 .hero-slide-content{width:calc(100% - 38px);padding:42px 19px 180px}.hero-slide-content h1{font-size:2.45rem}.hero-slide-content p{font-size:.95rem}.hero-nav{width:38px;height:38px}.hero-nav-prev{left:10px}.hero-nav-next{right:10px}.hero-search-panel{left:18px;right:18px}.hero-search-panel .search-box{min-width:0;max-width:none}.hero-controls{left:18px;right:18px}.hero-autoplay{font-size:.7rem} }
@@ -1135,7 +1135,7 @@
       box-shadow: none;
       margin-bottom: 28px;
       /* Proporção da arte recomendada: 1916 x 681 (~2,813:1). */
-      aspect-ratio: 1916 / 681;
+      aspect-ratio: 1920 / 780;
       height: auto;
       min-height: 0;
       overflow: hidden;
@@ -1144,7 +1144,7 @@
     .hero-memory-track {
       width: 100%;
       height: 100%;
-      aspect-ratio: 1916 / 681;
+      aspect-ratio: 1920 / 780;
     }
 
     /* Mantém a busca, filtros e conteúdo textual dentro de uma coluna confortável. */
@@ -1511,7 +1511,7 @@
       height: auto !important;
       min-height: 0 !important;
       max-height: none !important;
-      aspect-ratio: 1916 / 681 !important;
+      aspect-ratio: 1920 / 780 !important;
       overflow: hidden !important;
     }
 
@@ -1520,7 +1520,7 @@
       height: 100% !important;
       min-height: 0 !important;
       max-height: none !important;
-      aspect-ratio: 1916 / 681 !important;
+      aspect-ratio: 1920 / 780 !important;
     }
 
     .hero-memory .hero-slide {
@@ -1539,11 +1539,11 @@
 
     @media (max-width: 900px) {
       .hero-memory {
-        aspect-ratio: 1916 / 681 !important;
+        aspect-ratio: 1920 / 780 !important;
       }
 
       .hero-memory-track {
-        aspect-ratio: 1916 / 681 !important;
+        aspect-ratio: 1920 / 780 !important;
       }
 
       .hero-search-panel {
@@ -1561,13 +1561,13 @@
 
     @media (max-width: 620px) {
       .hero-memory {
-        aspect-ratio: 1916 / 681 !important;
+        aspect-ratio: 1920 / 780 !important;
         margin-top: 0 !important;
         margin-bottom: 18px !important;
       }
 
       .hero-memory-track {
-        aspect-ratio: 1916 / 681 !important;
+        aspect-ratio: 1920 / 780 !important;
       }
 
       .hero-search-panel {
@@ -2939,11 +2939,11 @@
       <div class="lgpd-modal-header">
         <button type="button" class="lgpd-modal-close" onclick="fecharPoliticaPrivacidade()" aria-label="Fechar">×</button>
         <h2 id="lgpdModalTitulo">Política de Privacidade e Proteção de Dados</h2>
-        <p>Memória FMABC · Versão 1.0 · 21/09/2026</p>
+        <p>Portal de Ex-Alunos FMABC · Versão 1.0 · 21/09/2026</p>
       </div>
       <div class="lgpd-modal-body">
         <h3>1. Objetivo</h3>
-        <p>Esta política informa, de forma clara e acessível, como o Memória FMABC trata dados pessoais quando eles são fornecidos ou utilizados em funcionalidades do portal.</p>
+        <p>Esta política informa, de forma clara e acessível, como o Portal de Ex-Alunos FMABC trata dados pessoais quando eles são fornecidos ou utilizados em funcionalidades do portal.</p>
 
         <h3>2. Responsável pelo tratamento</h3>
         <p>O Centro Universitário FMABC, mantido pela Fundação do ABC, é o responsável pelas decisões sobre o tratamento de dados pessoais no contexto deste portal.</p>
@@ -4973,7 +4973,7 @@
     const MENU_PADRAO = [
       { id: 'inicio', pageId: 'inicio', label: 'Início', url: 'index.html', target: '_self', visible: true },
       { id: 'linha-do-tempo', pageId: 'linha-do-tempo', label: 'Linha do tempo', url: 'linha-do-tempo.html', target: '_self', visible: true },
-      { id: 'depoimentos-ex-alunos', pageId: 'depoimentos-ex-alunos', label: 'Depoimentos', url: 'depoimentos.html', target: '_self', visible: true },
+      { id: 'depoimentos-ex-alunos', pageId: 'depoimentos-ex-alunos', label: 'Depoimentos de ex-alunos', url: 'depoimentos-ex-alunos.html', target: '_self', visible: true },
       { id: 'galeria-diretores-reitores', pageId: 'galeria-diretores-reitores', label: 'Fotos e galeria de diretores e reitores', url: 'galeria-diretores-reitores.html', target: '_self', visible: true },
       { id: 'professores-emeritos', pageId: 'professores-emeritos', label: 'Professores eméritos', url: 'professores-emeritos.html', target: '_self', visible: true }
     ];
@@ -5008,10 +5008,8 @@
 
       itens.forEach((item, index) => {
         if (!item || typeof item !== 'object') return;
-        let label = String(item.label ?? item.nome ?? '').trim();
-        let url = normalizarUrlMenu(item.url ?? item.link ?? '');
-        if (url === 'depoimentos-ex-alunos.html') url = 'depoimentos.html';
-        if (String(item.id || '') === 'depoimentos-ex-alunos' || url === 'depoimentos.html') label = 'Depoimentos';
+        const label = String(item.label ?? item.nome ?? '').trim();
+        const url = normalizarUrlMenu(item.url ?? item.link ?? '');
         if (!label || !url) return;
 
         // Impede duplicação de um mesmo destino interno no menu.
@@ -5044,7 +5042,7 @@
       const mapa = {
         '#inicio': 'index.html',
         '#linha-do-tempo': 'linha-do-tempo.html',
-        '#depoimentos-ex-alunos': 'depoimentos.html',
+        '#depoimentos-ex-alunos': 'depoimentos-ex-alunos.html',
         '#galeria-diretores-reitores': 'galeria-diretores-reitores.html',
         '#professores-emeritos': 'professores-emeritos.html'
       };
@@ -5393,7 +5391,7 @@
     const PAGINAS_SISTEMA = [
       { id:'inicio', tipo:'sistema', titulo:'Página Inicial', url:'index.html', resumo:'Página principal do acervo de turmas.', conteudo:'', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'institucional', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:true, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:1, podeExcluir:false },
       { id:'linha-do-tempo', tipo:'sistema', titulo:'Linha do tempo', url:'linha-do-tempo.html', resumo:'Principais marcos da história da FMABC, organizados cronologicamente.', conteudo:'<p>Área exclusiva para a linha do tempo institucional.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'memoria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:2, podeExcluir:false },
-      { id:'depoimentos-ex-alunos', tipo:'sistema', titulo:'Depoimentos', url:'depoimentos.html', resumo:'Memórias, experiências e mensagens de quem fez parte da história da FMABC.', conteudo:'<p>Envie seu depoimento para integrar o acervo histórico da sua turma. O conteúdo será encaminhado para análise antes da publicação.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'memoria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:3, podeExcluir:false },
+      { id:'depoimentos-ex-alunos', tipo:'sistema', titulo:'Depoimentos de ex-alunos', url:'depoimentos-ex-alunos.html', resumo:'Memórias, experiências e mensagens de quem fez parte da história da FMABC.', conteudo:'<p>Envie seu depoimento para integrar o acervo histórico da sua turma. O conteúdo será encaminhado para análise antes da publicação.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'memoria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:3, podeExcluir:false },
       { id:'galeria-diretores-reitores', tipo:'sistema', titulo:'Fotos e galeria de diretores e reitores', url:'galeria-diretores-reitores.html', resumo:'Registro visual das gestões e dos personagens que marcaram a trajetória institucional.', conteudo:'<p>Área exclusiva para fotos e galeria de diretores e reitores.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'galeria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:4, podeExcluir:false },
       { id:'professores-emeritos', tipo:'sistema', titulo:'Professores eméritos', url:'professores-emeritos.html', resumo:'Memória e reconhecimento dos professores eméritos da instituição.', conteudo:'<p>Área exclusiva para o acervo dos professores eméritos.</p>', conteudoSecundario:'', informacoesAdicionais:'', imagem:'', bannerAlt:'', modelo:'memoria', paginaMae:'', popup:'', categoria:'memoria', subcategoria:'', destaque:false, mostrarBusca:true, seoTitulo:'', seoDescricao:'', seoKeywords:'', visivel:true, menu:true, ordem:5, podeExcluir:false }
     ];
